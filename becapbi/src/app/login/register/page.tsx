@@ -70,19 +70,36 @@ function FormularioRegistro() {
           </div>
           
           <div className="flex items-center mb-4">
-            <Label htmlFor='nombre' className="mr-2">
-                            Sexo
-            </Label>
-            <Input type='text'
-                  className='mt-2 mb-4 bg-transparent mr-2'  
-            />
 
-            <Label htmlFor='nombre' className="mr-2">
-                            Estado Civil
+            <Label htmlFor='sexo' className="mr-2">
+              Sexo
             </Label>
-            <Input type='text'
-                  className='mt-2 mb-4 bg-transparent'  
-            />
+            <select
+              id='sexo'
+              className='mt-2 mb-4 bg-transparent mr-2 text-white border border-gray-400 rounded p-2' 
+            >
+              <option value="" disabled selected>
+                Selecciona
+              </option>
+              <option value="femenino">Femenino</option>
+              <option value="masculino">Masculino</option>
+            </select>
+
+            <Label htmlFor='sexo' className="mr-2">
+              Estado civil
+            </Label>
+            <select
+              id='sexo'
+              className='mt-2 mb-4 bg-transparent mr-2 text-white border border-gray-400 rounded p-2' 
+            >
+              <option value="" disabled selected>
+                Selecciona
+              </option>
+              <option value="femenino">Soltero</option>
+              <option value="masculino">Casado</option>
+              <option value="masculino">Viudo</option>
+              <option value="masculino">Divorciado</option>
+            </select>
           </div>
 
           <div className="flex items-center mb-4">
