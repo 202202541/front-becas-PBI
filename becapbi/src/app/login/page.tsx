@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import "./style.css"
@@ -18,11 +18,13 @@ function Login() {
                 </div>
 
                 <form >
-                    <Button className='flex mb-4 items-center w-full gap-4 px-12 bg-trasparent rounded-full'
-                             variant="outline">
+                    {/* <Button className='flex mb-4 items-center w-full gap-4 px-12 bg-trasparent rounded-full'
+                             variant="outline"
+                            
+                             >
                         <FcGoogle/>
                         <p>Iniciar con google</p>
-                    </Button>
+                    </Button> */}
                     <Label htmlFor='email'>
                         Email
                     </Label>
@@ -44,7 +46,10 @@ function Login() {
                     <Button type='submit' className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'>
                         Login
                     </Button>
-
+                    
+                    <Button type='submit' className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'>
+                        Registrarse
+                    </Button>
                 </form>
             </div>
         
