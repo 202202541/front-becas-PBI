@@ -3,11 +3,10 @@ import { Button } from '@/components/ui/button'
 // import { FcGoogle } from "react-icons/fc";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import "./style.css"
 
 function Login() {
   return (
-    <div className='bg-[#26313c] h-screen flex items-center justify-center p-1 h-screen flex items-center justify-center p-1 fondo'>
+    <div className="bg-[#26313c] h-screen flex items-center justify-center p-1 h-screen flex items-center justify-center p-1 bg-[url('/fondo.png')] bg-cover bg-center min-h-screen">
             <div className='bg-[#16202a] text-white flex items-center justify-center flex-col p-8 rounded-lg shadow-lg'>
                 <div className='my-4'>
                     <h1 className='text-3xl font-semibold'>Login</h1>
