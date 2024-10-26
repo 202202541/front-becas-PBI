@@ -18,8 +18,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 export default function formularioRegistro() {
 	return (
-		<div className="bg-[url('/fondo.png')] bg-cover bg-center bg-fixed min-h-screen py-8 ">
-			<div className=" flex min-h-screen w-full items-center justify-center px-2">
+		<div className="relative w-full min-h-screen">
+			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
+					style={{ zIndex: -1 }}>
+
+			</div>
+			<div className=" flex min-h-screen w-full items-center justify-center p-8">
 				<Card className="mx-auto max-w-3xl w-full">
 					<CardHeader>
 						<CardTitle className="text-2xl">Registro</CardTitle>
@@ -55,18 +59,18 @@ export default function formularioRegistro() {
 								<div className="grid gap-2">
 									<Label htmlFor="primerNombre">Primer Nombre</Label>
 									<Input
-										id="primer nombre"
+										id="primerNombre"
 										type="text"
-										placeholder="primerNombre"
+										placeholder="primer nombre"
 										required
 									/>
 								</div>
 								<div className="grid gap-2">
 									<Label htmlFor="segundoNombre">Segundo Nombre</Label>
 									<Input
-										id="segundo nombre"
+										id="segundoNombre"
 										type="text"
-										placeholder="segundoNombre"
+										placeholder="segundo nombre"
 										required
 									/>
 								</div>
@@ -112,21 +116,30 @@ export default function formularioRegistro() {
 							<div className="grid grid-cols-2 gap-4">
 								<div>
 										<Label htmlFor="sexo">Sexo</Label>
-										<Input
-											id="sexo"
-											type="text"
-											placeholder="sexo"
-											required
-										/>
+										<Select>
+											<SelectTrigger>
+												<SelectValue placeholder="sexo" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="masculino">Masculino</SelectItem>
+												<SelectItem value="femenino">Femenino</SelectItem>
+											</SelectContent>
+										</Select>
 								</div>
 								<div >
 										<Label htmlFor="estadoCivil">Estado Civil</Label>
-										<Input
-											id="estadoCivil"
-											type="text"
-											placeholder="estado civil"
-											required
-										/>
+										<Select>
+											<SelectTrigger >
+												<SelectValue placeholder="Estado civil" />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="soltero">Soltero(a)</SelectItem>
+												<SelectItem value="casado">Casado(a)</SelectItem>
+												<SelectItem value="divorciado">Divorciado(a)</SelectItem>
+												<SelectItem value="viudo">Viudo(a)</SelectItem>
+												<SelectItem value="unido">Unido(a) de hecho</SelectItem>
+											</SelectContent>
+										</Select>
 								</div>
 							</div>
 							<div >
@@ -171,7 +184,7 @@ export default function formularioRegistro() {
 									required />
 							</div>
 							<Button type="submit" className="w-full">
-								Login
+								Registrarse
 							</Button>
 							{/* <Button variant="outline" className="w-full">
 								Login with Google
