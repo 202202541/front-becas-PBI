@@ -1,5 +1,8 @@
+"use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
 	Card,
 	CardContent,
@@ -14,9 +17,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {Calendar} from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+
+
 export default function formularioRegistro() {
+	const [date, setDate] = React.useState<Date | undefined>(new Date())
+	
+	
 	return (
 		<div className="relative w-full min-h-screen">
 			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
@@ -142,14 +158,44 @@ export default function formularioRegistro() {
 										</Select>
 								</div>
 							</div>
-							<div >
-									<Label htmlFor="nacionalidad">Nacionalidad</Label>
-									<Input
-										id="nacionalidad"
-										type="text"
-										placeholder="nacionalidad"
-										required
-									/>
+							<div className="grid grid-cols-2 gap-4">	
+								<div >
+										<Label htmlFor="nacionalidad">Fecha de Nacimiento</Label>
+										<Popover>
+											<PopoverTrigger asChild>
+												<Button
+													variant={"outline"}
+													className={cn(
+														"w-[280px] justify-start text-left font-normal",
+														!date && "text-muted-foreground"
+													)}
+												>
+													<CalendarIcon className="mr-2 h-4 w-4" />
+													{date ? format(date, "PPP") : <span>Pick a date</span>}
+												</Button>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0">
+												<Calendar
+													mode="single"
+													captionLayout="dropdown-buttons"
+													fromYear={1990}
+													toYear={2024}
+													selected={date}
+													onSelect={setDate}
+													initialFocus
+												/>
+											</PopoverContent>
+										</Popover>
+								</div>
+								<div >
+										<Label htmlFor="nacionalidad">Nacionalidad</Label>
+										<Input
+											id="nacionalidad"
+											type="text"
+											placeholder="nacionalidad"
+											required
+										/>
+								</div>
 							</div>
 
 							<div className="grid gap-2">
