@@ -46,9 +46,6 @@ function Login() {
                         Login
                     </Button>
                     
-                    <Button type='submit' className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'>
-                        Registrarse
-                    </Button>
                 </form>
             </div>
         

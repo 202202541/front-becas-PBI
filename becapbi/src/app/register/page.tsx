@@ -28,8 +28,8 @@ import {Calendar} from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
-
-export default function formularioRegistro() {
+function FormularioRegistro() {
+  
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
 	
 	
@@ -242,3 +242,6 @@ export default function formularioRegistro() {
 		</div>
 	)
 }
+
+
+export default FormularioRegistro;
