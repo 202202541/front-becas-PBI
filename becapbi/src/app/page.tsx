@@ -1,11 +1,37 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-// import { FcGoogle } from "react-icons/fc";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import Link  from "next/link"
 
-function Login() {
+interface RespuestaValida{
+    activo: boolean;
+    mensaje : string;
+}
+
+const Login: React.FC = () => {
+
+    const[activo, setActivo] = useState<boolean>(false);
+    const[mensaje, setMensaje] = useState<string>('');
+
+    useEffect(() => {
+        const validarHabilitado = async () =>{
+            try{
+                const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/ciclo-formulario');
+                const datos: RespuestaValida = await respuesta.json();
+
+                setActivo(datos.activo);
+                setMensaje(datos.activo? '' : 'Aun no esta en fecha de registro')
+            }catch (error){
+                console.error("error al verificar la dispoopnivilidad: ", error)
+            }
+        };
+        validarHabilitado();
+    },[])
+
+    
+
   return (
     <div className="bg-[#26313c] h-screen flex items-center justify-center p-1 h-screen flex items-center justify-center p-1 bg-[url('/fondo.png')] bg-cover bg-center min-h-screen">
             <div className='bg-[#16202a] text-white flex items-center justify-center flex-col p-7 w-96 rounded-lg shadow-lg'>
@@ -18,13 +44,6 @@ function Login() {
                 </div>
 
                 <form >
-                    {/* <Button className='flex mb-4 items-center w-full gap-4 px-12 bg-trasparent rounded-full'
-                             variant="outline"
-                            
-                             >
-                        <FcGoogle/>
-                        <p>Iniciar con google</p>
-                    </Button> */}
                     <Label htmlFor='email'>
                         Email
                     </Label>
@@ -50,11 +69,14 @@ function Login() {
                     </Link>
 
                     <Link href="/register">
-                      <Button type='submit' className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'
+                      <Button type='button' 
+                              className={`w-full mt-6 $ {activo ? ' bg-indigo-600 rounded-full hover:bg-indigo-700':'bg-gray-500 cursor-not-allowed'}`}
+                              disabled = {!activo}
                               >
                           Registrarse
                       </Button>
                     </Link>
+                    {activo && <p className='mt-2 text-red-500'>{mensaje}</p>}
                 </form>
             </div>
         
