@@ -17,8 +17,8 @@ function FotoCargada() {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-2xl mb-4">Sube tu foto 4x4 fondo rojo</h2>
-      <div className="border-2 border-dashed border-gray-400 p-4 w-80 flex flex-col items-center justify-center">
+      <h2 className="text-1xl mb-4">Sube tu foto 4x4 fondo rojo</h2>
+      <div className="border-2 border-dashed border-gray-400 p-4 w-60  h-60 flex flex-col items-center justify-center">
         <input
           type="file"
           accept="image/*"
@@ -27,9 +27,9 @@ function FotoCargada() {
           id="file-upload"
         />
         {photo ? (
-          <img src={photo} alt="Previsualización" className="w-32 h-32 object-cover mt-4" />
+          <img src={photo} alt="Previsualización" className="w-60 h-60 object-cover mt-4" />
         ) : (
-          <p className="text-gray-500">No hay imagen seleccionada</p>
+          <p className="text-gray-500 flex " >No hay imagen seleccionada</p>
         )}
       </div>
       {photo ? (
