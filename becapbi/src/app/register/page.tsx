@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -15,7 +15,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select"
 import {
   Popover,
@@ -25,14 +25,49 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {Calendar} from "@/components/ui/calendar"
-import { format } from "date-fns"
+import { format} from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
-function FormularioRegistro() {
+interface Datos {
+	id: number;
+	descripcion : string;
+	sigla: string;
+}
+
+interface DatosP {
+	[key: string]: string;
+}
+
+const FormularioRegistro: React.FC = () => {
   
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
-	
-	
+	const [descripcionPaises , setDescripcionPaises] = useState<Datos[]>([]);
+	const [tipoColegio, setTipoColegio] = useState <Datos[]>([]);
+	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
+	const [sexos , setSexos] = useState<DatosP>({});
+
+	useEffect(() => {
+		const fetchDatos = async () => {
+			try{
+				const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/clasificadores-crea');
+				const datos = await respuesta.json();
+				console.log(datos);
+				console.log(datos.lista_sexos);
+
+				setDescripcionPaises(datos.lista_pais);
+				setTipoColegio(datos.lista_tipo_colegio);
+				setSexos(datos.lista_sexo);
+				setEstadoCivil(datos.lista_estado_civil);
+
+			}catch (error){
+				console.error("Error al obtener los nombres: ", (error as Error).message);
+			}
+		}
+		fetchDatos();
+	},[]);
+
+
+
 	return (
 		<div className="relative w-full min-h-screen">
 			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
@@ -120,12 +155,19 @@ function FormularioRegistro() {
 										/>
 								</div>
 								<div className="grid gap-2">
-										<Label htmlFor="tipoColegio">Tipo de Colegio</Label>
-										<Input
-											id="tipoColegio"
-											type="text"
-											required
-										/>
+									<Label htmlFor="Tipo de colegio">Tipo de colegio</Label>
+										<Select>
+											<SelectTrigger >
+												<SelectValue placeholder="Tipó de colegio" />
+											</SelectTrigger>
+											<SelectContent>
+												{tipoColegio.map((item)=>(
+													<SelectItem value={item.descripcion} key={item.id}>
+														{item.descripcion}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
 								</div>
 							</div>
 
@@ -137,8 +179,11 @@ function FormularioRegistro() {
 												<SelectValue placeholder="sexo" />
 											</SelectTrigger>
 											<SelectContent>
-												<SelectItem value="masculino">Masculino</SelectItem>
-												<SelectItem value="femenino">Femenino</SelectItem>
+												{Object.entries(sexos).map(([key, value])=>(
+														<SelectItem value={key} key={key}>
+															{value} ({key})
+														</SelectItem>
+													))}
 											</SelectContent>
 										</Select>
 								</div>
@@ -149,11 +194,12 @@ function FormularioRegistro() {
 												<SelectValue placeholder="Estado civil" />
 											</SelectTrigger>
 											<SelectContent>
-												<SelectItem value="soltero">Soltero(a)</SelectItem>
-												<SelectItem value="casado">Casado(a)</SelectItem>
-												<SelectItem value="divorciado">Divorciado(a)</SelectItem>
-												<SelectItem value="viudo">Viudo(a)</SelectItem>
-												<SelectItem value="unido">Unido(a) de hecho</SelectItem>
+												{Object.entries(estadoCivil).map(([key,value])=>(
+													<SelectItem value={key} key={key}>
+														{value} ({key})
+													</SelectItem>
+												))}
+												
 											</SelectContent>
 										</Select>
 								</div>
@@ -171,7 +217,7 @@ function FormularioRegistro() {
 													)}
 												>
 													<CalendarIcon className="mr-2 h-4 w-4" />
-													{date ? format(date, "PPP") : <span>Pick a date</span>}
+													{date ? format(date, "dd/MM/yyyy") : <span>Pick a date</span>}
 												</Button>
 											</PopoverTrigger>
 											<PopoverContent className="w-auto p-0">
@@ -188,18 +234,24 @@ function FormularioRegistro() {
 										</Popover>
 								</div>
 								<div >
-										<Label htmlFor="nacionalidad">Nacionalidad</Label>
-										<Input
-											id="nacionalidad"
-											type="text"
-											placeholder="nacionalidad"
-											required
-										/>
+									<Label htmlFor="Nacionalidad">Nacionalidad</Label>
+										<Select>
+											<SelectTrigger >
+												<SelectValue placeholder="Nacionalidad" />
+											</SelectTrigger>
+											<SelectContent>
+												{descripcionPaises.map((item)=>(
+													<SelectItem value={item.descripcion} key={item.id}>
+														{item.descripcion}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
 								</div>
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="email">Email</Label>
+								<Label htmlFor="email">Correo electronico</Label>
 								<Input
 									id="email"
 									type="email"
@@ -207,6 +259,8 @@ function FormularioRegistro() {
 									required
 								/>
 							</div>
+
+							{/* CREAR PASSWORD Y CONFIRMAR
 							<div className="grid gap-2">
 								<div className="flex items-center">
 									<Label htmlFor="password">Password</Label>
@@ -231,7 +285,9 @@ function FormularioRegistro() {
 							</div>
 							<Button type="submit" className="w-full">
 								Registrarse
-							</Button>
+							</Button> */}
+
+							{/* Iniciar con google */}
 							{/* <Button variant="outline" className="w-full">
 								Login with Google
 							</Button> */}

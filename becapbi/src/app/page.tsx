@@ -7,14 +7,12 @@ import Link  from "next/link"
 
 interface RespuestaValida{
     activo: boolean;
-    mensaje : string;
 }
 
 const Login: React.FC = () => {
 
     const[activo, setActivo] = useState<boolean>(false);
-    const[mensaje, setMensaje] = useState<string>('');
-
+    
     useEffect(() => {
         const validarHabilitado = async () =>{
             try{
@@ -22,7 +20,6 @@ const Login: React.FC = () => {
                 const datos: RespuestaValida = await respuesta.json();
 
                 setActivo(datos.activo);
-                setMensaje(datos.activo? '' : 'Aun no esta en fecha de registro')
             }catch (error){
                 console.error("error al verificar la dispoopnivilidad: ", error)
             }
@@ -31,7 +28,6 @@ const Login: React.FC = () => {
     },[])
 
     
-
   return (
     <div className="bg-[#26313c] h-screen flex items-center justify-center p-1 h-screen flex items-center justify-center p-1 bg-[url('/fondo.png')] bg-cover bg-center min-h-screen">
             <div className='bg-[#16202a] text-white flex items-center justify-center flex-col p-7 w-96 rounded-lg shadow-lg'>
@@ -68,15 +64,14 @@ const Login: React.FC = () => {
                       </Button>
                     </Link>
 
-                    <Link href="/register">
-                      <Button type='button' 
-                              className={`w-full mt-6 $ {activo ? ' bg-indigo-600 rounded-full hover:bg-indigo-700':'bg-gray-500 cursor-not-allowed'}`}
-                              disabled = {!activo}
-                              >
-                          Registrarse
-                      </Button>
-                    </Link>
-                    {activo && <p className='mt-2 text-red-500'>{mensaje}</p>}
+                   
+                <Button type='button' 
+                        className={`w-full mt-6 $ {activo ? ' bg-indigo-600 rounded-full hover:bg-indigo-700':'bg-gray-500 cursor-not-allowed'}`}
+                        disabled = {!activo}
+                        onClick={()=>{<Link href='/register'/>}}
+                >
+                    Registrarse
+                </Button>
                 </form>
             </div>
         
