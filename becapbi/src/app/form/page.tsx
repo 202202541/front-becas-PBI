@@ -55,60 +55,73 @@ function FormularioRegistro() {
             </CardHeader>
 					<CardContent>
 						<div className="grid gap-3">
-
-              
-
-							<div className="grid grid-cols-3 gap-4">
-								<div className="grid gap-2">
-									<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
-									<Input
-										id="apellidoPaterno"
-										type="text"
-										placeholder="apellido paterno"
-										required
-									/>
-								</div>
-								<div className="grid gap-2">
-									<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
-									<Input
-										id="apellidoMaterno"
-										type="text"
-										placeholder="apellido materno"
-										required
-									/>
-								</div>
-                <FotoCargada/>
-							</div>
-							
-							
 							<div className="grid grid-cols-2 gap-4">
-								<div className="grid gap-2">
-									<Label htmlFor="primerNombre">Primer Nombre</Label>
-									<Input
-										id="primerNombre"
-										type="text"
-										placeholder="primer nombre"
-										required
-									/>
+								<div className="grid grid-rows-2 gap-1">
+									<div className="grid grid-cols-2 gap-6">
+										<div>
+											<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
+											<Input
+												id="apellidoPaterno"
+												type="text"
+												placeholder="apellido paterno"
+												required
+											/>
+										</div>
+										<div>
+											<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
+											<Input
+												id="apellidoMaterno"
+												type="text"
+												placeholder="apellido materno"
+												required
+											/>
+										</div>
+									</div>
+									<div className="grid grid-cols-2 gap-6">
+										<div>
+											<Label htmlFor="primerNombre">Primer Nombre</Label>
+											<Input
+												id="primerNombre"
+												type="text"
+												placeholder="primer nombre"
+												required
+											/>
+										</div>
+										<div>
+											<Label htmlFor="segundoNombre">Segundo Nombre</Label>
+											<Input
+												id="segundoNombre"
+												type="text"
+												placeholder="segundo nombre"
+												required
+											/>
+										</div>
+									</div>
+									<div className="grid grid-rows-2 gap-2">
+										<div  className="grid gap-2">
+											<Label htmlFor="carnet">CI</Label>
+											<Input
+												id="carnet"
+												type="text"
+												placeholder="carnet"
+												required
+										/>
+										</div>
+										<div  className="grid gap-2">
+												<Label htmlFor="carnet">CI Exp</Label>
+												<Input
+													id="carnet"
+													type="text"
+													placeholder="CI expedito"
+													required
+												/>
+										</div>
+									</div>
+									</div>
+									<FotoCargada/>
 								</div>
-								<div className="grid gap-2">
-									<Label htmlFor="segundoNombre">Segundo Nombre</Label>
-									<Input
-										id="segundoNombre"
-										type="text"
-										placeholder="segundo nombre"
-										required
-									/>
-								</div>
-							</div>
-							<div  className="grid gap-2">
-									<Label htmlFor="carnet">CI</Label>
-									<Input
-										id="carnet"
-										type="text"
-										placeholder="carnet"
-										required
-									/>
+							<div className="grid grid-cols-2 gap-4">
+								
 							</div>
 							<div  className="grid gap-2">
 									<Label htmlFor="colegio">Colegio de Egreso</Label>
@@ -168,8 +181,8 @@ function FormularioRegistro() {
 										</Select>
 								</div>
 							</div>
-							<div className="grid grid-cols-2 gap-4">	
-								<div >
+							<div>	
+								<div className="grid grid-cols-2 gap-4">
 										<Label htmlFor="nacionalidad">Fecha de Nacimiento</Label>
 										<Popover>
 											<PopoverTrigger asChild>
