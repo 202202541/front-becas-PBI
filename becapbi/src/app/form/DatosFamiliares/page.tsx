@@ -323,12 +323,12 @@ function DatosFamiliares() {
                         <PaginationPrevious href="#" />
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink href="#">
+                        <PaginationLink href="/form/DatosPersonales" isActive>
                             1
                         </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink href="#" isActive>
+                        <PaginationLink href="/form/DatosFamiliares">
                             2
                         </PaginationLink>
                     </PaginationItem>
