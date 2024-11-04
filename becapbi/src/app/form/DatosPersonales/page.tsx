@@ -333,7 +333,7 @@ function DatosPersonales() {
 						</PaginationLink>
 					</PaginationItem>
 					<PaginationItem>
-						<PaginationLink href="#">
+						<PaginationLink href="AntecedentesAcademicos">
 							3
 						</PaginationLink>
 					</PaginationItem>
