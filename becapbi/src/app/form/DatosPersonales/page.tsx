@@ -52,7 +52,7 @@ function DatosPersonales() {
 				style={{ zIndex: -1 }}>
 
 			</div>
-			<div className=" flex min-h-screen w-full items-center justify-center p-8">
+			<div className=" flex min-h-screen w-full items-center justify-center p-4">
 				<Card className="mx-auto max-w-6xl w-full">
 					<CardHeader className="flex flex-col items-center justify-center text-center">
 						<CardTitle className="text-2xl">
@@ -323,18 +323,23 @@ function DatosPersonales() {
 						<PaginationPrevious href="#" />
 					</PaginationItem>
 					<PaginationItem>
-						<PaginationLink href="/form/DatosPersonales">
+						<PaginationLink href="/form/DatosPersonales" isActive>
 							1
 						</PaginationLink>
 					</PaginationItem>
 					<PaginationItem>
-						<PaginationLink href="/form/DatosFamiliares" isActive>
+						<PaginationLink href="/form/DatosFamiliares">
 							2
 						</PaginationLink>
 					</PaginationItem>
 					<PaginationItem>
 						<PaginationLink href="AntecedentesAcademicos">
 							3
+						</PaginationLink>
+					</PaginationItem>
+					<PaginationItem>
+						<PaginationLink href="DatosSocioeconomicos">
+							4
 						</PaginationLink>
 					</PaginationItem>
 					<PaginationItem>
