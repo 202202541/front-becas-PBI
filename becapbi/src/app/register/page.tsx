@@ -38,6 +38,23 @@ interface DatosP {
 	[key: string]: string;
 }
 
+interface FormData {
+	apellido1: string;
+	apellido2: string;
+	nombre1: string;
+	nombre2: string;
+	ci: string;
+	pais_nacionalidad_id: number; 
+	fecha_nacimiento: string;
+	sexo: string;
+	estado_civil: string;
+	email: string;
+	telefono_celular: string;
+	nombre_colegio: string;
+	gestion_egreso_colegio: number;
+	tipo_colegio_id: number; 
+}
+
 const FormularioRegistro: React.FC = () => {
 
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -45,6 +62,23 @@ const FormularioRegistro: React.FC = () => {
 	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
 	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
 	const [sexos, setSexos] = useState<DatosP>({});
+
+	const [formData, setFormData] = useState<FormData>({
+		apellido1:"",
+		apellido2:"",
+		nombre1:"",
+		nombre2:"",
+		ci:"",
+		pais_nacionalidad_id: 0 ,
+		fecha_nacimiento:"",
+		sexo:"",
+		estado_civil: "",
+		email:"",
+		telefono_celular:"",
+		nombre_colegio:"",
+		gestion_egreso_colegio:0,
+		tipo_colegio_id:0,
+	});
 
 	useEffect(() => {
 		const fetchDatos = async () => {
@@ -66,10 +100,45 @@ const FormularioRegistro: React.FC = () => {
 		fetchDatos();
 	}, []);
 
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const {name, value} = e.target;
+		setFormData({...formData, [name]: value});
+	};
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		try{
+			const respuesta = await fetch('http://sispos.dev.umss.net/api/postulante/crea-cuenta',{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					...formData,
+					fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
+					tipo_colegio_id : formData.tipo_colegio_id,
+					pais_nacionalidad_id: formData.pais_nacionalidad_id,
+					sexo: formData.sexo,
+					estado_civil : formData.estado_civil,
+				}),
+			});
+
+			if(!respuesta.ok){
+				throw new Error('Error al crear la cuenta')
+			}
+
+			const resultado = await respuesta.json();
+			console.log(resultado);
+
+		}catch(error){
+			console.error("error al enviar el formulario: ", (error as Error).message);
+		}
+	}
+
 
 
 	return (
-		<div className="relative w-full min-h-screen">
+		<form className="relative w-full min-h-screen" >
 			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
 				style={{ zIndex: -1 }}>
 
@@ -88,19 +157,23 @@ const FormularioRegistro: React.FC = () => {
 								<div className="grid gap-2">
 									<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
 									<Input
-										id="apellidoPaterno"
+										id="apellido1"
+										name="apellido1"
 										type="text"
 										placeholder="apellido paterno"
 										required
+										onChange={handleChange}
 									/>
 								</div>
 								<div className="grid gap-2">
 									<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
 									<Input
-										id="apellidoMaterno"
+										id="apellido2"
+										name="apellido2"
 										type="text"
 										placeholder="apellido materno"
 										required
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
@@ -110,59 +183,69 @@ const FormularioRegistro: React.FC = () => {
 								<div className="grid gap-2">
 									<Label htmlFor="primerNombre">Primer Nombre</Label>
 									<Input
-										id="primerNombre"
+										id="nombre1"
+										name="nombre1"
 										type="text"
 										placeholder="primer nombre"
 										required
+										onChange={handleChange}
 									/>
 								</div>
 								<div className="grid gap-2">
 									<Label htmlFor="segundoNombre">Segundo Nombre</Label>
 									<Input
-										id="segundoNombre"
+										id="nombre2"
+										name="nombre2"
 										type="text"
 										placeholder="segundo nombre"
 										required
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
 							<div className="grid gap-2">
 								<Label htmlFor="carnet">CI</Label>
 								<Input
-									id="carnet"
+									id="ci"
+									name="ci"
 									type="text"
 									placeholder="carnet"
 									required
+									onChange={handleChange}
 								/>
 							</div>
 							<div className="grid gap-2">
 								<Label htmlFor="colegio">Colegio de Egreso</Label>
 								<Input
-									id="colegio"
+									id="nombre_colegio"
+									name="nombre_colegio"
 									type="text"
 									placeholder="colegio de egreso"
 									required
+									onChange={handleChange}
 								/>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
 									<Label htmlFor="gestionEgreso">Gestion de Egreso</Label>
 									<Input
-										id="gestionEgreso"
+										id="gestion_egreso_colegio"
+										name="gestion_egreso_colegio"
 										type="text"
 										placeholder="gestion de egreso"
 										required
+										onChange={handleChange}
 									/>
 								</div>
 								<div className="grid gap-2">
-									<Label htmlFor="Tipo de colegio">Tipo de colegio</Label>
-									<Select>
+									<Label htmlFor="tipo_colegio_id">Tipo de colegio</Label>
+									<Select onValueChange={(value) => setFormData({...formData, tipo_colegio_id:Number(value)})}>
 										<SelectTrigger >
 											<SelectValue placeholder="Tipó de colegio" />
 										</SelectTrigger>
 										<SelectContent>
 											{tipoColegio.map((item) => (
-												<SelectItem value={item.descripcion} key={item.id}>
+												<SelectItem value={item.id.toString()} key={item.id}>
 													{item.descripcion}
 												</SelectItem>
 											))}
@@ -174,7 +257,7 @@ const FormularioRegistro: React.FC = () => {
 							<div className="grid grid-cols-2 gap-4">
 								<div>
 									<Label htmlFor="sexo">Sexo</Label>
-									<Select>
+									<Select onValueChange={(value) => setFormData({...formData,sexo : value})}>
 										<SelectTrigger>
 											<SelectValue placeholder="sexo" />
 										</SelectTrigger>
@@ -189,7 +272,7 @@ const FormularioRegistro: React.FC = () => {
 								</div>
 								<div >
 									<Label htmlFor="estadoCivil">Estado Civil</Label>
-									<Select>
+									<Select onValueChange={(value) => setFormData({...formData, estado_civil:value})}>
 										<SelectTrigger >
 											<SelectValue placeholder="Estado civil" />
 										</SelectTrigger>
@@ -206,7 +289,7 @@ const FormularioRegistro: React.FC = () => {
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div >
-									<Label htmlFor="nacionalidad">Fecha de Nacimiento</Label>
+									<Label htmlFor="fecha_nacimiento">Fecha de Nacimiento</Label>
 									<Popover>
 										<PopoverTrigger asChild>
 											<Button
@@ -217,7 +300,7 @@ const FormularioRegistro: React.FC = () => {
 												)}
 											>
 												<CalendarIcon className="mr-2 h-4 w-4" />
-												{date ? format(date, "dd/MM/yyyy") : <span>Pick a date</span>}
+												{date ? format(date, "dd/MM/yyyy") : <span>Seleccionar fecha</span>}
 											</Button>
 										</PopoverTrigger>
 										<PopoverContent className="w-auto p-0">
@@ -227,21 +310,24 @@ const FormularioRegistro: React.FC = () => {
 												fromYear={1990}
 												toYear={2024}
 												selected={date}
-												onSelect={setDate}
+												onSelect={(date) =>{
+													setDate(date);
+													setFormData({...formData, fecha_nacimiento: date ? format(date,"yyyy-MM-dd"): ""});
+												}}
 												initialFocus
 											/>
 										</PopoverContent>
 									</Popover>
 								</div>
 								<div >
-									<Label htmlFor="Nacionalidad">Nacionalidad</Label>
-									<Select>
+									<Label htmlFor="pais_nacionalidad_id">Nacionalidad</Label>
+									<Select onValueChange={(value) => setFormData({...formData, pais_nacionalidad_id: Number(value)})}>
 										<SelectTrigger >
 											<SelectValue placeholder="Nacionalidad" />
 										</SelectTrigger>
 										<SelectContent>
 											{descripcionPaises.map((item) => (
-												<SelectItem value={item.descripcion} key={item.id}>
+												<SelectItem value={item.id.toString()} key={item.id}>
 													{item.descripcion}
 												</SelectItem>
 											))}
@@ -257,45 +343,21 @@ const FormularioRegistro: React.FC = () => {
 									type="email"
 									placeholder="m@example.com"
 									required
+									onChange={(e) =>setFormData({...formData, email : e.target.value})}
 								/>
 							</div>
 
-							{/* CREAR PASSWORD Y CONFIRMAR
-							<div className="grid gap-2">
-								<div className="flex items-center">
-									<Label htmlFor="password">Password</Label>
-								</div>
-								<Input 
-									id="password" 
-									type="password" 
-									placeholder="contraseña"
-									required />
-							</div>
-							<div className="grid gap-1">
-								<div className="flex items-center">
-									<Label htmlFor="password">Porfavor confirme su contraseña</Label>
-								</div>
-								<div className="flex items-center">
-								</div>
-								<Input 
-									id="passwordConfirm" 
-									type="password" 
-									placeholder="contraseña"
-									required />
-							</div>
-							<Button type="submit" className="w-full">
+							<div>
+							<Button type="submit" className="w-full" onSubmit={handleSubmit}>
 								Registrarse
-							</Button> */}
-
-							{/* Iniciar con google */}
-							{/* <Button variant="outline" className="w-full">
-								Login with Google
-							</Button> */}
+							</Button>
 						</div>
+						</div>
+						
 					</CardContent>
 				</Card>
 			</div>
-		</div>
+		</form>
 	)
 }
 

@@ -23,6 +23,7 @@ const Login: React.FC = () => {
             try {
                 const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/ciclo-formulario');
                 const datos: RespuestaValida = await respuesta.json();
+                //modificar datos.activo
                 setActivo(datos.activo);
             } catch (error) {
                 console.error("Error al verificar la disponibilidad: ", error);
