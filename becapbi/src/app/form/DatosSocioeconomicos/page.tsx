@@ -46,7 +46,6 @@ function DatosSocioeconomicos() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <NavBar />
       <div className="fixed inset-0 bg-whait bg-cover bg-center bg-fixed"
         style={{ zIndex: -1 }}>
 
