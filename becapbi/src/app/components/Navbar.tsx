@@ -13,16 +13,16 @@ function Navbar() {
         <h1 className="text-white text-2xl">UMSS</h1>
         <ul className="flex space-x-4">
           <li>
-            {pathname === '/form' ? (
+            {pathname === '/form/DatosPersonales' ? (
               <div className="border border-orange-500 rounded p-1">
-                <Link className="text-orange-500" href="/form">
+                <Link className="text-orange-500" href="/form/DatosPersonales">
                   Formulario
                 </Link>
               </div>
             ) : (
               <Link
                 className="text-white hover:text-gray-300"
-                href="/form"
+                href="/form/DatosPersonales"
               >
                 Formulario
               </Link>

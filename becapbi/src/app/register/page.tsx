@@ -62,7 +62,7 @@ const FormularioRegistro: React.FC = () => {
 	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
 	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
 	const [sexos, setSexos] = useState<DatosP>({});
-
+	const [errorM, setErrorM]= useState<string | null>(null);
 	const [formData, setFormData] = useState<FormData>({
 		apellido1:"",
 		apellido2:"",
@@ -85,8 +85,6 @@ const FormularioRegistro: React.FC = () => {
 			try {
 				const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/clasificadores-crea');
 				const datos = await respuesta.json();
-				console.log(datos);
-				console.log(datos.lista_sexos);
 
 				setDescripcionPaises(datos.lista_pais);
 				setTipoColegio(datos.lista_tipo_colegio);
@@ -107,6 +105,16 @@ const FormularioRegistro: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		console.log("Datos enviados:", {
+			...formData,
+			fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
+			tipo_colegio_id: formData.tipo_colegio_id,
+			pais_nacionalidad_id: formData.pais_nacionalidad_id,
+			sexo: formData.sexo,
+			estado_civil: formData.estado_civil,
+		});
+
 		try{
 			const respuesta = await fetch('http://sispos.dev.umss.net/api/postulante/crea-cuenta',{
 				method: 'POST',
@@ -123,22 +131,36 @@ const FormularioRegistro: React.FC = () => {
 				}),
 			});
 
+			const resultado = await respuesta.json();
+
 			if(!respuesta.ok){
-				throw new Error('Error al crear la cuenta')
+				setErrorM(resultado.message);
+				console.log('Error al crear la cuenta: ', resultado.message);
+				alert("Hubo un problema al registrar la cuenta. verifique los datos");
+				return;
 			}
 
-			const resultado = await respuesta.json();
-			console.log(resultado);
+			
+			console.log("Respuesta exitosa: " ,resultado);
+			alert("Cuenta creada exitposamente")
 
 		}catch(error){
 			console.error("error al enviar el formulario: ", (error as Error).message);
+			alert("hubo un error al enviar el formulario. intentalo nuevamente.");
+			setErrorM("hubo un error al enviar el formulario. intentalo nuevamente.");
+
 		}
-	}
+	};
 
 
 
 	return (
-		<form className="relative w-full min-h-screen" >
+		<div className="relative w-full min-h-screen" >
+			{errorM &&(
+				<div className="text-red-500-bg-red-100 p-3 rounded mb-4">
+					<strong>Error:</strong>{errorM}
+				</div>
+			)}
 			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
 				style={{ zIndex: -1 }}>
 
@@ -348,7 +370,7 @@ const FormularioRegistro: React.FC = () => {
 							</div>
 
 							<div>
-							<Button type="submit" className="w-full" onSubmit={handleSubmit}>
+							<Button type="submit" className="w-full" onClick={handleSubmit}>
 								Registrarse
 							</Button>
 						</div>
@@ -357,7 +379,7 @@ const FormularioRegistro: React.FC = () => {
 					</CardContent>
 				</Card>
 			</div>
-		</form>
+		</div>
 	)
 }
 
