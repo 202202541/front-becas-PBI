@@ -27,6 +27,7 @@ import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
+import Link from "next/link"
 
 interface Datos {
 	id: number;
@@ -150,6 +151,7 @@ const FormularioRegistro: React.FC = () => {
 			setErrorM("hubo un error al enviar el formulario. intentalo nuevamente.");
 
 		}
+
 	};
 
 
@@ -372,6 +374,7 @@ const FormularioRegistro: React.FC = () => {
 							<div>
 							<Button type="submit" className="w-full" onClick={handleSubmit}>
 								Registrarse
+								<Link href= "../page.tsx"></Link>
 							</Button>
 						</div>
 						</div>

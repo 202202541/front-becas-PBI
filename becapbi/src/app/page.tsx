@@ -2,7 +2,7 @@
 "use client"; // Marca el archivo como un componente de cliente
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Cambia la importación aquí
+import { useRouter } from 'next/navigation'; // Corrigiendo importación
 import { Button } from '@/components/ui/button';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -11,29 +11,33 @@ interface RespuestaValida {
     activo: boolean;
 }
 
-const Login: React.FC = () => {
+const Login : React.FC = () => {
     const router = useRouter();
     const [activo, setActivo] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [token, setToken] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); // Nuevo estado para manejar errores
 
+    // Verificar si el formulario está habilitado
     useEffect(() => {
         const validarHabilitado = async () => {
             try {
                 const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/ciclo-formulario');
                 const datos: RespuestaValida = await respuesta.json();
-                //modificar datos.activo
                 setActivo(datos.activo);
             } catch (error) {
                 console.error("Error al verificar la disponibilidad: ", error);
+                setErrorMessage("Error al verificar la disponibilidad, intenta más tarde.");
             }
         };
         validarHabilitado();
     }, []);
 
+    // Manejo del login
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setErrorMessage(null); // Limpiar mensaje de error al intentar hacer login
 
         try {
             const respuesta = await fetch(
@@ -43,8 +47,9 @@ const Login: React.FC = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password })
-                });
+                    body: JSON.stringify({ username, password }),
+                }
+            );
 
             if (!respuesta.ok) {
                 const errorData = await respuesta.json();
@@ -56,6 +61,7 @@ const Login: React.FC = () => {
             router.push('/inicio');
         } catch (error) {
             console.error("Error durante el inicio de sesión: ", error);
+            setErrorMessage("Credenciales incorrectas o error en el servidor.");
         }
     };
 
@@ -67,9 +73,17 @@ const Login: React.FC = () => {
                     <p className='mt-2 text-xs text-slate-400'>Iniciar sesión o registrarse</p>
                 </div>
 
+                
+                {errorMessage && (
+                    <div className="text-red-500 bg-red-100 p-3 rounded mb-4">
+                        <strong>Error:</strong> {errorMessage}
+                    </div>
+                )}
+
                 <form onSubmit={handleLogin}>
                     <Label htmlFor='username'>Usuario</Label>
-                    <Input className='mt-2 mb-4 bg-transparent rounded-full'
+                    <Input 
+                        className='mt-2 mb-4 bg-transparent rounded-full'
                         type='text'
                         id='username'
                         placeholder='usuario'
@@ -77,8 +91,9 @@ const Login: React.FC = () => {
                         onChange={(e) => setUsername(e.target.value)}
                     />
 
-                    <Label htmlFor='password'>Password</Label>
-                    <Input className='mt-2 mb-4 bg-transparent rounded-full'
+                    <Label htmlFor='password'>Contraseña</Label>
+                    <Input 
+                        className='mt-2 mb-4 bg-transparent rounded-full'
                         type='password'
                         id='password'
                         placeholder='password'
@@ -86,14 +101,16 @@ const Login: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <Button type='submit'
+                    <Button 
+                        type='submit'
                         className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'
                         disabled={!activo}
                     >
                         Login
                     </Button>
 
-                    <Button type='button'
+                    <Button 
+                        type='button'
                         className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'
                         onClick={() => router.push('/register')}
                         disabled={!activo}
