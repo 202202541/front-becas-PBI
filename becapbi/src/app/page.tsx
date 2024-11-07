@@ -11,6 +11,11 @@ interface RespuestaValida {
     activo: boolean;
 }
 
+interface ErrorResponse {
+    message: string;
+}
+
+
 const Login : React.FC = () => {
     const router = useRouter();
     const [activo, setActivo] = useState<boolean>(false);
@@ -37,8 +42,13 @@ const Login : React.FC = () => {
     // Manejo del login
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorMessage(null); // Limpiar mensaje de error al intentar hacer login
-
+        setErrorMessage(null); // Limpiar mensaje de error
+    
+        if (!username || !password) {
+            setErrorMessage("Por favor, ingrese ambos campos.");
+            return;
+        }
+    
         try {
             const respuesta = await fetch(
                 'http://sispos.dev.umss.net/api/postulante/login',
@@ -50,12 +60,25 @@ const Login : React.FC = () => {
                     body: JSON.stringify({ username, password }),
                 }
             );
-
+    
+            // Verificar si la respuesta fue exitosa
             if (!respuesta.ok) {
-                const errorData = await respuesta.json();
-                throw new Error(errorData.message || 'Error en la autenticación');
+                const errorText = await respuesta.text(); // Obtener la respuesta como texto
+                let errorData: ErrorResponse = { message: 'Error desconocido' }; // Valor predeterminado
+    
+                try {
+                    errorData = JSON.parse(errorText); // Intentar convertir el texto en JSON
+                } catch{
+                    // Si no es JSON, mostramos el texto plano como mensaje de error
+                    setErrorMessage('Error de autenticación. No se pudo parsear el mensaje de error.');
+                    return;
+                }
+    
+                setErrorMessage(errorData.message || 'Error en la autenticación');
+                return;
             }
-
+    
+            // Si la respuesta es exitosa, obtenemos el token
             const datos = await respuesta.json();
             setToken(datos.token);
             router.push('/inicio');
@@ -64,6 +87,8 @@ const Login : React.FC = () => {
             setErrorMessage("Credenciales incorrectas o error en el servidor.");
         }
     };
+    
+ 
 
     return (
         <div className="bg-[#26313c] h-screen flex items-center justify-center p-1 bg-[url('/fondo.png')] bg-cover bg-center">
@@ -102,9 +127,8 @@ const Login : React.FC = () => {
                     />
 
                     <Button 
-                        type='submit'
-                        className='w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700'
-                        disabled={!activo}
+                        type="submit"
+                        className="w-full mt-6 bg-indigo-600 rounded-full hover:bg-indigo-700"
                     >
                         Login
                     </Button>

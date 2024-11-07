@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import Link from "next/link"
+import { useRouter } from 'next/navigation';
 
 interface Datos {
 	id: number;
@@ -57,6 +57,8 @@ interface FormData {
 }
 
 const FormularioRegistro: React.FC = () => {
+
+	const router= useRouter();
 
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
 	const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([]);
@@ -107,7 +109,7 @@ const FormularioRegistro: React.FC = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		console.log("Datos enviados:", {
+		console.log("Validando0", {
 			...formData,
 			fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
 			tipo_colegio_id: formData.tipo_colegio_id,
@@ -119,6 +121,7 @@ const FormularioRegistro: React.FC = () => {
 		try{
 			const respuesta = await fetch('http://sispos.dev.umss.net/api/postulante/crea-cuenta',{
 				method: 'POST',
+				mode: 'no-cors',
 				headers: {
 					'Content-Type': 'application/json',
 				},
@@ -133,7 +136,7 @@ const FormularioRegistro: React.FC = () => {
 			});
 
 			const resultado = await respuesta.json();
-
+			console.log('validadndo 1 ');
 			if(!respuesta.ok){
 				setErrorM(resultado.message);
 				console.log('Error al crear la cuenta: ', resultado.message);
@@ -141,7 +144,7 @@ const FormularioRegistro: React.FC = () => {
 				return;
 			}
 
-			
+			router.push('../page.tsx');
 			console.log("Respuesta exitosa: " ,resultado);
 			alert("Cuenta creada exitposamente")
 
@@ -176,7 +179,8 @@ const FormularioRegistro: React.FC = () => {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid gap-3">
+
+						<form onSubmit={handleSubmit} className="grid gap-3">
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
 									<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
@@ -374,10 +378,9 @@ const FormularioRegistro: React.FC = () => {
 							<div>
 							<Button type="submit" className="w-full" onClick={handleSubmit}>
 								Registrarse
-								<Link href= "../page.tsx"></Link>
 							</Button>
 						</div>
-						</div>
+						</form>
 						
 					</CardContent>
 				</Card>
