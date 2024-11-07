@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
+import { FormProvider } from '../components/formProvider';
 
 interface LayoutProps{
     children: React.ReactNode;
@@ -7,10 +8,12 @@ interface LayoutProps{
 
 const FormularioVentana: React.FC<LayoutProps> =({ children }) =>{
   return (
-    
+  
     <div>
         <Navbar/>
-        <main>{children}</main>
+        <FormProvider>
+          <main>{children}</main>
+        </FormProvider>
     </div>
   )
 }
