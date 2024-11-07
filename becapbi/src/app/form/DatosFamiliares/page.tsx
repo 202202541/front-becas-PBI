@@ -127,12 +127,12 @@ function DatosFamiliares() {
                         </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink href="AntecedentesAcademicos">
+                        <PaginationLink href="/form/AntecedentesAcademicos">
                             3
                         </PaginationLink>
                     </PaginationItem>
                     <PaginationItem>
-                        <PaginationLink href="DatosSocioeconomicos">
+                        <PaginationLink href="/form/DatosSocioeconomicos">
                             4
                         </PaginationLink>
                     </PaginationItem>

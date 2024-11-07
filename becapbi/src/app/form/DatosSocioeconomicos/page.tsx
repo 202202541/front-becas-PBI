@@ -5,32 +5,32 @@ import NavBar from "@/app/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card"
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover"
 import {
-	Pagination,
-	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination"
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -113,19 +113,19 @@ function DatosSocioeconomicos() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                <Label htmlFor="estadoCivil">Estado Civil</Label>
-                <Select>
-										<SelectTrigger >
-											<SelectValue placeholder="Estado civil" />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="soltero">Soltero(a)</SelectItem>
-											<SelectItem value="casado">Casado(a)</SelectItem>
-											<SelectItem value="divorciado">Divorciado(a)</SelectItem>
-											<SelectItem value="viudo">Viudo(a)</SelectItem>
-											<SelectItem value="unido">Unido(a) de hecho</SelectItem>
-										</SelectContent>
-									</Select>
+                  <Label htmlFor="estadoCivil">Estado Civil</Label>
+                  <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Estado civil" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="soltero">Soltero(a)</SelectItem>
+                      <SelectItem value="casado">Casado(a)</SelectItem>
+                      <SelectItem value="divorciado">Divorciado(a)</SelectItem>
+                      <SelectItem value="viudo">Viudo(a)</SelectItem>
+                      <SelectItem value="unido">Unido(a) de hecho</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="nacionalidad">Fecha de Nacimiento</Label>
@@ -158,17 +158,17 @@ function DatosSocioeconomicos() {
                   </div>
                 </div>
               </div>
-              <div>
-                <Label htmlFor="ocupacion">Ocupacion</Label>
-                <Input
-                  id="ocupacion"
-                  type="text"
-                  placeholder="ocupacion"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-6">
-                <div className="col-span-2">
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="ocupacion">Ocupacion</Label>
+                  <Input
+                    id="ocupacion"
+                    type="text"
+                    placeholder="ocupacion"
+                    required
+                  />
+                </div>
+                <div>
                   <Label htmlFor="institucion">Institucion de trabajo</Label>
                   <Input
                     id="institucion"
@@ -177,6 +177,8 @@ function DatosSocioeconomicos() {
                     required
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="salario">Salario/Ingresos</Label>
                   <Input
@@ -186,7 +188,84 @@ function DatosSocioeconomicos() {
                     required
                   />
                 </div>
-                
+                <div>
+                  <Label htmlFor="otroIngreso">Otros ingresos</Label>
+                  <Input
+                    id="otroIngreso"
+                    type="text"
+                    placeholder="otros"
+                    required
+                  />
+                </div>
+              </div>
+              <Label className="text-lg" > Lugar de Trabajo:</Label>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-1">
+                  <Label htmlFor="Municipio">Municipio</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Municipio" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Bolivia">Bolivia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-1">
+                  <Label htmlFor="Provincia">Provincia</Label>
+                  <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Provincia" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="soltero">Bolivia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-1">
+                  <Label htmlFor="Departamento">Departamento</Label>
+                  <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Departamento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="soltero">Bolivia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="integrantes">N° Integrantes de familia</Label>
+                  <Input
+                    id="integrantes"
+                    type="text"
+                    placeholder="integrantes"
+                    required
+                  />
+                </div>
+                <div className="col-span-1">
+                  <Label htmlFor="sectorTrabajo">Sector de Trabajo</Label>
+                  <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="seleccione el sector" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="obrero">Obrero</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="col-span-1">
+                <Label htmlFor="sectorTrabajo">Categoria Ocupacional</Label>
+                <Select>
+                  <SelectTrigger >
+                    <SelectValue placeholder="seleccione la categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cuentaPropia">Trabajador por cuenta propia</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -217,7 +296,7 @@ function DatosSocioeconomicos() {
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="DatosSocioeconomicos" isActive>
+            <PaginationLink href="/form/DatosSocioeconomicos" isActive>
               4
             </PaginationLink>
           </PaginationItem>

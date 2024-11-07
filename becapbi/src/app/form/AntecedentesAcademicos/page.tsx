@@ -179,7 +179,7 @@ function AntecedentesAcademicos() {
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="DatosSocioeconomicos">
+            <PaginationLink href="/form/DatosSocioeconomicos">
               4
             </PaginationLink>
           </PaginationItem>
