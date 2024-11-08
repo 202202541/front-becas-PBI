@@ -67,20 +67,20 @@ const FormularioRegistro: React.FC = () => {
 	const [sexos, setSexos] = useState<DatosP>({});
 	const [errorM, setErrorM]= useState<string | null>(null);
 	const [formData, setFormData] = useState<FormData>({
-		apellido1:"",
-		apellido2:"",
-		nombre1:"",
-		nombre2:"",
-		ci:"",
-		pais_nacionalidad_id: 0 ,
-		fecha_nacimiento:"",
-		sexo:"",
-		estado_civil: "",
-		email:"",
-		telefono_celular:"",
-		nombre_colegio:"",
-		gestion_egreso_colegio:0,
-		tipo_colegio_id:0,
+		"apellido1":"",
+		"apellido2":"",
+		"nombre1":"",
+		"nombre2":"",
+		"ci":"",
+		"pais_nacionalidad_id": 0 ,
+		"fecha_nacimiento":"",
+		"sexo":"",
+		"estado_civil": "",
+		"email":"",
+		"telefono_celular":"",
+		"nombre_colegio":"",
+		"gestion_egreso_colegio":0,
+		"tipo_colegio_id":0,
 	});
 
 	useEffect(() => {
@@ -149,7 +149,7 @@ const FormularioRegistro: React.FC = () => {
 			alert("Cuenta creada exitposamente")
 
 		}catch(error){
-			console.error("error al enviar el formulario: ", (error as Error).message);
+			console.error("validad ", (error as Error).message);
 			alert("hubo un error al enviar el formulario. intentalo nuevamente.");
 			setErrorM("hubo un error al enviar el formulario. intentalo nuevamente.");
 
