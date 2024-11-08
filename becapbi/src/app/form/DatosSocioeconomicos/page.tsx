@@ -17,15 +17,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import {
   Select,
   SelectContent,
   SelectItem,
