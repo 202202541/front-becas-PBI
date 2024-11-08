@@ -315,40 +315,6 @@ function DatosPersonales() {
 					</CardContent>
 				</Card>
 			</div>
-
-			<Pagination>
-				<PaginationContent>
-					<PaginationItem>
-						<PaginationPrevious href="#" />
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationLink href="/form/DatosPersonales" isActive>
-							1
-						</PaginationLink>
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationLink href="/form/DatosFamiliares">
-							2
-						</PaginationLink>
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationLink href="/form/AntecedentesAcademicos">
-							3
-						</PaginationLink>
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationLink href="/form/DatosSocioeconomicos">
-							4
-						</PaginationLink>
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationEllipsis />
-					</PaginationItem>
-					<PaginationItem>
-						<PaginationNext href="#" />
-					</PaginationItem>
-				</PaginationContent>
-			</Pagination>
 		</div >
 	)
 }
