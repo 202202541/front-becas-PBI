@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { AxiosServiceCiclo } from '@/lib/Services/axios.service';
+import { AxiosServiceCiclo , AxiosServiceLogin} from '@/lib/Services/axios.service';
 
 interface RespuestaValida {
     activo: boolean;
@@ -41,46 +41,23 @@ const Login : React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('ingresando al login')
         setErrorMessage(null);
-    
+        console.log({username, password})
         if (!username || !password) {
             setErrorMessage("Por favor, ingrese ambos campos.");
             return;
         }
-    
+        const data = {username, password}
+        console.log(data)
         try {
-            const respuesta = await fetch(
-                'http://sispos.dev.umss.net/api/postulante/login',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                }
-            )
-
-            if (!respuesta.ok) {
-                const errorText = await respuesta.text()
-                let errorData: ErrorResponse = { message: 'Error desconocido' }
-    
-                try {
-                    errorData = JSON.parse(errorText)
-                } catch{
-                    setErrorMessage('Error de autenticación. No se pudo parsear el mensaje de error.')
-                    return;
-                }
-    
-                setErrorMessage(errorData.message || 'Error en la autenticación')
-                return
-            }
-    
-            const datos = await respuesta.json()
+            const respuesta = await AxiosServiceLogin(data)
+            const datos = respuesta.data
             setToken(datos.token)
-            router.push('/inicio')
+            console.log(token)
+            //router.push('/inicio')
         } catch (error) {
             console.error("Error durante el inicio de sesión: ", error)
-            setErrorMessage("Credenciales incorrectas o error en el servidor.")
         }
     };
     
