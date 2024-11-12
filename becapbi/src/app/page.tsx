@@ -1,11 +1,11 @@
-// src/app/login/page.tsx
-"use client"; // Marca el archivo como un componente de cliente
+"use client";
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Corrigiendo importación
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { AxiosServiceCiclo } from '@/lib/Services/axios.service';
 
 interface RespuestaValida {
     activo: boolean;
@@ -22,14 +22,19 @@ const Login : React.FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [token, setToken] = useState<string | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null); // Nuevo estado para manejar errores
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Verificar si el formulario está habilitado
+    const fetchCiclo = async () => {
+        const respuesta = await AxiosServiceCiclo()
+        return respuesta
+    }
+
     useEffect(() => {
         const validarHabilitado = async () => {
             try {
-                const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/ciclo-formulario');
-                const datos: RespuestaValida = await respuesta.json();
+                const respuesta = await fetchCiclo()
+                const datos: RespuestaValida = respuesta.data;
+                console.log(datos)
                 setActivo(datos.activo);
             } catch (error) {
                 console.error("Error al verificar la disponibilidad: ", error);
@@ -39,10 +44,9 @@ const Login : React.FC = () => {
         validarHabilitado();
     }, []);
 
-    // Manejo del login
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorMessage(null); // Limpiar mensaje de error
+        setErrorMessage(null);
     
         if (!username || !password) {
             setErrorMessage("Por favor, ingrese ambos campos.");
@@ -59,32 +63,29 @@ const Login : React.FC = () => {
                     },
                     body: JSON.stringify({ username, password }),
                 }
-            );
-    
-            // Verificar si la respuesta fue exitosa
+            )
+
             if (!respuesta.ok) {
-                const errorText = await respuesta.text(); // Obtener la respuesta como texto
-                let errorData: ErrorResponse = { message: 'Error desconocido' }; // Valor predeterminado
+                const errorText = await respuesta.text()
+                let errorData: ErrorResponse = { message: 'Error desconocido' }
     
                 try {
-                    errorData = JSON.parse(errorText); // Intentar convertir el texto en JSON
+                    errorData = JSON.parse(errorText)
                 } catch{
-                    // Si no es JSON, mostramos el texto plano como mensaje de error
-                    setErrorMessage('Error de autenticación. No se pudo parsear el mensaje de error.');
+                    setErrorMessage('Error de autenticación. No se pudo parsear el mensaje de error.')
                     return;
                 }
     
-                setErrorMessage(errorData.message || 'Error en la autenticación');
-                return;
+                setErrorMessage(errorData.message || 'Error en la autenticación')
+                return
             }
     
-            // Si la respuesta es exitosa, obtenemos el token
-            const datos = await respuesta.json();
-            setToken(datos.token);
-            router.push('/inicio');
+            const datos = await respuesta.json()
+            setToken(datos.token)
+            router.push('/inicio')
         } catch (error) {
-            console.error("Error durante el inicio de sesión: ", error);
-            setErrorMessage("Credenciales incorrectas o error en el servidor.");
+            console.error("Error durante el inicio de sesión: ", error)
+            setErrorMessage("Credenciales incorrectas o error en el servidor.")
         }
     };
     
