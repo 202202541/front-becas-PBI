@@ -24,15 +24,10 @@ const Login : React.FC = () => {
     const [token, setToken] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const fetchCiclo = async () => {
-        const respuesta = await AxiosServiceCiclo()
-        return respuesta
-    }
-
     useEffect(() => {
         const validarHabilitado = async () => {
             try {
-                const respuesta = await fetchCiclo()
+                const respuesta = await AxiosServiceCiclo()
                 const datos: RespuestaValida = respuesta.data;
                 console.log(datos)
                 setActivo(datos.activo);
