@@ -3,31 +3,16 @@
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card"
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue
-} from "@/components/ui/select"
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover"
+import {Card,CardContent,CardDescription,CardHeader,CardTitle} from "@/components/ui/card"
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select"
+import {Popover,PopoverContent,PopoverTrigger} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation';
+import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/Services/axios.service"
 
 interface Datos {
 	id: number;
@@ -66,6 +51,7 @@ const FormularioRegistro: React.FC = () => {
 	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
 	const [sexos, setSexos] = useState<DatosP>({});
 	const [errorM, setErrorM]= useState<string | null>(null);
+
 	const [formData, setFormData] = useState<FormData>({
 		"apellido1":"",
 		"apellido2":"",
@@ -82,13 +68,13 @@ const FormularioRegistro: React.FC = () => {
 		"gestion_egreso_colegio":0,
 		"tipo_colegio_id":0,
 	});
+	const [data, setData] = useState<FormData>();
 
 	useEffect(() => {
 		const fetchDatos = async () => {
 			try {
-				const respuesta = await fetch('http://sispos.dev.umss.net/api/postulacion/clasificadores-crea');
-				const datos = await respuesta.json();
-
+				const respuesta = await AxiosServiceClasificadoresCrea();
+				const datos = respuesta.data 
 				setDescripcionPaises(datos.lista_pais);
 				setTipoColegio(datos.lista_tipo_colegio);
 				setSexos(datos.lista_sexo);
@@ -109,34 +95,26 @@ const FormularioRegistro: React.FC = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		console.log("Validando0", {
+		const preparedData = {
 			...formData,
 			fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
-			tipo_colegio_id: formData.tipo_colegio_id,
+			tipo_colegio_id : formData.tipo_colegio_id,
 			pais_nacionalidad_id: formData.pais_nacionalidad_id,
 			sexo: formData.sexo,
-			estado_civil: formData.estado_civil,
-		});
+			estado_civil : formData.estado_civil,
+		}
+
+		setData(preparedData);
+
+		console.log("Validando", data);
 
 		try{
-			const respuesta = await fetch('http://sispos.dev.umss.net/api/postulante/crea-cuenta',{
-				method: 'POST',
-				mode: 'no-cors',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					...formData,
-					fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
-					tipo_colegio_id : formData.tipo_colegio_id,
-					pais_nacionalidad_id: formData.pais_nacionalidad_id,
-					sexo: formData.sexo,
-					estado_civil : formData.estado_civil,
-				}),
-			});
+			const respuesta = await AxiosServiceClasificadoresCrea();
 
-			const resultado = await respuesta.json();
+			const resultado =  respuesta.data;
+
 			console.log('validadndo 1 ');
+
 			if(!respuesta.ok){
 				setErrorM(resultado.message);
 				console.log('Error al crear la cuenta: ', resultado.message);

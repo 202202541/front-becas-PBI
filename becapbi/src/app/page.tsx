@@ -45,8 +45,6 @@ const Login : React.FC = () => {
         try {
             const respuesta= await AxiosServiceLogin({username, password})
             console.log("respuesta de login" , respuesta);
-            const token = respuesta.data.token;
-            console.log("token de autentificacion: ",token)
             router.push('/inicio')
         } catch (error) {
             console.error("Error durante el inicio de sesión: ", error);

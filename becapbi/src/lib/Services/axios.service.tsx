@@ -1,5 +1,6 @@
 import axios from "axios";
 
+//Servicios para el login
 interface LoginResponse {
   token : string;
 }
@@ -35,4 +36,14 @@ const setAuthToken = (authToken: string | null) =>{
   }else{
     delete axiosPostulacionInstance.defaults.headers.common['Authorization'];
   }
+}
+
+//servicios para el registro
+
+export const AxiosServiceClasificadoresCrea = () => {
+  return axiosPostulacionInstance.get('postulacion/clasificadores-crea');
+}
+
+export const AxiosServiceCreaCuenta = () => {
+  return axiosPostulacionInstance.post('postulante/crea-cuenta');
 }
