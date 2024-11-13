@@ -15,7 +15,7 @@ const FormularioVentana: React.FC<LayoutProps> =({ children }) =>{
         <FormProvider>
           <main>{children}</main>
         </FormProvider>
-        <PaginationComponent></PaginationComponent>
+        <PaginationComponent/>
     </div>
   )
 }
