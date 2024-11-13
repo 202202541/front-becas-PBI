@@ -11,25 +11,19 @@ interface RespuestaValida {
     activo: boolean;
 }
 
-interface ErrorResponse {
-    message: string;
-}
-
-
 const Login : React.FC = () => {
     const router = useRouter();
     const [activo, setActivo] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [token, setToken] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const validarHabilitado = async () => {
             try {
                 const respuesta = await AxiosServiceCiclo()
-                const datos: RespuestaValida = respuesta.data;
-                console.log(datos)
+                const datos = respuesta.data as RespuestaValida;
+                console.log("Respuesta del ciclo formulario ", datos)
                 setActivo(datos.activo);
             } catch (error) {
                 console.error("Error al verificar la disponibilidad: ", error);
@@ -41,23 +35,22 @@ const Login : React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('ingresando al login')
         setErrorMessage(null);
         console.log({username, password})
         if (!username || !password) {
             setErrorMessage("Por favor, ingrese ambos campos.");
             return;
         }
-        const data = {username, password}
-        console.log(data)
+        
         try {
-            const respuesta = await AxiosServiceLogin(data)
-            const datos = respuesta.data
-            setToken(datos.token)
-            console.log(token)
-            //router.push('/inicio')
+            const respuesta= await AxiosServiceLogin({username, password})
+            console.log("respuesta de login" , respuesta);
+            const token = respuesta.data.token;
+            console.log("token de autentificacion: ",token)
+            router.push('/inicio')
         } catch (error) {
-            console.error("Error durante el inicio de sesión: ", error)
+            console.error("Error durante el inicio de sesión: ", error);
+            setErrorMessage("Error durante el inicion de sesion. verifique sus credenciales")
         }
     };
     
