@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import DatosFamiliar from "@/app/components/DatosFamiliar"
+import { Button } from "@/components/ui/button"
 
 
 function DatosFamiliares() {
@@ -26,11 +28,7 @@ function DatosFamiliares() {
 
     return (
         <div className="relative w-full min-h-screen">
-            <div className="fixed inset-0 bg-whait bg-cover bg-center bg-fixed"
-                style={{ zIndex: -1 }}>
-
-            </div>
-            <div className=" flex min-h-screen w-full items-center justify-center p-4">
+            <div className=" flex min-h-screen w-full items-center justify-center p-2">
                 <Card className="mx-auto max-w-6xl w-full">
                     <CardHeader className="flex flex-col items-center justify-center text-center">
                         <CardTitle className="text-2xl">
@@ -215,6 +213,12 @@ function DatosFamiliares() {
                                 </Select>
                             </div>
                             <Label className="text-lg" >Grupo Familiar</Label>
+                            <div>
+                                <DatosFamiliar />
+                            </div>
+                            <Button className="w-[200px]">
+                                Añadir un nuevo familiar
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>

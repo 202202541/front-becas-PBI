@@ -26,11 +26,7 @@ function AntecedentesAcademicos() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <div className="fixed inset-0 bg-whait bg-cover bg-center bg-fixed"
-        style={{ zIndex: -1 }}>
-
-      </div>
-      <div className=" flex min-h-screen w-full items-center justify-center p-4">
+      <div className=" flex min-h-screen w-full items-center justify-center p-2">
         <Card className="mx-auto max-w-6xl w-full">
           <CardHeader className="flex flex-col items-center justify-center text-center">
             <CardTitle className="text-2xl">
