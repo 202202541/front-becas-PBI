@@ -212,11 +212,11 @@ function DatosFamiliares() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <Label className="text-lg" >Grupo Familiar</Label>
                             <div>
+                                <Label className="text-lg" >Grupo Familiar</Label>
                                 <DatosFamiliar />
                             </div>
-                            <Button className="w-[200px]">
+                            <Button className="w-[170px]">
                                 Añadir un nuevo familiar
                             </Button>
                         </div>
