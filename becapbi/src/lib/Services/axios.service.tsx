@@ -5,7 +5,7 @@ import { FormData } from "@/app/register/page";
 
 const axiosPostulacionInstance = axios.create({
   baseURL: "http://sispos.dev.umss.net/api",
-  headers:{"Content-Type" : "application/json"},
+  headers:{"Content-Type" : "multipart/form-data"},
 });
 
 //Servicios para el login

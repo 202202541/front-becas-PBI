@@ -118,9 +118,10 @@ const FormularioRegistro: React.FC = () => {
 			const respuesta = await AxiosServiceCreaCuenta(preparedData);
 
 			console.log('Respuesta exitosa: ', respuesta.data);
+
 			alert("Cuenta creada exitosaemnte")
 
-			router.push('../page.tsx');
+			//router.push('../page.tsx');
 
 		}catch(error){
 			console.error("Error al crear la cuenta: " , error);
