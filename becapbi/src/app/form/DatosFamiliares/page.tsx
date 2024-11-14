@@ -19,11 +19,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import DatosFamiliar from "@/app/components/DatosFamiliar"
 import { Button } from "@/components/ui/button"
-
+import { FamilyMember } from "./Interface"
+import { FaMagento } from "react-icons/fa"
 
 function DatosFamiliares() {
 
-    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const [familyData, setFamilyData] = React.useState<FamilyMember[]>([
+        { nombre: "", apellido: "", estadoCivil: "", edad: "", parentesco: "" },
+    ])
+
+    const handleAddFamily = () => {
+        setFamilyData([
+            ...familyData,
+            { nombre: "", apellido: "", estadoCivil: "", edad: "", parentesco: "" },
+        ])
+    }
+
+    const onChangeDataFamiliar = () => {
+
+    }
 
 
     return (
@@ -212,11 +226,18 @@ function DatosFamiliares() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div>
-                                <Label className="text-lg" >Grupo Familiar</Label>
-                                <DatosFamiliar />
-                            </div>
-                            <Button className="w-[170px]">
+                            <Label className="text-lg">Grupo Familiar</Label>
+                            {familyData.map((familiar, index) => (
+                                <DatosFamiliar
+                                    key={index}
+                                    index={index}
+                                    data={familiar}
+                                    onChange={onChangeDataFamiliar}
+                                />
+                            ))}
+                            <Button
+                                className="w-[170px]"
+                                onClick={handleAddFamily}>
                                 Añadir un nuevo familiar
                             </Button>
                         </div>

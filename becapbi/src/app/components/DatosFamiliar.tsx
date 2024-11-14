@@ -13,13 +13,19 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import { FamilyMember } from "../form/DatosFamiliares/Interface"
 
-const DatosFamiliar = () => {
+interface DatosFamiliarProps {
+  index: number
+  data: FamilyMember
+  onChange: (index: number, updatedData: FamilyMember) => void
+}
+
+const DatosFamiliar: React.FC<DatosFamiliarProps> = ({ index, data, onChange }) => {
   return (
     <Accordion type="single" collapsible>
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Familiar 1</AccordionTrigger>
+      <AccordionItem value={`item-${index}`}>
+        <AccordionTrigger>Familiar {index}</AccordionTrigger>
         <AccordionContent>
           <div className="grid gap-2 w-full px-2">
 
