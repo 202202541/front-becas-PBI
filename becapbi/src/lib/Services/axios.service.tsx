@@ -1,18 +1,23 @@
 import axios from "axios";
+import { FormData } from "@/app/register/page";
 
-//Servicios para el login
-interface LoginResponse {
-  token : string;
-}
+
 
 const axiosPostulacionInstance = axios.create({
   baseURL: "http://sispos.dev.umss.net/api",
   headers:{"Content-Type" : "application/json"},
 });
 
+//Servicios para el login
+
+interface LoginResponse {
+  token : string;
+}
+
 export const AxiosServiceCiclo = () =>{
   return axiosPostulacionInstance.get('postulacion/ciclo-formulario');
 }
+
 
 
 export const AxiosServiceLogin = (data: { username: string; password: string }) => {
@@ -44,6 +49,6 @@ export const AxiosServiceClasificadoresCrea = () => {
   return axiosPostulacionInstance.get('postulacion/clasificadores-crea');
 }
 
-export const AxiosServiceCreaCuenta = () => {
-  return axiosPostulacionInstance.post('postulante/crea-cuenta');
+export const AxiosServiceCreaCuenta = (data: FormData) => {
+  return axiosPostulacionInstance.post('postulante/crea-cuenta',data);
 }

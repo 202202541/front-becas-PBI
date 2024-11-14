@@ -24,7 +24,7 @@ interface DatosP {
 	[key: string]: string;
 }
 
-interface FormData {
+export interface FormData {
 	apellido1: string;
 	apellido2: string;
 	nombre1: string;
@@ -40,6 +40,14 @@ interface FormData {
 	gestion_egreso_colegio: number;
 	tipo_colegio_id: number; 
 }
+
+interface ClasificadoresData {
+	lista_pais: Datos[];
+	lista_tipo_colegio: Datos[];
+	lista_sexo: DatosP;
+	lista_estado_civil: DatosP;
+  }
+  
 
 const FormularioRegistro: React.FC = () => {
 
@@ -68,13 +76,12 @@ const FormularioRegistro: React.FC = () => {
 		"gestion_egreso_colegio":0,
 		"tipo_colegio_id":0,
 	});
-	const [data, setData] = useState<FormData>();
 
 	useEffect(() => {
 		const fetchDatos = async () => {
 			try {
 				const respuesta = await AxiosServiceClasificadoresCrea();
-				const datos = respuesta.data 
+				const datos = respuesta.data as ClasificadoresData;
 				setDescripcionPaises(datos.lista_pais);
 				setTipoColegio(datos.lista_tipo_colegio);
 				setSexos(datos.lista_sexo);
@@ -97,40 +104,28 @@ const FormularioRegistro: React.FC = () => {
 
 		const preparedData = {
 			...formData,
-			fecha_nacimiento: date ? format(date, "yyyy-MM-dd") : "",
+			fecha_nacimiento: format(new Date(formData.fecha_nacimiento), "yyyy-MM-dd"),
 			tipo_colegio_id : formData.tipo_colegio_id,
 			pais_nacionalidad_id: formData.pais_nacionalidad_id,
 			sexo: formData.sexo,
 			estado_civil : formData.estado_civil,
 		}
 
-		setData(preparedData);
-
-		console.log("Validando", data);
+		console.log("Validando", preparedData);
 
 		try{
-			const respuesta = await AxiosServiceClasificadoresCrea();
 
-			const resultado =  respuesta.data;
+			const respuesta = await AxiosServiceCreaCuenta(preparedData);
 
-			console.log('validadndo 1 ');
-
-			if(!respuesta.ok){
-				setErrorM(resultado.message);
-				console.log('Error al crear la cuenta: ', resultado.message);
-				alert("Hubo un problema al registrar la cuenta. verifique los datos");
-				return;
-			}
+			console.log('Respuesta exitosa: ', respuesta.data);
+			alert("Cuenta creada exitosaemnte")
 
 			router.push('../page.tsx');
-			console.log("Respuesta exitosa: " ,resultado);
-			alert("Cuenta creada exitposamente")
 
 		}catch(error){
-			console.error("validad ", (error as Error).message);
+			console.error("Error al crear la cuenta: " , error);
 			alert("hubo un error al enviar el formulario. intentalo nuevamente.");
-			setErrorM("hubo un error al enviar el formulario. intentalo nuevamente.");
-
+			setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.");
 		}
 
 	};
@@ -140,7 +135,7 @@ const FormularioRegistro: React.FC = () => {
 	return (
 		<div className="relative w-full min-h-screen" >
 			{errorM &&(
-				<div className="text-red-500-bg-red-100 p-3 rounded mb-4">
+				<div className="text-red-500 bg-red-100 p-3 rounded mb-4">
 					<strong>Error:</strong>{errorM}
 				</div>
 			)}
