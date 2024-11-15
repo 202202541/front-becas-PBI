@@ -111,17 +111,18 @@ const FormularioRegistro: React.FC = () => {
 			estado_civil : formData.estado_civil,
 		}
 
-		console.log("Validando", preparedData);
+		//console.log("Validando", preparedData);
 
 		try{
 
 			const respuesta = await AxiosServiceCreaCuenta(preparedData);
 
-			console.log('Respuesta exitosa: ', respuesta.data);
+			if(respuesta.data.statusCode === 200){
+				router.push('../inicio');
+			}
+			//console.log('codigo : ', respuesta.data.statusCode , "mensaje: ", respuesta.data.message);
+			setErrorM(respuesta.data.message);
 
-			alert("Cuenta creada exitosaemnte")
-
-			//router.push('../page.tsx');
 
 		}catch(error){
 			console.error("Error al crear la cuenta: " , error);

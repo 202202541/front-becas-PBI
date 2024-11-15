@@ -12,43 +12,34 @@ const axiosPostulacionInstance = axios.create({
 
 interface LoginResponse {
   token : string;
+  statusCode: number;
+  message: string;
+}
+
+interface RespuestaValida {
+  activo: boolean;
 }
 
 export const AxiosServiceCiclo = () =>{
-  return axiosPostulacionInstance.get('postulacion/ciclo-formulario');
+  return axiosPostulacionInstance.get<RespuestaValida>('postulacion/ciclo-formulario');
 }
-
-
 
 export const AxiosServiceLogin = (data: { username: string; password: string }) => {
-  return axiosPostulacionInstance
-    .post<LoginResponse>('postulante/login', data)
-    .then(response => {
-      const authToken = response.data.token;
-      console.log("token de autentificación: ", authToken);
-      setAuthToken(authToken);
-      return response;
-    })
-    .catch(error => {
-      console.log("Estamos dentro del servicio de login", error);
-      throw error;
-    });
+  return axiosPostulacionInstance.post<LoginResponse>('postulante/login', data)
 };
 
-const setAuthToken = (authToken: string | null) =>{
-  if(authToken){
-    axiosPostulacionInstance.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-  }else{
-    delete axiosPostulacionInstance.defaults.headers.common['Authorization'];
-  }
-}
 
 //servicios para el registro
+
+interface ResponseData {
+  statusCode: number;
+  message: string;
+}
 
 export const AxiosServiceClasificadoresCrea = () => {
   return axiosPostulacionInstance.get('postulacion/clasificadores-crea');
 }
 
 export const AxiosServiceCreaCuenta = (data: FormData) => {
-  return axiosPostulacionInstance.post('postulante/crea-cuenta',data);
+  return axiosPostulacionInstance.post<ResponseData>('postulante/crea-cuenta',data);
 }

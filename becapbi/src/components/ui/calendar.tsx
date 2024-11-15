@@ -60,7 +60,7 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
         Dropdown: (dropdownProps) => {
-          console.log({ dropdownProps });
+          //console.log({ dropdownProps });
           const { currentMonth, goToMonth } = useNavigation();
           const { fromYear, fromMonth, fromDate, toYear, toMonth, toDate } =
             useDayPicker();

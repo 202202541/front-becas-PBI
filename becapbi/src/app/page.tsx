@@ -7,9 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AxiosServiceCiclo , AxiosServiceLogin} from '@/lib/Services/axios.service';
 
-interface RespuestaValida {
-    activo: boolean;
-}
+
+
 
 const Login : React.FC = () => {
     const router = useRouter();
@@ -22,7 +21,7 @@ const Login : React.FC = () => {
         const validarHabilitado = async () => {
             try {
                 const respuesta = await AxiosServiceCiclo()
-                const datos = respuesta.data as RespuestaValida;
+                const datos = respuesta.data;
                 console.log("Respuesta del ciclo formulario ", datos)
                 setActivo(datos.activo);
             } catch (error) {
@@ -43,12 +42,16 @@ const Login : React.FC = () => {
         }
         
         try {
-            const respuesta= await AxiosServiceLogin({username, password})
+            const respuesta  = await AxiosServiceLogin({username, password})
             console.log("respuesta de login" , respuesta);
-            router.push('/inicio')
+            if(respuesta.data.statusCode === 200){
+                router.push('/inicio')
+            }
+            console.log("Respuesta", respuesta.data.message);
+            setErrorMessage(respuesta.data.message);
+            
         } catch (error) {
             console.error("Error durante el inicio de sesión: ", error);
-            setErrorMessage("Error durante el inicion de sesion. verifique sus credenciales")
         }
     };
     
