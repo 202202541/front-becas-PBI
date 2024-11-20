@@ -2,7 +2,6 @@ import axios from "axios";
 import { FormData } from "@/app/register/page";
 
 
-
 const axiosPostulacionInstance = axios.create({
   baseURL: "http://sispos.dev.umss.net/api",
   headers:{"Content-Type" : "multipart/form-data"},
@@ -14,6 +13,7 @@ interface LoginResponse {
   token : string;
   statusCode: number;
   message: string;
+  uuid: string;
 }
 
 interface RespuestaValida {
@@ -24,9 +24,11 @@ export const AxiosServiceCiclo = () =>{
   return axiosPostulacionInstance.get<RespuestaValida>('postulacion/ciclo-formulario');
 }
 
+
 export const AxiosServiceLogin = (data: { username: string; password: string }) => {
   return axiosPostulacionInstance.post<LoginResponse>('postulante/login', data)
 };
+
 
 
 //servicios para el registro

@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AxiosServiceCiclo , AxiosServiceLogin} from '@/lib/Services/axios.service';
-
-
-
+import { useAuth } from '@/context/AuthContext';
 
 const Login : React.FC = () => {
     const router = useRouter();
+    const {setAuthData} = useAuth(); //servicio q direcciona el token y UUi a uso general depues de un login exitoso
     const [activo, setActivo] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
 
     useEffect(() => {
         const validarHabilitado = async () => {
@@ -44,8 +44,12 @@ const Login : React.FC = () => {
         try {
             const respuesta  = await AxiosServiceLogin({username, password})
             console.log("respuesta de login" , respuesta);
+            
             if(respuesta.data.statusCode === 200){
+                setAuthData(respuesta.data.token, respuesta.data.uuid)
                 router.push('/inicio')
+                console.log("token: " , respuesta.data.token);
+                console.log("uuid: ", respuesta.data.uuid);
             }
             console.log("Respuesta", respuesta.data.message);
             setErrorMessage(respuesta.data.message);

@@ -1,7 +1,6 @@
 "use client"
 import {createContext, useContext} from "react"
 import { ReactNode } from "react"
-import internal from "stream"
 
 type Form = {
   name: string,
@@ -11,7 +10,7 @@ type Form = {
   ci: number,
   exp: string,
   edad: number,
-  sexo: String,
+  sexo: string,
   fechaNacimiento: string,
   lugarNacimiento: string
 
