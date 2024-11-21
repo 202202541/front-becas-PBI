@@ -17,13 +17,10 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import{useForm} from "@/app/components/formProvider"
 
 function AntecedentesAcademicos() {
-
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
-
-
+  const form = useForm();
   return (
     <div className="relative w-full min-h-screen">
       <div className=" flex min-h-screen w-full items-center justify-center p-2">
@@ -46,6 +43,7 @@ function AntecedentesAcademicos() {
                     type="text"
                     placeholder="colegio"
                     required
+                    defaultValue={form.lugarNacimiento}
                   />
                 </div>
                 <div className="col-span-1">
@@ -55,6 +53,7 @@ function AntecedentesAcademicos() {
                     type="text"
                     placeholder="año"
                     required
+                    defaultValue={2024} // controlar el año aun no se sabe   
                   />
                 </div>
               </div>
@@ -112,7 +111,6 @@ function AntecedentesAcademicos() {
                       id="promedioCuarto"
                       type="text"
                       required
-
                     />
                     <p>/100</p>
                   </div>
@@ -121,7 +119,6 @@ function AntecedentesAcademicos() {
                       id="promedioCuarto"
                       type="text"
                       required
-
                     />
                     <p>/100</p>
                   </div>
@@ -130,7 +127,6 @@ function AntecedentesAcademicos() {
                       id="promedioCuarto"
                       type="text"
                       required
-
                     />
                     <p>/100</p>
                   </div>
