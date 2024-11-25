@@ -137,13 +137,13 @@ const FormularioRegistro: React.FC = () => {
 	return (
 		<div className="relative w-full min-h-screen" >
 			
-			<div className="fixed inset-0 bg-[url('/fondo.png')] bg-cover bg-center bg-fixed"
+			<div className="fixed inset-0 bg-[url('/PBI.svg')] bg-cover bg-center bg-fixed"
 				style={{ zIndex: -1 }}>
 
 			</div>
 			<div className=" flex min-h-screen w-full items-center justify-center p-8">
 				
-				<Card className="mx-auto max-w-3xl w-full">
+				<Card className="mx-auto max-w-3xl w-full bg-[#F3F4F7]">
 					{errorM &&(
 						<div className="text-red-500 bg-red-100 p-3 rounded mb-4 ">
 							<strong>Error:</strong>{errorM}
