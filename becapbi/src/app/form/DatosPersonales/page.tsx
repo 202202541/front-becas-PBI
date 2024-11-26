@@ -1,10 +1,9 @@
 "use client"
 
 import React from "react"
-import NavBar from "@/app/components/Navbar"
 import FotoCargada from "@/app/components/FotoCargada"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+	// import { Button } from "@/components/ui/button"
+	// import { cn } from "@/lib/utils"
 import {
 	Card,
 	CardContent,
@@ -19,22 +18,27 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover"
+// import {
+// 	Popover,
+// 	PopoverContent,
+// 	PopoverTrigger,
+// } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+// import { Calendar } from "@/components/ui/calendar"
+// import { format } from "date-fns"
+// import { Calendar as CalendarIcon } from "lucide-react"
+import { useForm } from "@/app/components/formProvider"
 
 
 function DatosPersonales() {
 
-	const [date, setDate] = React.useState<Date | undefined>(new Date())
+	//const [date, setDate] = React.useState<Date | undefined>(new Date())
+ 	const form = useForm();
+ 	console.log("Formulario en DatosPersonales:", form);
 
+
+	//tipo colegio
 
 	return (
 		<div className="relative w-full min-h-screen">
@@ -60,19 +64,15 @@ function DatosPersonales() {
 										<div>
 											<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
 											<Input
-												id="apellidoPaterno"
-												type="text"
-												placeholder="apellido paterno"
-												required
+												defaultValue={form.apellido1}
+												readOnly
 											/>
 										</div>
 										<div>
 											<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
 											<Input
-												id="apellidoMaterno"
-												type="text"
-												placeholder="apellido materno"
-												required
+												defaultValue={form.apellido2}
+												readOnly
 											/>
 										</div>
 									</div>
@@ -80,19 +80,15 @@ function DatosPersonales() {
 										<div>
 											<Label htmlFor="primerNombre">Primer Nombre</Label>
 											<Input
-												id="primerNombre"
-												type="text"
-												placeholder="primer nombre"
-												required
+												defaultValue={form.nombre1}
+												readOnly
 											/>
 										</div>
 										<div>
 											<Label htmlFor="segundoNombre">Segundo Nombre</Label>
 											<Input
-												id="segundoNombre"
-												type="text"
-												placeholder="segundo nombre"
-												required
+												defaultValue={form.nombre1}
+												readOnly
 											/>
 										</div>
 									</div>
@@ -100,12 +96,11 @@ function DatosPersonales() {
 										<div className="grid gap-2">
 											<Label htmlFor="carnet">CI</Label>
 											<Input
-												id="carnet"
-												type="text"
-												placeholder="carnet"
-												required
+												defaultValue={form.ci}
+												readOnly
 											/>
 										</div>
+										{/* ver  */}
 										<div className="grid gap-2">
 											<Label htmlFor="carnet">CI Exp</Label>
 											<Input
@@ -125,20 +120,16 @@ function DatosPersonales() {
 							<div className="grid gap-2">
 								<Label htmlFor="colegio">Colegio de Egreso</Label>
 								<Input
-									id="colegio"
-									type="text"
-									placeholder="colegio de egreso"
-									required
+									defaultValue={form.nombre_colegio}
+									readOnly
 								/>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
 									<Label htmlFor="gestionEgreso">Gestion de Egreso</Label>
 									<Input
-										id="gestionEgreso"
-										type="text"
-										placeholder="gestion de egreso"
-										required
+										defaultValue={form.gestion_egreso_colegio}
+										readOnly
 									/>
 								</div>
 								<div className="grid gap-2">
@@ -154,36 +145,29 @@ function DatosPersonales() {
 							<div className="grid grid-cols-2 gap-4">
 								<div>
 									<Label htmlFor="sexo">Sexo</Label>
-									<Select>
-										<SelectTrigger>
-											<SelectValue placeholder="sexo" />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="masculino">Masculino</SelectItem>
-											<SelectItem value="femenino">Femenino</SelectItem>
-										</SelectContent>
-									</Select>
+									<Input
+									defaultValue={form.sexo}
+									readOnly
+									/>
+							
 								</div>
 								<div >
 									<Label htmlFor="estadoCivil">Estado Civil</Label>
-									<Select>
-										<SelectTrigger >
-											<SelectValue placeholder="Estado civil" />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="soltero">Soltero(a)</SelectItem>
-											<SelectItem value="casado">Casado(a)</SelectItem>
-											<SelectItem value="divorciado">Divorciado(a)</SelectItem>
-											<SelectItem value="viudo">Viudo(a)</SelectItem>
-											<SelectItem value="unido">Unido(a) de hecho</SelectItem>
-										</SelectContent>
-									</Select>
+									<Input
+									defaultValue={form.estado_civil}
+									readOnly
+									/>
 								</div>
 							</div>
 							<div>
 								<Label htmlFor="nacionalidad">Fecha de Nacimiento</Label>
-								<div className="w-auto ">
-									<Popover>
+								<Input
+									defaultValue={form.fecha_nacimiento}
+									readOnly
+									/>
+								{/* pregutar si es editable
+									<div className="w-auto ">
+									 <Popover>
 										<PopoverTrigger asChild>
 											<Button
 												variant={"outline"}
@@ -207,8 +191,8 @@ function DatosPersonales() {
 												initialFocus
 											/>
 										</PopoverContent>
-									</Popover>
-								</div>
+									</Popover> 
+								</div>*/}
 							</div>
 							<Label className="text-lg" > Lugar de Nacimiento:</Label>
 							<div className="grid grid-cols-3 gap-4">
@@ -249,10 +233,8 @@ function DatosPersonales() {
 							<div className="grid gap-2">
 								<Label htmlFor="email">Correo Electronico</Label>
 								<Input
-									id="email"
-									type="email"
-									placeholder="m@example.com"
-									required
+									defaultValue={form.email}
+									readOnly
 								/>
 							</div>
 							<div className="grid grid-cols-4 gap-4">

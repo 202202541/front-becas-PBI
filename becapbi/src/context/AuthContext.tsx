@@ -3,8 +3,8 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface AuthContextType {
-  token: string | null;
-  uuid: string | null;
+  token: string ;
+  uuid: string ;
   setAuthData: (token: string, uuid: string) => void;
   logout: () => void;
 }
@@ -12,8 +12,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [uuid, setUuid] = useState<string | null>(null);
+  const [token, setToken] = useState<string >("");
+  const [uuid, setUuid] = useState<string >("");
 
   useEffect(() => {
     // Recuperamos token y UUID del localStorage al cargar la aplicación
@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    setToken(null);
-    setUuid(null);
+    setToken("");
+    setUuid("");
     localStorage.removeItem('token');
     localStorage.removeItem('uuid');
   };

@@ -43,7 +43,7 @@ function AntecedentesAcademicos() {
                     type="text"
                     placeholder="colegio"
                     required
-                    defaultValue={form.lugarNacimiento}
+                    defaultValue={form.nombre_colegio}
                   />
                 </div>
                 <div className="col-span-1">

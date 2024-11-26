@@ -45,3 +45,26 @@ export const AxiosServiceClasificadoresCrea = () => {
 export const AxiosServiceCreaCuenta = (data: FormData) => {
   return axiosPostulacionInstance.post<ResponseData>('postulante/crea-cuenta',data);
 }
+
+//servicio para objetener los datos del postulante
+export const AxiosServiceDatosIniciales = (uuid: string, token: string) => {
+  if (!uuid || !token) {
+    console.log("UUID o Token no proporcionados");
+  }
+
+  return axiosPostulacionInstance.get(`postulante/datos-iniciales?uuid=${uuid}`, {
+    headers: {
+      //Authorization: `Bearer ${token}`,
+    }
+  });
+};
+
+//servicio para los clasificadores del llenado del formulario
+export const AxiosServiceClasificadoresPostula = (token: string) => {
+  return axiosPostulacionInstance.get('postulacion/clasificadores-postula',{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+ 
+}
