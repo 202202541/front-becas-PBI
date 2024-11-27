@@ -10,7 +10,7 @@ interface LayoutProps{
 const FormularioVentana: React.FC<LayoutProps> =({ children }) =>{
   return (
   
-    <div className='bg-[#F5F4F5]'>
+    <div className='bg-[#EFF1F3]'>
         <Navbar/>
         <FormProvider>
           <main>{children}</main>
