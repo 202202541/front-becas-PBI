@@ -2,8 +2,8 @@
 
 import React from "react"
 import FotoCargada from "@/app/components/FotoCargada"
-	// import { Button } from "@/components/ui/button"
-	// import { cn } from "@/lib/utils"
+// import { Button } from "@/components/ui/button"
+// import { cn } from "@/lib/utils"
 import {
 	Card,
 	CardContent,
@@ -18,6 +18,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { TypographyH1 } from "@/components/ui/TypographyH1"
 // import {
 // 	Popover,
 // 	PopoverContent,
@@ -34,14 +35,14 @@ import { useForm } from "@/app/components/formProvider"
 function DatosPersonales() {
 
 	//const [date, setDate] = React.useState<Date | undefined>(new Date())
- 	const form = useForm();
- 	console.log("Formulario en DatosPersonales:", form);
+	const form = useForm();
+	console.log("Formulario en DatosPersonales:", form);
 
 
 	//tipo colegio
 
 	return (
-		<div className="relative w-full min-h-screen">
+		<div className="relative w-full min-h-screen p-2">
 			<div className="fixed inset-0 bg-whait bg-cover bg-center bg-fixed"
 				style={{ zIndex: -1 }}>
 
@@ -50,79 +51,54 @@ function DatosPersonales() {
 				<Card className="mx-auto max-w-6xl w-full">
 					<CardHeader className="flex flex-col items-center justify-center text-center">
 						<CardTitle className="text-2xl">
-							SOLICITUD DE BECA PBI-2024
+							Datos Familiares
 						</CardTitle>
-						<CardDescription>
+						<CardDescription className=" text-left p-4">
 							Ingrese sus datos para el formulario
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="grid gap-3">
-							<div className="grid grid-cols-2 gap-4">
-								<div className="grid grid-rows-2 gap-1">
-									<div className="grid grid-cols-2 gap-6">
-										<div>
+						<div className="grid gap-2">
+							<div className="flex flex-wrap lg:flex-nowrap gap-4">
+								<div className="flex w-full lg:w-1/2 justify-center items-center order-1 lg:order-2">
+									<FotoCargada />
+								</div>
+								<div className="flex flex-col w-full lg:w-1/2 gap-4 order-2 lg:order-1">
+									<div className="flex gap-6">
+										<div className="flex flex-col flex-1 gap-2">
 											<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
-											<Input
-												defaultValue={form.apellido1}
-												readOnly
-											/>
+											<Input defaultValue={form.apellido1} readOnly />
 										</div>
-										<div>
+										<div className="flex flex-col flex-1 gap-2">
 											<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
-											<Input
-												defaultValue={form.apellido2}
-												readOnly
-											/>
+											<Input defaultValue={form.apellido2} readOnly />
 										</div>
 									</div>
-									<div className="grid grid-cols-2 gap-6">
-										<div>
+									<div className="flex gap-6">
+										<div className="flex flex-col flex-1 gap-2">
 											<Label htmlFor="primerNombre">Primer Nombre</Label>
-											<Input
-												defaultValue={form.nombre1}
-												readOnly
-											/>
+											<Input defaultValue={form.nombre1} readOnly />
 										</div>
-										<div>
+										<div className="flex flex-col flex-1 gap-2">
 											<Label htmlFor="segundoNombre">Segundo Nombre</Label>
-											<Input
-												defaultValue={form.nombre1}
-												readOnly
-											/>
+											<Input defaultValue={form.nombre2} readOnly />
 										</div>
 									</div>
-									<div className="grid grid-rows-2 gap-2">
-										<div className="grid gap-2">
+									<div className="flex flex-col gap-4">
+										<div className="flex flex-col gap-2">
 											<Label htmlFor="carnet">CI</Label>
-											<Input
-												defaultValue={form.ci}
-												readOnly
-											/>
+											<Input defaultValue={form.ci} readOnly />
 										</div>
-										{/* ver  */}
-										<div className="grid gap-2">
-											<Label htmlFor="carnet">CI Exp</Label>
-											<Input
-												id="carnet"
-												type="text"
-												placeholder="CI expedito"
-												required
-											/>
+										<div className="flex flex-col gap-2">
+											<Label htmlFor="carnetExp">CI Exp</Label>
+											<Input id="carnetExp" type="text" placeholder="CI expedito" required />
+										</div>
+										<div className="flex flex-col gap-2">
+											<Label htmlFor="colegio">Colegio de Egreso</Label>
+											<Input defaultValue={form.nombre_colegio} readOnly />
 										</div>
 									</div>
 								</div>
-								<FotoCargada />
-							</div>
-							<div className="grid grid-cols-2 gap-4">
-
-							</div>
-							<div className="grid gap-2">
-								<Label htmlFor="colegio">Colegio de Egreso</Label>
-								<Input
-									defaultValue={form.nombre_colegio}
-									readOnly
-								/>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
@@ -146,16 +122,16 @@ function DatosPersonales() {
 								<div>
 									<Label htmlFor="sexo">Sexo</Label>
 									<Input
-									defaultValue={form.sexo}
-									readOnly
+										defaultValue={form.sexo}
+										readOnly
 									/>
-							
+
 								</div>
 								<div >
 									<Label htmlFor="estadoCivil">Estado Civil</Label>
 									<Input
-									defaultValue={form.estado_civil}
-									readOnly
+										defaultValue={form.estado_civil}
+										readOnly
 									/>
 								</div>
 							</div>
@@ -164,7 +140,7 @@ function DatosPersonales() {
 								<Input
 									defaultValue={form.fecha_nacimiento}
 									readOnly
-									/>
+								/>
 								{/* pregutar si es editable
 									<div className="w-auto ">
 									 <Popover>
