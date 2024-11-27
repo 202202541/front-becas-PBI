@@ -23,6 +23,12 @@ interface Datos {
 interface DatosP {
 	[key: string]: string;
 }
+interface ClasificadoresData {
+	lista_pais: Datos[];
+	lista_tipo_colegio: Datos[];
+	lista_sexo: DatosP;
+	lista_estado_civil: DatosP;
+  }
 
 export interface FormData {
 	apellido1: string;
@@ -41,12 +47,7 @@ export interface FormData {
 	tipo_colegio_id: number; 
 }
 
-interface ClasificadoresData {
-	lista_pais: Datos[];
-	lista_tipo_colegio: Datos[];
-	lista_sexo: DatosP;
-	lista_estado_civil: DatosP;
-  }
+
   
 
 const FormularioRegistro: React.FC = () => {
