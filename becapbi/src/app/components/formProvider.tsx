@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { useAuth } from "@/context/AuthContext"
-import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/Services/axios.service" // Importa el servicio
+import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/Services/axios.service"
 import { Postulante } from "@/Models/Postulante"
 import { ClasificadoresDataP, ClasificadoresResponse, Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
 
