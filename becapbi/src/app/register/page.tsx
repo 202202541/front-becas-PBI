@@ -13,22 +13,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation';
 import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/Services/axios.service"
-
-interface Datos {
-	id: number;
-	descripcion: string;
-	sigla: string;
-}
-
-interface DatosP {
-	[key: string]: string;
-}
-interface ClasificadoresData {
-	lista_pais: Datos[];
-	lista_tipo_colegio: Datos[];
-	lista_sexo: DatosP;
-	lista_estado_civil: DatosP;
-  }
+import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
 
 export interface FormData {
 	apellido1: string;
@@ -46,9 +31,6 @@ export interface FormData {
 	gestion_egreso_colegio: number;
 	tipo_colegio_id: number; 
 }
-
-
-  
 
 const FormularioRegistro: React.FC = () => {
 
@@ -82,7 +64,7 @@ const FormularioRegistro: React.FC = () => {
 		const fetchDatos = async () => {
 			try {
 				const respuesta = await AxiosServiceClasificadoresCrea();
-				const datos = respuesta.data as ClasificadoresData;
+				const datos = respuesta.data as ClasificadoresCrea;
 				setDescripcionPaises(datos.lista_pais);
 				setTipoColegio(datos.lista_tipo_colegio);
 				setSexos(datos.lista_sexo);
