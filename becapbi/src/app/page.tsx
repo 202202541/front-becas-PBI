@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const Login : React.FC = () => {
     const router = useRouter();
-    const {setAuthData} = useAuth(); //servicio q direcciona el token y UUi a uso general depues de un login exitoso
+    const {setAuthData} = useAuth();
     const [activo, setActivo] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -43,16 +43,18 @@ const Login : React.FC = () => {
         
         try {
             const respuesta  = await AxiosServiceLogin({username, password})
-            console.log("respuesta de login" , respuesta);
+            console.log("respuesta de login" , respuesta)
+            console.log("respuesta" , respuesta)
             
-            if(respuesta.data.statusCode === 200){
-                setAuthData(respuesta.data.token, respuesta.data.uuid)
+            if(respuesta.statusCode === 200){
+                console.log(respuesta)
+                setAuthData(respuesta.token, respuesta.uuid)
                 router.push('/inicio')
-                console.log("token: " , respuesta.data.token);
-                console.log("uuid: ", respuesta.data.uuid);
+                console.log("token: " , respuesta.token);
+                console.log("uuid: ", respuesta.uuid);
             }
-            console.log("Respuesta", respuesta.data.message);
-            setErrorMessage(respuesta.data.message);
+            console.log("Respuesta", respuesta.message);
+            setErrorMessage(respuesta.message);
             
         } catch (error) {
             console.error("Error durante el inicio de sesión: ", error);

@@ -229,7 +229,7 @@ const FormularioRegistro: React.FC = () => {
 									<Label htmlFor="tipo_colegio_id">Tipo de colegio</Label>
 									<Select onValueChange={(value) => setFormData({...formData, tipo_colegio_id:Number(value)})}>
 										<SelectTrigger >
-											<SelectValue placeholder="Tipó de colegio" />
+											<SelectValue placeholder="Tipo de colegio" />
 										</SelectTrigger>
 										<SelectContent>
 											{tipoColegio.map((item) => (
@@ -252,7 +252,7 @@ const FormularioRegistro: React.FC = () => {
 										<SelectContent>
 											{Object.entries(sexos).map(([key, value]) => (
 												<SelectItem value={key} key={key}>
-													{value} ({key})
+													{value}
 												</SelectItem>
 											))}
 										</SelectContent>
@@ -267,7 +267,7 @@ const FormularioRegistro: React.FC = () => {
 										<SelectContent>
 											{Object.entries(estadoCivil).map(([key, value]) => (
 												<SelectItem value={key} key={key}>
-													{value} ({key})
+													{value}
 												</SelectItem>
 											))}
 

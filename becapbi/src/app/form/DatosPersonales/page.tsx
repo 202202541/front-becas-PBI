@@ -125,7 +125,6 @@ function DatosPersonales() {
 										defaultValue={form.sexo}
 										readOnly
 									/>
-
 								</div>
 								<div >
 									<Label htmlFor="estadoCivil">Estado Civil</Label>

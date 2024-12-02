@@ -2,6 +2,8 @@ import axios from "axios"
 import { FormData } from "@/app/register/page"
 import { ApiResponse, ApiResponseStatus, StatusService } from "@/Models/ApiResponse"
 import { Postulante } from "@/Models/Postulante"
+import { ClasificadoresResponse } from "@/Models/ClasificadoresPostula"
+import { LoginResponse } from "@/Models/Login"
 
 
 const axiosPostulacionInstance = axios.create({
@@ -14,8 +16,9 @@ export const AxiosServiceCiclo = () =>{
   return axiosPostulacionInstance.get<StatusService>('postulacion/ciclo-formulario')
 }
 
-export const AxiosServiceLogin = (data: { username: string, password: string }) => {
-  return axiosPostulacionInstance.post<ApiResponse<string>>('postulante/login', data)
+export const AxiosServiceLogin = async (data: { username: string, password: string }) => {
+  const response = await axiosPostulacionInstance.post<LoginResponse>('postulante/login', data)
+  return response.data
 }
 
 
@@ -33,18 +36,18 @@ export const AxiosServiceDatosIniciales = async (uuid: string, token: string) =>
   if (!uuid || !token) {
     console.log("UUID o Token no proporcionados")
   }
-    const response = await axiosPostulacionInstance.get<ApiResponse<Postulante>>(`postulante/datos-iniciales?uuid=${uuid}`, {
+    const response = await axiosPostulacionInstance.get<Postulante>(`postulante/datos-iniciales?uuid=${uuid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
     })
     const postulanteResponse = response.data
-    return postulanteResponse 
+    return postulanteResponse
 }
 
-//servicio para los clasificadores del llenado del formulario
+
 export const AxiosServiceClasificadoresPostula = (token: string) => {
-  return axiosPostulacionInstance.get('postulacion/clasificadores-postula',{
+  return axiosPostulacionInstance.get<ApiResponse<ClasificadoresResponse>>('postulacion/clasificadores-postula',{
     headers: {
       Authorization: `Bearer ${token}`
     }
