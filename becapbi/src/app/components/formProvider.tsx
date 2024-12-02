@@ -72,7 +72,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       const fetchInitialData = async () => {
         try {
           const response = await AxiosServiceDatosIniciales(uuid, token) 
-          const postulante: Postulante = response.data
+          const postulante = response.data
           setForm(postulante)
           console.log(response)
           if (response.status !== "success") {
@@ -80,9 +80,22 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
           }
           
           const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
-          const clasificadores: ClasificadoresResponse = responseClasificadores.data
+          const clasificadores = responseClasificadores.data
           setTipoColegio(clasificadores.lista_tipo_colegio)
           setEstadoCivil(clasificadores.lista_estado_civil)
+          setSexos(clasificadores.lista_sexo)
+          setSectorTrabajo(clasificadores.lista_sector_trabajo)
+          setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
+          setDedicacion(clasificadores.lista_dedicacion)
+          setTipoVivienda(clasificadores.lista_tipo_vivienda)
+          setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
+          setPais(clasificadores.lista_pais)
+          setDepartamento(clasificadores.lista_departamento)
+          setProvincia(clasificadores.lista_provincia)
+          setMunicipio(clasificadores.lista_municipio)
+          setParentesco(clasificadores.lista_parentesco)
+          setOrganizacionSocial(clasificadores.lista_organizacion_social)
+          setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
 
         } catch (error) {
           console.error("Error al obtener los datos iniciales: ", error)

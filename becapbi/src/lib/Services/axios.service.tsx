@@ -36,18 +36,17 @@ export const AxiosServiceDatosIniciales = async (uuid: string, token: string) =>
   if (!uuid || !token) {
     console.log("UUID o Token no proporcionados")
   }
-    const response = await axiosPostulacionInstance.get<Postulante>(`postulante/datos-iniciales?uuid=${uuid}`, {
+    const response = await axiosPostulacionInstance.get<ApiResponse<Postulante>>(`postulante/datos-iniciales?uuid=${uuid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
     })
-    const postulanteResponse = response.data
-    return postulanteResponse
+    return response.data
 }
 
 
 export const AxiosServiceClasificadoresPostula = (token: string) => {
-  return axiosPostulacionInstance.get<ApiResponse<ClasificadoresResponse>>('postulacion/clasificadores-postula',{
+  return axiosPostulacionInstance.get<ClasificadoresResponse>('postulacion/clasificadores-postula',{
     headers: {
       Authorization: `Bearer ${token}`
     }
