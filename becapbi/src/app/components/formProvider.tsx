@@ -4,6 +4,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/Services/axios.service"; // Importa el servicio
+import { Postulante } from "@/Models/Postulante"
 
 // Nuevo tipo Form según la respuesta de la API
 type Form = {
@@ -119,32 +120,12 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     if (token && uuid) {
       const fetchInitialData = async () => {
         try {
-          console.log("Solicitando a URL:", `http://sispos.dev.umss.net/api/postulante/datos-iniciales?uuid=${uuid}`);
-
-          const respuesta = await AxiosServiceDatosIniciales(uuid, token); // Usando el servicio
-
-          console.log("Respuesta de la API:", respuesta.data);
-          const data = respuesta.data.data;
-
-          setForm({
-            apellido1: data.apellido1 ,
-            apellido2: data.apellido2 ,
-            nombre1: data.nombre1 ,
-            nombre2: data.nombre2 ,
-            ci: data.ci ,
-            pais_nacionalidad_id: data.pais_nacionalidad_id,
-            fecha_nacimiento: data.fecha_nacimiento,
-            sexo: data.sexo ,
-            estado_civil: data.estado_civil,
-            email: data.email ,
-            telefono_celular: data.telefono_celular ,
-            nombre_colegio: data.nombre_colegio ,
-            gestion_egreso_colegio: data.gestion_egreso_colegio,
-            tipo_colegio_id: data.tipo_colegio_id ,
-          });
-
-          if (respuesta.status !== 200) {
-            console.error("Error en la solicitud:", respuesta.status, respuesta.data);
+          const response = await AxiosServiceDatosIniciales(uuid, token)
+          const postulante: Postulante = response.data
+          setForm(postulante);
+          console.log(response)
+          if (response.status !== "success") {
+            console.error("Error en la solicitud:", response.status, response.data);
           }
         } catch (error) {
           console.error("Error al obtener los datos iniciales: ", error);
@@ -156,13 +137,13 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
 
 
   
-  useEffect(()=>{
-    const fetchDatosClasificador = async() =>{
-      const respuesta = await AxiosServiceClasificadoresPostula(token); // Usando el servicio
+  // useEffect(()=>{
+  //   const fetchDatosClasificador = async() =>{
+  //     const respuesta = await AxiosServiceClasificadoresPostula(token); // Usando el servicio
 
-    }
-    fetchDatosClasificador();
-  }, []);
+  //   }
+  //   fetchDatosClasificador();
+  // }, []);
 
 
 

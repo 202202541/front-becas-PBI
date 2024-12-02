@@ -1,63 +1,65 @@
-import axios from "axios";
-import { FormData } from "@/app/register/page";
+import axios from "axios"
+import { FormData } from "@/app/register/page"
+import { ApiResponse } from "@/Models/ApiResponse"
+import { Postulante } from "@/Models/Postulante"
 
 
 const axiosPostulacionInstance = axios.create({
   baseURL: "http://sispos.dev.umss.net/api",
   headers:{"Content-Type" : "multipart/form-data"},
-});
+})
 
 //Servicios para el login
 
 interface LoginResponse {
-  token : string;
-  statusCode: number;
-  message: string;
-  uuid: string;
+  token : string
+  statusCode: number
+  message: string
+  uuid: string
 }
 
 interface RespuestaValida {
-  activo: boolean;
+  activo: boolean
 }
 
 export const AxiosServiceCiclo = () =>{
-  return axiosPostulacionInstance.get<RespuestaValida>('postulacion/ciclo-formulario');
+  return axiosPostulacionInstance.get<RespuestaValida>('postulacion/ciclo-formulario')
 }
 
 
-export const AxiosServiceLogin = (data: { username: string; password: string }) => {
+export const AxiosServiceLogin = (data: { username: string, password: string }) => {
   return axiosPostulacionInstance.post<LoginResponse>('postulante/login', data)
-};
+}
 
 
 
 //servicios para el registro
 
 interface ResponseData {
-  statusCode: number;
-  message: string;
+  statusCode: number
+  message: string
 }
 
 export const AxiosServiceClasificadoresCrea = () => {
-  return axiosPostulacionInstance.get('postulacion/clasificadores-crea');
+  return axiosPostulacionInstance.get('postulacion/clasificadores-crea')
 }
 
 export const AxiosServiceCreaCuenta = (data: FormData) => {
-  return axiosPostulacionInstance.post<ResponseData>('postulante/crea-cuenta',data);
+  return axiosPostulacionInstance.post<ResponseData>('postulante/crea-cuenta',data)
 }
 
-//servicio para objetener los datos del postulante
-export const AxiosServiceDatosIniciales = (uuid: string, token: string) => {
+export const AxiosServiceDatosIniciales = async (uuid: string, token: string) => {
   if (!uuid || !token) {
-    console.log("UUID o Token no proporcionados");
+    console.log("UUID o Token no proporcionados")
   }
-
-  return axiosPostulacionInstance.get(`postulante/datos-iniciales?uuid=${uuid}`, {
-    headers: {
-      //Authorization: `Bearer ${token}`,
-    }
-  });
-};
+    const response = await axiosPostulacionInstance.get<ApiResponse<Postulante>>(`postulante/datos-iniciales?uuid=${uuid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    const postulanteResponse = response.data
+    return postulanteResponse 
+}
 
 //servicio para los clasificadores del llenado del formulario
 export const AxiosServiceClasificadoresPostula = (token: string) => {
@@ -65,6 +67,6 @@ export const AxiosServiceClasificadoresPostula = (token: string) => {
     headers: {
       Authorization: `Bearer ${token}`
     }
-  });
+  })
  
 }
