@@ -19,6 +19,7 @@ export const AxiosServiceCiclo = () =>{
 export const AxiosServiceLogin = async (data: { username: string, password: string }) => {
   const response = await axiosPostulacionInstance.post<LoginResponse>('postulante/login', data)
   return response.data
+  
 }
 
 
