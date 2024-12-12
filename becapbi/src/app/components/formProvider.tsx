@@ -81,6 +81,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
           
           const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
           const clasificadores = responseClasificadores.data
+          console.log(clasificadores)
           setTipoColegio(clasificadores.lista_tipo_colegio)
           setEstadoCivil(clasificadores.lista_estado_civil)
           setSexos(clasificadores.lista_sexo)

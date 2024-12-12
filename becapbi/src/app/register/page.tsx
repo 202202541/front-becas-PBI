@@ -41,7 +41,6 @@ const FormularioRegistro: React.FC = () => {
 	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
 	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
 	const [sexos, setSexos] = useState<DatosP>({});
-	const [errorM, setErrorM]= useState<string | null>(null);
 
 	const [formData, setFormData] = useState<FormData>({
 		"apellido1":"",
@@ -127,11 +126,6 @@ const FormularioRegistro: React.FC = () => {
 			<div className=" flex min-h-screen w-full items-center justify-center p-8">
 				
 				<Card className="mx-auto max-w-3xl w-full bg-[#F3F4F7]">
-					{errorM &&(
-						<div className="text-red-500 bg-red-100 p-3 rounded mb-4 ">
-							<strong>Error:</strong>{errorM}
-						</div>
-					)}
 					<CardHeader>
 						<CardTitle className="text-2xl">Registro</CardTitle>
 						<CardDescription>
