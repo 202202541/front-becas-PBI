@@ -41,6 +41,7 @@ const FormularioRegistro: React.FC = () => {
 	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
 	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
 	const [sexos, setSexos] = useState<DatosP>({});
+	const [errorM, setErrorM]= useState<string | null>(null);
 
 	const [formData, setFormData] = useState<FormData>({
 		"apellido1":"",
