@@ -1,3 +1,14 @@
+"use client"
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+const Inicio = () => {
+  const router = useRouter()
+  useEffect(() => {
+    router.push('/login')
+  }, [router])
+}
+export default Inicio
 // "use client";
 
 // import React, { useEffect, useState } from 'react';
@@ -8,7 +19,7 @@
 // import { AxiosServiceCiclo , AxiosServiceLogin} from '@/lib/Services/axios.service';
 // import { useAuth } from '@/context/AuthContext';
 
-// const Login : React.FC = () => {
+//const Login : React.FC = () => {
 //     const router = useRouter();
 //     const {setAuthData} = useAuth();
 //     const [activo, setActivo] = useState<boolean>(false);
