@@ -19,16 +19,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { TypographyH1 } from "@/components/ui/TypographyH1"
-// import {
-// 	Popover,
-// 	PopoverContent,
-// 	PopoverTrigger,
-// } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-// import { Calendar } from "@/components/ui/calendar"
-// import { format } from "date-fns"
-// import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "@/app/components/formProvider"
 
 
@@ -37,9 +29,6 @@ function DatosPersonales() {
 	//const [date, setDate] = React.useState<Date | undefined>(new Date())
 	const form = useForm();
 	console.log("Formulario en DatosPersonales:", form);
-
-
-	//tipo colegio
 
 	return (
 		<div className="relative w-full min-h-screen p-2">
@@ -51,7 +40,7 @@ function DatosPersonales() {
 				<Card className="mx-auto max-w-6xl w-full">
 					<CardHeader className="flex flex-col items-center justify-center text-center">
 						<CardTitle className="text-2xl">
-							Datos Familiares
+							Datos Personales
 						</CardTitle>
 						<CardDescription className=" text-left p-4">
 							Ingrese sus datos para el formulario
@@ -60,9 +49,9 @@ function DatosPersonales() {
 					<CardContent>
 						<div className="grid gap-2">
 							<div className="flex flex-wrap lg:flex-nowrap gap-4">
-								<div className="flex w-full lg:w-1/2 justify-center items-center order-1 lg:order-2">
+								{/* <div className="flex w-full lg:w-1/2 justify-center items-center order-1 lg:order-2">
 									<FotoCargada />
-								</div>
+								</div> */}
 								<div className="flex flex-col w-full lg:w-1/2 gap-4 order-2 lg:order-1">
 									<div className="flex gap-6">
 										<div className="flex flex-col flex-1 gap-2">

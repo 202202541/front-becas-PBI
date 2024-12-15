@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -11,37 +10,37 @@ import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/Services/axios.service"
 import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
 
 export interface FormData {
-	apellido1: string;
-	apellido2: string;
-	nombre1: string;
-	nombre2: string;
-	ci: string;
-	pais_nacionalidad_id: number; 
-	fecha_nacimiento: string;
-	sexo: string;
-	estado_civil: string;
-	email: string;
-	telefono_celular: string;
-	nombre_colegio: string;
-	gestion_egreso_colegio: number;
-	tipo_colegio_id: number; 
+	apellido1: string
+	apellido2: string
+	nombre1: string
+	nombre2: string
+	ci: string
+	pais_nacionalidad_id: number 
+	fecha_nacimiento: string
+	sexo: string
+	estado_civil: string
+	email: string
+	telefono_celular: string
+	nombre_colegio: string
+	gestion_egreso_colegio: number
+	tipo_colegio_id: number 
 }
 
-const FormularioRegistro: React.FC = () => {
+const FormRegister: React.FC = () => {
 
-	const router= useRouter();
+	const router= useRouter()
 
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
-	const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([]);
-	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
-	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
-	const [sexos, setSexos] = useState<DatosP>({});
-	const [errorM, setErrorM]= useState<string | null>(null);
+	const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([])
+	const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
+	const [estadoCivil, setEstadoCivil] = useState<DatosP>({})
+	const [sexos, setSexos] = useState<DatosP>({})
+	const [errorM, setErrorM]= useState<string | null>(null)
 
 	const [formData, setFormData] = useState<FormData>({
 		"apellido1":"",
@@ -58,32 +57,32 @@ const FormularioRegistro: React.FC = () => {
 		"nombre_colegio":"",
 		"gestion_egreso_colegio":0,
 		"tipo_colegio_id":0,
-	});
+	})
 
 	useEffect(() => {
 		const fetchDatos = async () => {
 			try {
-				const respuesta = await AxiosServiceClasificadoresCrea();
-				const datos = respuesta.data as ClasificadoresCrea;
-				setDescripcionPaises(datos.lista_pais);
-				setTipoColegio(datos.lista_tipo_colegio);
-				setSexos(datos.lista_sexo);
-				setEstadoCivil(datos.lista_estado_civil);
+				const respuesta = await AxiosServiceClasificadoresCrea()
+				const datos = respuesta.data as ClasificadoresCrea
+				setDescripcionPaises(datos.lista_pais)
+				setTipoColegio(datos.lista_tipo_colegio)
+				setSexos(datos.lista_sexo)
+				setEstadoCivil(datos.lista_estado_civil)
 
 			} catch (error) {
-				console.error("Error al obtener los nombres: ", (error as Error).message);
+				console.error("Error al obtener los nombres: ", (error as Error).message)
 			}
 		}
-		fetchDatos();
-	}, []);
+		fetchDatos()
+	}, [])
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		const {name, value} = e.target;
-		setFormData({...formData, [name]: value});
-	};
+		const {name, value} = e.target
+		setFormData({...formData, [name]: value})
+	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+		e.preventDefault()
 
 		const preparedData = {
 			...formData,
@@ -94,34 +93,34 @@ const FormularioRegistro: React.FC = () => {
 			estado_civil : formData.estado_civil,
 		}
 
-		//console.log("Validando", preparedData);
+		//console.log("Validando", preparedData)
 
 		try{
 
-			const respuesta = await AxiosServiceCreaCuenta(preparedData);
+			const respuesta = await AxiosServiceCreaCuenta(preparedData)
 
 			if(respuesta.data.statusCode === 200){
-				router.push('../inicio');
+				router.push('../inicio')
 			}
-			//console.log('codigo : ', respuesta.data.statusCode , "mensaje: ", respuesta.data.message);
-			setErrorM(respuesta.data.message);
+			//console.log('codigo : ', respuesta.data.statusCode , "mensaje: ", respuesta.data.message)
+			setErrorM(respuesta.data.message)
 
 
 		}catch(error){
-			console.error("Error al crear la cuenta: " , error);
-			alert("hubo un error al enviar el formulario. intentalo nuevamente.");
-			setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.");
+			console.error("Error al crear la cuenta: " , error)
+			setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
 		}
 
-	};
+	}
 
 
 
 	return (
-		<div className=" w-full min-h-screen" >
+		<div className="relative w-full min-h-screen" >
 			
 			<div className="fixed inset-0 bg-[url('/PBI.svg')] bg-cover bg-center bg-fixed"
 				style={{ zIndex: -1 }}>
+
 			</div>
 			<div className=" flex min-h-screen w-full items-center justify-center p-8">
 				
@@ -290,8 +289,8 @@ const FormularioRegistro: React.FC = () => {
 												toYear={2024}
 												selected={date}
 												onSelect={(date) =>{
-													setDate(date);
-													setFormData({...formData, fecha_nacimiento: date ? format(date,"yyyy-MM-dd"): ""});
+													setDate(date)
+													setFormData({...formData, fecha_nacimiento: date ? format(date,"yyyy-MM-dd"): ""})
 												}}
 												initialFocus
 											/>
@@ -320,7 +319,7 @@ const FormularioRegistro: React.FC = () => {
 								<Input
 									id="email"
 									type="email"
-									placeholder="m@example.com"
+									placeholder="ingrese el email"
 									required
 									onChange={(e) =>setFormData({...formData, email : e.target.value})}
 								/>
@@ -341,4 +340,4 @@ const FormularioRegistro: React.FC = () => {
 }
 
 
-export default FormularioRegistro;
+export default FormRegister
