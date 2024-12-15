@@ -82,7 +82,7 @@ const UserLogin = () => {
                     <Input
                       {...field}
                       type="text"
-                      maxLength={20}
+                      maxLength={9}
                       placeholder="ingrese su codigo SIS"
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "")
