@@ -1,343 +1,218 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import {Card,CardContent,CardDescription,CardHeader,CardTitle} from "@/components/ui/card"
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select"
-import {Popover,PopoverContent,PopoverTrigger} from "@/components/ui/popover"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Form } from '@/components/ui/form'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation'
-import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/Services/axios.service"
+import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/Services/axios.service"
 import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
-
-export interface FormData {
-	apellido1: string
-	apellido2: string
-	nombre1: string
-	nombre2: string
-	ci: string
-	pais_nacionalidad_id: number 
-	fecha_nacimiento: string
-	sexo: string
-	estado_civil: string
-	email: string
-	telefono_celular: string
-	nombre_colegio: string
-	gestion_egreso_colegio: number
-	tipo_colegio_id: number 
-}
+import FormInput from "@/app/components/FormInput"
+import FormSelect from "@/app/components/FormSelect"
 
 const FormRegister: React.FC = () => {
+  const router = useRouter()
 
-	const router= useRouter()
+  const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([])
+  const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
+  const [estadoCivil, setEstadoCivil] = useState<DatosP>({})
+  const [sexos, setSexos] = useState<DatosP>({})
+  const [errorM, setErrorM] = useState<string | null>(null)
+  const [date, setDate] = useState<Date | undefined>(new Date())
 
-	const [date, setDate] = React.useState<Date | undefined>(new Date())
-	const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([])
-	const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
-	const [estadoCivil, setEstadoCivil] = useState<DatosP>({})
-	const [sexos, setSexos] = useState<DatosP>({})
-	const [errorM, setErrorM]= useState<string | null>(null)
+  const formSchema = z.object({
+    apellido1: z.string().min(2, { message: "Primer apellido es requerido" }),
+    apellido2: z.string(),
+    nombre1: z.string().min(2, { message: "Primer nombre es requerido" }),
+    nombre2: z.string(),
+    ci: z.string().min(5, { message: "Documento de identidad inválido" }),
+    pais_nacionalidad_id: z.number().min(1, { message: "Seleccione un país" }),
+    fecha_nacimiento: z.string().refine(val => new Date(val).toString() !== "Invalid Date", {
+      message: "Fecha de nacimiento inválida"
+    }),
+    sexo: z.string().min(1, { message: "Seleccione un sexo" }),
+    estado_civil: z.string().min(1, { message: "Seleccione estado civil" }),
+    email: z.string().email({ message: "Email inválido" }),
+    telefono_celular: z.string().min(8, { message: "Teléfono inválido" }),
+    nombre_colegio: z.string().min(3, { message: "Nombre de colegio requerido" }),
+    gestion_egreso_colegio: z.number().min(1900, { message: "Año de egreso inválido" }),
+    tipo_colegio_id: z.number().min(1, { message: "Seleccione tipo de colegio" }),
+  })
 
-	const [formData, setFormData] = useState<FormData>({
-		"apellido1":"",
-		"apellido2":"",
-		"nombre1":"",
-		"nombre2":"",
-		"ci":"",
-		"pais_nacionalidad_id": 0 ,
-		"fecha_nacimiento":"",
-		"sexo":"",
-		"estado_civil": "",
-		"email":"",
-		"telefono_celular":"",
-		"nombre_colegio":"",
-		"gestion_egreso_colegio":0,
-		"tipo_colegio_id":0,
-	})
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      apellido1: "",
+      apellido2: "",
+      nombre1: "",
+      nombre2: "",
+      ci: "",
+      pais_nacionalidad_id: 0,
+      fecha_nacimiento: "",
+      sexo: "",
+      estado_civil: "",
+      email: "",
+      telefono_celular: "",
+      nombre_colegio: "",
+      gestion_egreso_colegio: 0,
+      tipo_colegio_id: 0,
+    },
+  })
 
-	useEffect(() => {
-		const fetchDatos = async () => {
-			try {
-				const respuesta = await AxiosServiceClasificadoresCrea()
-				const datos = respuesta.data as ClasificadoresCrea
-				setDescripcionPaises(datos.lista_pais)
-				setTipoColegio(datos.lista_tipo_colegio)
-				setSexos(datos.lista_sexo)
-				setEstadoCivil(datos.lista_estado_civil)
+  useEffect(() => {
+    const fetchDatos = async () => {
+      try {
+        const respuesta = await AxiosServiceClasificadoresCrea()
+        const datos = respuesta.data as ClasificadoresCrea
+        setDescripcionPaises(datos.lista_pais)
+        setTipoColegio(datos.lista_tipo_colegio)
+        setSexos(datos.lista_sexo)
+        setEstadoCivil(datos.lista_estado_civil)
+      } catch (error) {
+        console.error("Error al obtener los clasificadores: ", (error as Error).message)
+      }
+    }
+    fetchDatos()
+  }, [])
 
-			} catch (error) {
-				console.error("Error al obtener los nombres: ", (error as Error).message)
-			}
-		}
-		fetchDatos()
-	}, [])
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      const preparedData = {
+        ...data,
+        fecha_nacimiento: format(new Date(data.fecha_nacimiento), "yyyy-MM-dd"),
+      }
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		const {name, value} = e.target
-		setFormData({...formData, [name]: value})
-	}
+      const respuesta = await AxiosServiceCreaCuenta(preparedData)
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
+      if (respuesta.data.statusCode === 200) {
+        router.push('../inicio')
+      }
+      setErrorM(respuesta.data.message)
+    } catch (error) {
+      console.error("Error al crear la cuenta: ", error)
+      setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
+    }
+  }
 
-		const preparedData = {
-			...formData,
-			fecha_nacimiento: format(new Date(formData.fecha_nacimiento), "yyyy-MM-dd"),
-			tipo_colegio_id : formData.tipo_colegio_id,
-			pais_nacionalidad_id: formData.pais_nacionalidad_id,
-			sexo: formData.sexo,
-			estado_civil : formData.estado_civil,
-		}
+  return (
+    <Card className="mx-auto max-w-md w-full bg-[#F3F4F7]">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Registro de Cuenta</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+                <FormInput
+                  form={form}
+                  name="apellido1"
+                  label="Primer Apellido"
+                  placeholder="Ingrese primer apellido"
+                />
+                <FormInput
+                  form={form}
+                  name="apellido2"
+                  label="Segundo Apellido"
+                  placeholder="Ingrese segundo apellido"
+                />
+                <FormInput
+                  form={form}
+                  name="nombre1"
+                  label="Primer Nombre"
+                  placeholder="Ingrese primer nombre"
+                />
+                <FormInput
+                  form={form}
+                  name="nombre2"
+                  label="Segundo Nombre"
+                  placeholder="Ingrese segundo nombre"
+                />
+                <FormInput
+                  form={form}
+                  name="ci"
+                  label="Carnet de Identidad"
+                  placeholder="Ingrese su CI"
+                  validation="numeric"
+                />
+                <FormSelect
+                  form={form}
+                  name="example"
+                  label="Example Label"
+                  options={descripcionPaises.map((item) => ({
+                    value: item.id,
+                    label: item.descripcion,
+                  }))}
+                />
+                <FormSelect
+                  form={form}
+                  name="sexo"
+                  label="Sexo"
+                  options={Object.entries(sexos).map(([key, value]) => ({
+                    value: key,
+                    label: value,
+                  }))}
+                />
+                <FormSelect
+                  form={form}
+                  name="estado_civil"
+                  label="Estado Civil"
+                  options={Object.entries(estadoCivil).map(([key, value]) => ({
+                    value: key,
+                    label: value,
+                  }))}
+                />
+                <FormInput
+                  form={form}
+                  name="email"
+                  label="Correo Electrónico"
+                  placeholder="Ingrese su email"
+                  type="email"
+                />
+                <FormInput
+                  form={form}
+                  name="telefono_celular"
+                  label="Teléfono Celular"
+                  placeholder="Ingrese su número de teléfono"
+                  validation="numeric"
+                />
+                <FormInput
+                  form={form}
+                  name="nombre_colegio"
+                  label="Nombre del Colegio"
+                  placeholder="Ingrese nombre de su colegio"
+                />
+                <FormInput
+                  form={form}
+                  name="gestion_egreso_colegio"
+                  label="Año de Egreso"
+                  placeholder="Ingrese año de egreso"
+                  type="number"
+                />
+                <FormSelect
+                  form={form}
+                  name="example"
+                  label="Example Label"
+                  options={tipoColegio.map((item) => ({
+                    value: item.id,
+                    label: item.descripcion,
+                  }))}
+                />
 
-		//console.log("Validando", preparedData)
-
-		try{
-
-			const respuesta = await AxiosServiceCreaCuenta(preparedData)
-
-			if(respuesta.data.statusCode === 200){
-				router.push('../inicio')
-			}
-			//console.log('codigo : ', respuesta.data.statusCode , "mensaje: ", respuesta.data.message)
-			setErrorM(respuesta.data.message)
-
-
-		}catch(error){
-			console.error("Error al crear la cuenta: " , error)
-			setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
-		}
-
-	}
-
-
-
-	return (
-		<div className="relative w-full min-h-screen" >
-			
-			<div className="fixed inset-0 bg-[url('/PBI.svg')] bg-cover bg-center bg-fixed"
-				style={{ zIndex: -1 }}>
-
-			</div>
-			<div className=" flex min-h-screen w-full items-center justify-center p-8">
-				
-				<Card className="mx-auto max-w-xl w-full bg-[#F3F4F7]">
-					<CardHeader>
-						<CardTitle className="text-2xl">Registro</CardTitle>
-					</CardHeader>
-					<CardContent>
-
-						<form onSubmit={handleSubmit} className="grid gap-3">
-							<div className="grid grid-cols-2 gap-4">
-								<div className="grid gap-2">
-									<Label htmlFor="apellidoPaterno">Apellido Paterno</Label>
-									<Input
-										id="apellido1"
-										name="apellido1"
-										type="text"
-										placeholder="apellido paterno"
-										required
-										onChange={handleChange}
-									/>
-								</div>
-								<div className="grid gap-2">
-									<Label htmlFor="apellidoMaterno">Apellido Materno</Label>
-									<Input
-										id="apellido2"
-										name="apellido2"
-										type="text"
-										placeholder="apellido materno"
-										required
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-
-
-							<div className="grid grid-cols-2 gap-4">
-								<div className="grid gap-2">
-									<Label htmlFor="primerNombre">Primer Nombre</Label>
-									<Input
-										id="nombre1"
-										name="nombre1"
-										type="text"
-										placeholder="primer nombre"
-										required
-										onChange={handleChange}
-									/>
-								</div>
-								<div className="grid gap-2">
-									<Label htmlFor="segundoNombre">Segundo Nombre</Label>
-									<Input
-										id="nombre2"
-										name="nombre2"
-										type="text"
-										placeholder="segundo nombre"
-										required
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-							<div className="grid gap-2">
-								<Label htmlFor="carnet">CI</Label>
-								<Input
-									id="ci"
-									name="ci"
-									type="text"
-									placeholder="carnet"
-									required
-									onChange={handleChange}
-								/>
-							</div>
-							<div className="grid gap-2">
-								<Label htmlFor="colegio">Colegio de Egreso</Label>
-								<Input
-									id="nombre_colegio"
-									name="nombre_colegio"
-									type="text"
-									placeholder="colegio de egreso"
-									required
-									onChange={handleChange}
-								/>
-							</div>
-							<div className="grid grid-cols-2 gap-4">
-								<div className="grid gap-2">
-									<Label htmlFor="gestionEgreso">Gestion de Egreso</Label>
-									<Input
-										id="gestion_egreso_colegio"
-										name="gestion_egreso_colegio"
-										type="text"
-										placeholder="gestion de egreso"
-										required
-										onChange={handleChange}
-									/>
-								</div>
-								<div className="grid gap-2">
-									<Label htmlFor="tipo_colegio_id">Tipo de colegio</Label>
-									<Select onValueChange={(value) => setFormData({...formData, tipo_colegio_id:Number(value)})}>
-										<SelectTrigger >
-											<SelectValue placeholder="Tipo de colegio" />
-										</SelectTrigger>
-										<SelectContent>
-											{tipoColegio.map((item) => (
-												<SelectItem value={item.id.toString()} key={item.id}>
-													{item.descripcion}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</div>
-							</div>
-
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<Label htmlFor="sexo">Sexo</Label>
-									<Select onValueChange={(value) => setFormData({...formData,sexo : value})}>
-										<SelectTrigger>
-											<SelectValue placeholder="sexo" />
-										</SelectTrigger>
-										<SelectContent>
-											{Object.entries(sexos).map(([key, value]) => (
-												<SelectItem value={key} key={key}>
-													{value}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</div>
-								<div >
-									<Label htmlFor="estadoCivil">Estado Civil</Label>
-									<Select onValueChange={(value) => setFormData({...formData, estado_civil:value})}>
-										<SelectTrigger >
-											<SelectValue placeholder="Estado civil" />
-										</SelectTrigger>
-										<SelectContent>
-											{Object.entries(estadoCivil).map(([key, value]) => (
-												<SelectItem value={key} key={key}>
-													{value}
-												</SelectItem>
-											))}
-
-										</SelectContent>
-									</Select>
-								</div>
-							</div>
-							<div className="grid grid-cols-2 gap-4">
-								<div >
-									<Label htmlFor="fecha_nacimiento">Nacimiento</Label>
-									<Popover>
-										<PopoverTrigger asChild>
-											<Button
-												variant={"outline"}
-												className={cn(
-													"w-[280px] justify-start text-left font-normal",
-													!date && "text-muted-foreground"
-												)}
-											>
-												<CalendarIcon className="mr-2 h-4 w-4" />
-												{date ? format(date, "dd/MM/yyyy") : <span>Seleccionar fecha</span>}
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0">
-											<Calendar
-												mode="single"
-												captionLayout="dropdown-buttons"
-												fromYear={1990}
-												toYear={2024}
-												selected={date}
-												onSelect={(date) =>{
-													setDate(date)
-													setFormData({...formData, fecha_nacimiento: date ? format(date,"yyyy-MM-dd"): ""})
-												}}
-												initialFocus
-											/>
-										</PopoverContent>
-									</Popover>
-								</div>
-								<div >
-									<Label htmlFor="pais_nacionalidad_id">Nacionalidad</Label>
-									<Select onValueChange={(value) => setFormData({...formData, pais_nacionalidad_id: Number(value)})}>
-										<SelectTrigger >
-											<SelectValue placeholder="Nacionalidad" />
-										</SelectTrigger>
-										<SelectContent>
-											{descripcionPaises.map((item) => (
-												<SelectItem value={item.id.toString()} key={item.id}>
-													{item.descripcion}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</div>
-							</div>
-
-							<div className="grid gap-2">
-								<Label htmlFor="email">Correo electronico</Label>
-								<Input
-									id="email"
-									type="email"
-									placeholder="ingrese el email"
-									required
-									onChange={(e) =>setFormData({...formData, email : e.target.value})}
-								/>
-							</div>
-
-							<div>
-							<Button type="submit" className="w-full" onClick={handleSubmit}>
-								Registrarse
-							</Button>
-						</div>
-						</form>
-						
-					</CardContent>
-				</Card>
-			</div>
-		</div>
-	)
+                <Button type="submit" className="w-full mt-3">
+                  Registrarse
+                </Button>
+              </form>
+            </Form>
+            {errorM && (
+              <div className="text-red-500 text-center mt-3">
+                {errorM}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+  )
 }
-
 
 export default FormRegister
