@@ -6,18 +6,23 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { useAuth } from "@/context/AuthContext"
-import { AxiosServiceCiclo, AxiosServiceLogin } from "@/lib/Services/axios.service"
+import { AxiosServiceLogin, axiosGetServiceCiclo } from "@/lib/Services/axios.service"
+import { StatusService } from "@/Models/ApiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const UserLogin = () => {
   const router = useRouter()
   const { setAuthData } = useAuth()
-  const [activo, setActivo] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>("")
+  const { data } = useQuery<StatusService>({
+    queryKey: ["status-register"],
+    queryFn: axiosGetServiceCiclo
+  })
 
   const formSchema = z.object({
     username: z.string(),
@@ -48,20 +53,6 @@ const UserLogin = () => {
       setErrorMessage("Error en el servidor. Inténtelo de nuevo.")
     }
   }
-
-  useEffect(() => {
-    const validarHabilitado = async () => {
-      try {
-        const res = await AxiosServiceCiclo()
-        const datos = res.data
-        setActivo(datos.activo)
-      } catch (error) {
-        setErrorMessage("Error al verificar la disponibilidad, intenta más tarde.")
-      }
-    }
-
-    validarHabilitado()
-  }, [])
 
   return (
     <Card className="mx-auto w-10/12 md:w-full bg-[#F3F4F7]">
@@ -123,9 +114,9 @@ const UserLogin = () => {
         </Form>
 
         <p className="text-center">¿Aún no tienes una cuenta? <button
-          className="font-medium text-customBlue hover:text-primary/90 hover:border-b border-b hover:border-primary/90 cursor-pointer disabled:opacity-50 disabled:border-none disabled:cursor-auto"
+          className="font-medium text-customBlue hover:text-primary/90 hover:border-b border-b hover:border-primary/90 cursor-pointer disabled:opacity-50 disabled:cursor-auto disabled:border-transparent"
           onClick={() => router.push("/register")}
-          disabled={!activo}
+          disabled={!data?.activo}
         >registrate</button>
         </p>
       </CardContent>

@@ -11,6 +11,10 @@ const axiosPostulacionInstance = axios.create({
   headers:{"Content-Type" : "multipart/form-data"},
 })
 
+export const axiosGetServiceCiclo = async (): Promise<StatusService> => {
+  const response = await axiosPostulacionInstance.get<StatusService>('postulacion/ciclo-formulario')
+  return response.data
+}
 
 export const AxiosServiceCiclo = () =>{
   return axiosPostulacionInstance.get<StatusService>('postulacion/ciclo-formulario')
