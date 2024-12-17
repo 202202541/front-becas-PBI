@@ -12,6 +12,8 @@ import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/Se
 import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
 import FormInput from "@/app/components/FormInput"
 import FormSelect from "@/app/components/FormSelect"
+import FormDatePicker from "./FormDatePicker"
+
 
 const FormRegister: React.FC = () => {
   const router = useRouter()
@@ -30,15 +32,13 @@ const FormRegister: React.FC = () => {
     nombre2: z.string(),
     ci: z.string().min(5, { message: "Documento de identidad inválido" }),
     pais_nacionalidad_id: z.number().min(1, { message: "Seleccione un país" }),
-    fecha_nacimiento: z.string().refine(val => new Date(val).toString() !== "Invalid Date", {
-      message: "Fecha de nacimiento inválida"
-    }),
+    fecha_nacimiento: z.string().refine(val => new Date(val).toString() !== "Invalid Date", { message: "Fecha inválida" }),
     sexo: z.string().min(1, { message: "Seleccione un sexo" }),
     estado_civil: z.string().min(1, { message: "Seleccione estado civil" }),
     email: z.string().email({ message: "Email inválido" }),
     telefono_celular: z.string().min(8, { message: "Teléfono inválido" }),
     nombre_colegio: z.string().min(3, { message: "Nombre de colegio requerido" }),
-    gestion_egreso_colegio: z.number().min(1900, { message: "Año de egreso inválido" }),
+    gestion_egreso_colegio: z.string(),
     tipo_colegio_id: z.number().min(1, { message: "Seleccione tipo de colegio" }),
   })
 
@@ -57,10 +57,11 @@ const FormRegister: React.FC = () => {
       email: "",
       telefono_celular: "",
       nombre_colegio: "",
-      gestion_egreso_colegio: 0,
+      gestion_egreso_colegio: "",
       tipo_colegio_id: 0,
     },
   })
+
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -79,23 +80,31 @@ const FormRegister: React.FC = () => {
   }, [])
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      const preparedData = {
-        ...data,
-        fecha_nacimiento: format(new Date(data.fecha_nacimiento), "yyyy-MM-dd"),
-      }
+    const newFecha = data.fecha_nacimiento.slice(0, 10)
+    data.fecha_nacimiento = newFecha
+    console.log("Datos enviados:", data)
+    // try {
+    //   const preparedData = {
+    //     ...data,
+    //     fecha_nacimiento: format(new Date(data.fecha_nacimiento), "yyyy-MM-dd"),
+    //   }
 
-      const respuesta = await AxiosServiceCreaCuenta(preparedData)
+    //   const respuesta = await AxiosServiceCreaCuenta(preparedData)
 
-      if (respuesta.data.statusCode === 200) {
-        router.push('../inicio')
-      }
-      setErrorM(respuesta.data.message)
-    } catch (error) {
-      console.error("Error al crear la cuenta: ", error)
-      setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
-    }
+    //   if (respuesta.data.statusCode === 200) {
+    //     router.push('../inicio')
+    //   }
+    //   setErrorM(respuesta.data.message)
+    // } catch (error) {
+    //   console.error("Error al crear la cuenta: ", error)
+    //   setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
+    // }
   }
+
+	const watchedFields = form.watch();
+  useEffect(() => {
+    console.log("Campos del formulario:", watchedFields);
+  }, [watchedFields]);
 
   return (
     <Card className="mx-auto max-w-md w-full bg-[#F3F4F7]">
@@ -138,8 +147,8 @@ const FormRegister: React.FC = () => {
                 />
                 <FormSelect
                   form={form}
-                  name="example"
-                  label="Example Label"
+                  name="pais_nacionalidad_id"
+                  label="País de Nacionalidad"
                   options={descripcionPaises.map((item) => ({
                     value: item.id,
                     label: item.descripcion,
@@ -170,6 +179,11 @@ const FormRegister: React.FC = () => {
                   placeholder="Ingrese su email"
                   type="email"
                 />
+                <FormDatePicker
+                  form={form}
+                  name="fecha_nacimiento"
+                  label="Fecha de Nacimiento"
+                />
                 <FormInput
                   form={form}
                   name="telefono_celular"
@@ -192,8 +206,8 @@ const FormRegister: React.FC = () => {
                 />
                 <FormSelect
                   form={form}
-                  name="example"
-                  label="Example Label"
+                  name="tipo_colegio_id"
+                  label="Tipo de Colegio"
                   options={tipoColegio.map((item) => ({
                     value: item.id,
                     label: item.descripcion,
