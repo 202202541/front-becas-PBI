@@ -13,7 +13,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation';
 import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/services/axios.service"
-import { ClasificadoresCrea, Datos, DatosP } from "@/models/Clasificadores"
+import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
 
 export interface FormData {
 	apellido1: string;
@@ -37,10 +37,10 @@ const FormularioRegistro: React.FC = () => {
 	const router= useRouter();
 
 	const [date, setDate] = React.useState<Date | undefined>(new Date())
-	const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([]);
-	const [tipoColegio, setTipoColegio] = useState<Datos[]>([]);
-	const [estadoCivil, setEstadoCivil] = useState<DatosP>({});
-	const [sexos, setSexos] = useState<DatosP>({});
+	const [descripcionPaises, setDescripcionPaises] = useState<IDatos[]>([]);
+	const [tipoColegio, setTipoColegio] = useState<IDatos[]>([]);
+	const [estadoCivil, setEstadoCivil] = useState<IDatosP>({});
+	const [sexos, setSexos] = useState<IDatosP>({});
 	const [errorM, setErrorM]= useState<string | null>(null);
 
 	const [formData, setFormData] = useState<FormData>({
@@ -64,7 +64,7 @@ const FormularioRegistro: React.FC = () => {
 		const fetchDatos = async () => {
 			try {
 				const respuesta = await AxiosServiceClasificadoresCrea();
-				const datos = respuesta.data as ClasificadoresCrea;
+				const datos = respuesta.data as IClasificadoresCrea;
 				setDescripcionPaises(datos.lista_pais);
 				setTipoColegio(datos.lista_tipo_colegio);
 				setSexos(datos.lista_sexo);

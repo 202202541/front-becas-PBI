@@ -1,4 +1,4 @@
-export interface LoginResponse {
+export interface ILoginResponse {
   estado: string,
   message: string,
   statusCode: number,

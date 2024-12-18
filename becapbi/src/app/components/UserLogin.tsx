@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { useAuth } from "@/hooks/useAuth"
 import { AxiosServiceLogin, axiosGetServiceCiclo } from "@/lib/services/axios.service"
-import { StatusService } from "@/models/ApiResponse"
+import { IStatusService } from "@/models/apiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
@@ -19,7 +19,7 @@ const UserLogin = () => {
   const router = useRouter()
   const { setAuthData } = useAuth()
   const [errorMessage, setErrorMessage] = useState<string>("")
-  const { data } = useQuery<StatusService>({
+  const { data } = useQuery<IStatusService>({
     queryKey: ["status-register"],
     queryFn: axiosGetServiceCiclo
   })
