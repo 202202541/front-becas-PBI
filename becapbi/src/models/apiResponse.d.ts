@@ -28,6 +28,6 @@ export interface FormData {
   email: string
   telefono_celular: string
   nombre_colegio: string
-  gestion_egreso_colegio: string
+  gestion_egreso_colegio: number
   tipo_colegio_id: number
 }

@@ -6,22 +6,15 @@ import FormSelect from "@/app/components/FormSelect"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
-import { axiosGetServiceClasificadoresCrea, axiosPostServiceCreaCuenta } from "@/lib/services/axios.service"
+import { useGetDataRegister, usePostRegister } from "@/hooks/useRegister"
 import { FormData } from "@/models/apiResponse"
-import { IClasificadoresCrea } from "@/models/clasificadores"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const FormRegister = () => {
-  const { data } = useQuery<IClasificadoresCrea>({
-    queryKey: ["data-register"],
-    queryFn: axiosGetServiceClasificadoresCrea,
-  })
-  const { mutate: register, data: responseRegister } = useMutation({
-    mutationFn: (data: FormData) => axiosPostServiceCreaCuenta(data)
-  })
+  const { data } = useGetDataRegister()
+  const { mutate: register, data: responseRegister } = usePostRegister()
 
   const lista_estado_civil = Object.entries(data?.lista_estado_civil || {})
   const lista_sexo = Object.entries(data?.lista_sexo || {})
@@ -58,7 +51,7 @@ const FormRegister = () => {
       email: "",
       telefono_celular: "",
       nombre_colegio: "",
-      gestion_egreso_colegio: "",
+      gestion_egreso_colegio: 0,
       tipo_colegio_id: 0,
     },
   })
