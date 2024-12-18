@@ -1,10 +1,9 @@
 "use client"
 
+import FormFieldInput from "@/app/components/FormFieldInput"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/ui/password-input"
+import { Form } from "@/components/ui/form"
 import { useAuth } from "@/hooks/useAuth"
 import { AxiosServiceLogin, axiosGetServiceCiclo } from "@/lib/services/axios.service"
 import { IStatusService } from "@/models/apiResponse"
@@ -63,52 +62,27 @@ const UserLogin = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mb-3">
-            <FormField
+            <FormFieldInput
               control={form.control}
               name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Codigo SIS</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      maxLength={9}
-                      placeholder="ingrese su codigo SIS"
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, "")
-                        field.onChange(value)
-                      }}
-                      required
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Codigo SIS"
+              maxLength={9}
+              placeholder="ingrese su codigo SIS"
+              onlyNumber
+              isRequired
             />
 
-            <FormField
+            <FormFieldInput
               control={form.control}
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Contraseña</FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      placeholder="Ingrese su contraseña"
-                      maxLength={50}
-                      required
-                    />
-                  </FormControl>
-                  <FormMessage />
-
-                </FormItem>
-              )}
+              label="Contraseña"
+              maxLength={50}
+              placeholder="Ingrese su contraseña"
+              isRequired
+              type="password"
             />
 
             {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
-
             <Button type="submit" className="w-full mt-3 font-bold bg-customBlue">Iniciar Sesión</Button>
           </form>
         </Form>

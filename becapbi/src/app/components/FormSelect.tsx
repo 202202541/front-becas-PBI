@@ -1,34 +1,33 @@
-"use client";
+"use client"
 
-import React from "react";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"
 
 interface Option {
-  value: string | number;
-  label: string;
+  value: string | number
+  label: string
 }
 
 interface FormSelectProps {
-  form: any; // Form instance from react-hook-form
-  name: string; // Field name
-  options: Option[]; // List of options with value and label
-  label: string; // Label for the select
-  placeholder?: string; // Placeholder text
-  isRequired?: boolean; // Whether the field is required
-  className?: string; // Additional CSS classes
+  form: any
+  name: string
+  options: Option[]
+  label: string
+  placeholder?: string
+  isRequired?: boolean
+  className?: string
 }
 
 const FormSelect: React.FC<FormSelectProps> = ({
@@ -46,10 +45,11 @@ const FormSelect: React.FC<FormSelectProps> = ({
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel>
+          <FormLabel className="font-bold">
             {label}
-            {isRequired && <span className="text-red-500 ml-1">*</span>}
+            {isRequired && <span className="text-red-600 ml-1">*</span>}
           </FormLabel>
+
           <FormControl>
             <Select
               onValueChange={(value) =>
@@ -69,11 +69,12 @@ const FormSelect: React.FC<FormSelectProps> = ({
               </SelectContent>
             </Select>
           </FormControl>
+
           <FormMessage />
         </FormItem>
       )}
     />
-  );
-};
+  )
+}
 
-export default FormSelect;
+export default FormSelect
