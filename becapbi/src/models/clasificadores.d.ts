@@ -1,8 +1,8 @@
 export interface IClasificadoresCrea {
-	lista_pais: Datos[]
-	lista_tipo_colegio: Datos[]
-	lista_sexo: DatosP
-	lista_estado_civil: DatosP
+	lista_pais: IDatos[]
+	lista_tipo_colegio: IDatos[]
+	lista_sexo: IDatosP
+	lista_estado_civil: IDatosP
 }
 
 export interface IDatos {
@@ -13,4 +13,9 @@ export interface IDatos {
 
 export interface IDatosP {
 	[key: string]: string
+}
+
+export interface IOption {
+	value: string
+	label: string
 }

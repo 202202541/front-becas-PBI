@@ -14,23 +14,7 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation';
 import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/services/axios.service"
 import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
-
-export interface FormData {
-	apellido1: string;
-	apellido2: string;
-	nombre1: string;
-	nombre2: string;
-	ci: string;
-	pais_nacionalidad_id: number; 
-	fecha_nacimiento: string;
-	sexo: string;
-	estado_civil: string;
-	email: string;
-	telefono_celular: string;
-	nombre_colegio: string;
-	gestion_egreso_colegio: number;
-	tipo_colegio_id: number; 
-}
+import { FormData } from "@/models/apiResponse"
 
 const FormularioRegistro: React.FC = () => {
 

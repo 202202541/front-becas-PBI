@@ -1,6 +1,6 @@
-import { FormData } from "@/app/register/page"
 import { axiosInstance } from "@/lib/services/axios.interceptor"
-import { IApiResponse, IApiResponseStatus, IStatusService } from "@/models/apiResponse"
+import { FormData, IApiResponse, IApiResponseStatus, IStatusService } from "@/models/apiResponse"
+import { IClasificadoresCrea } from "@/models/clasificadores"
 import { IClasificadoresResponse } from "@/models/clasificadoresPostula"
 import { ILoginResponse } from "@/models/login"
 import { IPostulante } from "@/models/postulante"
@@ -16,8 +16,8 @@ export const axiosPostServiceLogin = async (data: { username: string, password: 
   return response.data
 }
 
-export const axiosGetServiceClasificadoresCrea = async () => {
-  const response = await axiosInstance.get('postulacion/clasificadores-crea')
+export const axiosGetServiceClasificadoresCrea = async (): Promise<IClasificadoresCrea> => {
+  const response = await axiosInstance.get<IClasificadoresCrea>('postulacion/clasificadores-crea')
   return response.data
 }
 

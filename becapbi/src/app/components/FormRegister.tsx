@@ -6,18 +6,25 @@ import FormSelect from "@/app/components/FormSelect"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
-import { AxiosServiceClasificadoresCrea } from "@/lib/services/axios.service"
-import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
+import { axiosGetServiceClasificadoresCrea, axiosPostServiceCreaCuenta } from "@/lib/services/axios.service"
+import { FormData } from "@/models/apiResponse"
+import { IClasificadoresCrea } from "@/models/clasificadores"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const FormRegister = () => {
-  const [descripcionPaises, setDescripcionPaises] = useState<IDatos[]>([])
-  const [tipoColegio, setTipoColegio] = useState<IDatos[]>([])
-  const [estadoCivil, setEstadoCivil] = useState<IDatosP>({})
-  const [sexos, setSexos] = useState<IDatosP>({})
+  const { data } = useQuery<IClasificadoresCrea>({
+    queryKey: ["data-register"],
+    queryFn: axiosGetServiceClasificadoresCrea,
+  })
+  const { mutate: register, data: responseRegister } = useMutation({
+    mutationFn: (data: FormData) => axiosPostServiceCreaCuenta(data)
+  })
+
+  const lista_estado_civil = Object.entries(data?.lista_estado_civil || {})
+  const lista_sexo = Object.entries(data?.lista_sexo || {})
 
   const formSchema = z.object({
     apellido1: z.string().min(2, { message: "Primer apellido es requerido" }),
@@ -36,7 +43,7 @@ const FormRegister = () => {
     tipo_colegio_id: z.number().min(1, { message: "Seleccione tipo de colegio" }),
   })
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       apellido1: "",
@@ -56,31 +63,9 @@ const FormRegister = () => {
     },
   })
 
-  const watchedFields = form.watch()
-
-  useEffect(() => {
-    const fetchDatos = async () => {
-      try {
-        const respuesta = await AxiosServiceClasificadoresCrea()
-        const datos = respuesta.data as IClasificadoresCrea
-        setDescripcionPaises(datos.lista_pais)
-        setTipoColegio(datos.lista_tipo_colegio)
-        setSexos(datos.lista_sexo)
-        setEstadoCivil(datos.lista_estado_civil)
-      } catch (error) {
-        console.error("Error al obtener los clasificadores: ", (error as Error).message)
-      }
-    }
-    fetchDatos()
-  }, [])
-
-  // useEffect(() => {
-  //   console.log("Campos del formulario:", watchedFields)
-  // }, [watchedFields])
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: FormData) => {
     data.fecha_nacimiento = data.fecha_nacimiento.slice(0, 10)
-    console.log("Datos enviados:", data)
+    register(data)
   }
 
   return (
@@ -158,7 +143,7 @@ const FormRegister = () => {
                 name="sexo"
                 label="Sexo"
                 placeholder="Seleccionar sexo"
-                options={Object.entries(sexos).map(([key, value]) => ({
+                options={lista_sexo.map(([key, value]) => ({
                   value: key,
                   label: value,
                 }))}
@@ -170,7 +155,7 @@ const FormRegister = () => {
                 name="estado_civil"
                 label="Estado Civil"
                 placeholder="Seleccionar estado civil"
-                options={Object.entries(estadoCivil).map(([key, value]) => ({
+                options={lista_estado_civil.map(([key, value]) => ({
                   value: key,
                   label: value,
                 }))}
@@ -185,11 +170,12 @@ const FormRegister = () => {
                 name="pais_nacionalidad_id"
                 label="País de Nacionalidad"
                 placeholder="Seleccionar país"
-                options={descripcionPaises.map((item) => ({
-                  value: item.id,
-                  label: item.descripcion,
-                }))}
+                options={data?.lista_pais.map(({ id, descripcion }) => ({
+                  value: id.toString(),
+                  label: descripcion,
+                })) || []}
                 isRequired
+                isValueNumber
               />
               <FormDatePicker
                 form={form}
@@ -215,7 +201,7 @@ const FormRegister = () => {
                 label="Año de Egreso"
                 placeholder="Seleccionaer año"
                 options={Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => ({
-                  value: new Date().getFullYear() - i,
+                  value: (new Date().getFullYear() - i).toString(),
                   label: (new Date().getFullYear() - i).toString(),
                 }))}
                 isRequired
@@ -226,11 +212,12 @@ const FormRegister = () => {
                 name="tipo_colegio_id"
                 label="Tipo de Colegio"
                 placeholder="Seleccionar tipo"
-                options={tipoColegio.map((item) => ({
-                  value: item.id,
-                  label: item.descripcion,
-                }))}
+                options={data?.lista_tipo_colegio.map(({ id, descripcion }) => ({
+                  value: id.toString(),
+                  label: descripcion,
+                })) || []}
                 isRequired
+                isValueNumber
               />
             </div>
 
