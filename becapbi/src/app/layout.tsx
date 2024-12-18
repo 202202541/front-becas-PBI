@@ -1,5 +1,5 @@
-import { AuthProvider } from "@/context/AuthContext"
-import { QueryProvider } from "@/providers/QueryProvider"
+import AuthProvider from "@/providers/AuthProvider"
+import QueryProvider from "@/providers/QueryProvider"
 import type { Metadata } from "next"
 import "@/app/globals.css"
 
