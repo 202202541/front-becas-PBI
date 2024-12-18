@@ -14,20 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
-interface Option {
-  value: string | number
-  label: string
-}
+import { IOption } from "@/models/clasificadores"
 
 interface FormSelectProps {
   form: any
   name: string
-  options: Option[]
+  options: IOption[]
   label: string
   placeholder?: string
   isRequired?: boolean
   className?: string
+  isValueNumber?: boolean
 }
 
 const FormSelect: React.FC<FormSelectProps> = ({
@@ -38,6 +35,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
   placeholder = "Select an option",
   isRequired = false,
   className = "",
+  isValueNumber = false,
 }) => {
   return (
     <FormField
@@ -52,9 +50,13 @@ const FormSelect: React.FC<FormSelectProps> = ({
 
           <FormControl>
             <Select
-              onValueChange={(value) =>
-                field.onChange(isNaN(Number(value)) ? value : Number(value))
-              }
+              onValueChange={(value) => {
+                if (isValueNumber) {
+                  field.onChange(Number(value))
+                } else {
+                  field.onChange(value.toString())
+                }
+              }}
               defaultValue={String(field.value || "")}
             >
               <SelectTrigger>
