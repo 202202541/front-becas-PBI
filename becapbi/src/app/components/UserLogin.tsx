@@ -55,7 +55,7 @@ const UserLogin = () => {
   }
 
   return (
-    <Card className="mx-auto w-10/12 md:w-full bg-[#F3F4F7]">
+    <Card className="w-11/12 max-w-md bg-[#F3F4F7]">
       <CardHeader>
         <CardTitle className="text-center text-2xl">Inicio de Sesión</CardTitle>
       </CardHeader>
@@ -68,7 +68,7 @@ const UserLogin = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">Codigo SIS</FormLabel>
+                  <FormLabel className="font-semibold">Codigo SIS</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -92,7 +92,7 @@ const UserLogin = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">Contraseña</FormLabel>
+                  <FormLabel className="font-semibold">Contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
                       {...field}
@@ -109,7 +109,7 @@ const UserLogin = () => {
 
             {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-            <Button type="submit" className="w-full mt-3 bg-customBlue">Iniciar Sesión</Button>
+            <Button type="submit" className="w-full mt-3 font-bold bg-customBlue">Iniciar Sesión</Button>
           </form>
         </Form>
 
