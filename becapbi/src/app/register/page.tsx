@@ -12,8 +12,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useRouter } from 'next/navigation';
-import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/Services/axios.service"
-import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
+import { AxiosServiceClasificadoresCrea , AxiosServiceCreaCuenta} from "@/lib/services/axios.service"
+import { ClasificadoresCrea, Datos, DatosP } from "@/models/Clasificadores"
 
 export interface FormData {
 	apellido1: string;
