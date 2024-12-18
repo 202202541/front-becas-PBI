@@ -1,55 +1,14 @@
-"use client";
+"use client"
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext } from "react"
 
 interface AuthContextType {
-  token: string ;
-  uuid: string ;
-  setAuthData: (token: string, uuid: string) => void;
-  logout: () => void;
+  token: string
+  uuid: string
+  setAuthData: (token: string, uuid: string) => void
+  logout: () => void
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string >("");
-  const [uuid, setUuid] = useState<string >("");
-
-  useEffect(() => {
-    // Recuperamos token y UUID del localStorage al cargar la aplicación
-    const savedToken = localStorage.getItem('token');
-    const savedUuid = localStorage.getItem('uuid');
-    if (savedToken && savedUuid) {
-      setToken(savedToken);
-      setUuid(savedUuid);
-    }
-  }, []);
-
-  const setAuthData = (newToken: string, newUuid: string) => {
-    setToken(newToken);
-    setUuid(newUuid);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('uuid', newUuid);
-  };
-
-  const logout = () => {
-    setToken("");
-    setUuid("");
-    localStorage.removeItem('token');
-    localStorage.removeItem('uuid');
-  };
-
-  return (
-    <AuthContext.Provider value={{ token, uuid, setAuthData, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
-  }
-  return context;
-};
+export default AuthContext
