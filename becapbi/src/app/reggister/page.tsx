@@ -1,18 +1,15 @@
-import React from 'react'
-import FormRegister from '../components/FormRegister'
+import FormRegister from "@/app/components/FormRegister"
 
-const page = () => {
+const Register = () => {
   return (
-    <div className="relative w-full min-h-screen">
-      <div
-        className="fixed inset-0 bg-[url('/PBI.svg')] bg-cover bg-center bg-fixed"
-        style={{ zIndex: -1 }}
-      />
-      <div className="flex min-h-screen w-full items-center justify-center p-8">
-      <FormRegister />
+    <section className="relative w-full min-h-screen">
+      <div className="fixed inset-0 bg-[url('/PBI.svg')] bg-cover bg-center bg-fixed -z-10" />
+
+      <div className="flex w-full items-center justify-center py-8">
+        <FormRegister />
       </div>
-    </div>
+    </section>
   )
 }
 
-export default page
+export default Register

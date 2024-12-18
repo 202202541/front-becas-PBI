@@ -1,29 +1,23 @@
 "use client"
-import React, { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Form } from '@/components/ui/form'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { format } from "date-fns"
-import { useRouter } from 'next/navigation'
-import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/services/axios.service"
-import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
+
+import FormDatePicker from "@/app/components/FormDatePicker"
 import FormInput from "@/app/components/FormInput"
 import FormSelect from "@/app/components/FormSelect"
-import FormDatePicker from "./FormDatePicker"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Form } from "@/components/ui/form"
+import { AxiosServiceClasificadoresCrea } from "@/lib/services/axios.service"
+import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-
-const FormRegister: React.FC = () => {
-  const router = useRouter()
-
+const FormRegister = () => {
   const [descripcionPaises, setDescripcionPaises] = useState<IDatos[]>([])
   const [tipoColegio, setTipoColegio] = useState<IDatos[]>([])
   const [estadoCivil, setEstadoCivil] = useState<IDatosP>({})
   const [sexos, setSexos] = useState<IDatosP>({})
-  const [errorM, setErrorM] = useState<string | null>(null)
-  const [date, setDate] = useState<Date | undefined>(new Date())
 
   const formSchema = z.object({
     apellido1: z.string().min(2, { message: "Primer apellido es requerido" }),
@@ -62,6 +56,7 @@ const FormRegister: React.FC = () => {
     },
   })
 
+  const watchedFields = form.watch()
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -79,153 +74,163 @@ const FormRegister: React.FC = () => {
     fetchDatos()
   }, [])
 
+  // useEffect(() => {
+  //   console.log("Campos del formulario:", watchedFields)
+  // }, [watchedFields])
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const newFecha = data.fecha_nacimiento.slice(0, 10)
-    data.fecha_nacimiento = newFecha
+    data.fecha_nacimiento = data.fecha_nacimiento.slice(0, 10)
     console.log("Datos enviados:", data)
-    // try {
-    //   const preparedData = {
-    //     ...data,
-    //     fecha_nacimiento: format(new Date(data.fecha_nacimiento), "yyyy-MM-dd"),
-    //   }
-
-    //   const respuesta = await AxiosServiceCreaCuenta(preparedData)
-
-    //   if (respuesta.data.statusCode === 200) {
-    //     router.push('../inicio')
-    //   }
-    //   setErrorM(respuesta.data.message)
-    // } catch (error) {
-    //   console.error("Error al crear la cuenta: ", error)
-    //   setErrorM("Hubo un error al enviar el formulario. Inténtalo nuevamente.")
-    // }
   }
 
-	const watchedFields = form.watch();
-  useEffect(() => {
-    console.log("Campos del formulario:", watchedFields);
-  }, [watchedFields]);
-
   return (
-    <Card className="mx-auto max-w-md w-full bg-[#F3F4F7]">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center">Registro de Cuenta</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                <FormInput
-                  form={form}
-                  name="apellido1"
-                  label="Primer Apellido"
-                  placeholder="Ingrese primer apellido"
-                />
-                <FormInput
-                  form={form}
-                  name="apellido2"
-                  label="Segundo Apellido"
-                  placeholder="Ingrese segundo apellido"
-                />
-                <FormInput
-                  form={form}
-                  name="nombre1"
-                  label="Primer Nombre"
-                  placeholder="Ingrese primer nombre"
-                />
-                <FormInput
-                  form={form}
-                  name="nombre2"
-                  label="Segundo Nombre"
-                  placeholder="Ingrese segundo nombre"
-                />
-                <FormInput
-                  form={form}
-                  name="ci"
-                  label="Carnet de Identidad"
-                  placeholder="Ingrese su CI"
-                  validation="numeric"
-                />
-                <FormSelect
-                  form={form}
-                  name="pais_nacionalidad_id"
-                  label="País de Nacionalidad"
-                  options={descripcionPaises.map((item) => ({
-                    value: item.id,
-                    label: item.descripcion,
-                  }))}
-                />
-                <FormSelect
-                  form={form}
-                  name="sexo"
-                  label="Sexo"
-                  options={Object.entries(sexos).map(([key, value]) => ({
-                    value: key,
-                    label: value,
-                  }))}
-                />
-                <FormSelect
-                  form={form}
-                  name="estado_civil"
-                  label="Estado Civil"
-                  options={Object.entries(estadoCivil).map(([key, value]) => ({
-                    value: key,
-                    label: value,
-                  }))}
-                />
-                <FormInput
-                  form={form}
-                  name="email"
-                  label="Correo Electrónico"
-                  placeholder="Ingrese su email"
-                  type="email"
-                />
-                <FormDatePicker
-                  form={form}
-                  name="fecha_nacimiento"
-                  label="Fecha de Nacimiento"
-                />
-                <FormInput
-                  form={form}
-                  name="telefono_celular"
-                  label="Teléfono Celular"
-                  placeholder="Ingrese su número de teléfono"
-                  validation="numeric"
-                />
-                <FormInput
-                  form={form}
-                  name="nombre_colegio"
-                  label="Nombre del Colegio"
-                  placeholder="Ingrese nombre de su colegio"
-                />
-                <FormInput
-                  form={form}
-                  name="gestion_egreso_colegio"
-                  label="Año de Egreso"
-                  placeholder="Ingrese año de egreso"
-                  type="number"
-                />
-                <FormSelect
-                  form={form}
-                  name="tipo_colegio_id"
-                  label="Tipo de Colegio"
-                  options={tipoColegio.map((item) => ({
-                    value: item.id,
-                    label: item.descripcion,
-                  }))}
-                />
+    <Card className="w-11/12 max-w-lg bg-[#F3F4F7]">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">Registro de Cuenta</CardTitle>
+      </CardHeader>
 
-                <Button type="submit" className="w-full mt-3">
-                  Registrarse
-                </Button>
-              </form>
-            </Form>
-            {errorM && (
-              <div className="text-red-500 text-center mt-3">
-                {errorM}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormInput
+                form={form}
+                name="nombre1"
+                label="Primer Nombre"
+                placeholder="Ingrese primer nombre"
+              />
+              <FormInput
+                form={form}
+                name="nombre2"
+                label="Segundo Nombre"
+                placeholder="Ingrese segundo nombre"
+              />
+            </div>
+
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormInput
+                form={form}
+                name="apellido1"
+                label="Primer Apellido"
+                placeholder="Ingrese primer apellido"
+              />
+              <FormInput
+                form={form}
+                name="apellido2"
+                label="Segundo Apellido"
+                placeholder="Ingrese segundo apellido"
+              />
+            </div>
+
+            <FormInput
+              form={form}
+              name="email"
+              label="Correo Electrónico"
+              placeholder="Ingrese su email"
+              type="email"
+            />
+
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormInput
+                form={form}
+                name="ci"
+                label="Carnet de Identidad"
+                placeholder="Ingrese su CI"
+                validation="numeric"
+              />
+              <FormInput
+                form={form}
+                name="telefono_celular"
+                label="Teléfono Celular"
+                placeholder="Ingrese su número de teléfono"
+                validation="numeric"
+              />
+            </div>
+
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormSelect
+                className="w-full"
+                form={form}
+                name="sexo"
+                label="Sexo"
+                placeholder="Seleccionar sexo"
+                options={Object.entries(sexos).map(([key, value]) => ({
+                  value: key,
+                  label: value,
+                }))}
+              />
+              <FormSelect
+                className="w-full"
+                form={form}
+                name="estado_civil"
+                label="Estado Civil"
+                placeholder="Seleccionar estado civil"
+                options={Object.entries(estadoCivil).map(([key, value]) => ({
+                  value: key,
+                  label: value,
+                }))}
+              />
+            </div>
+
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormSelect
+                className="w-full"
+                form={form}
+                name="pais_nacionalidad_id"
+                label="País de Nacionalidad"
+                placeholder="Seleccionar país"
+                options={descripcionPaises.map((item) => ({
+                  value: item.id,
+                  label: item.descripcion,
+                }))}
+              />
+              <FormDatePicker
+                form={form}
+                name="fecha_nacimiento"
+                label="Fecha de Nacimiento"
+              />
+            </div>
+
+            <FormInput
+              form={form}
+              name="nombre_colegio"
+              label="Nombre del Colegio"
+              placeholder="Ingrese nombre de su colegio"
+            />
+
+            <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+              <FormSelect
+                className="w-full"
+                form={form}
+                name="gestion_egreso_colegio"
+                label="Año de Egreso"
+                placeholder="Seleccionaer año"
+                options={Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => ({
+                  value: new Date().getFullYear() - i,
+                  label: (new Date().getFullYear() - i).toString(),
+                }),
+                )}
+              />
+              <FormSelect
+                className="w-full"
+                form={form}
+                name="tipo_colegio_id"
+                label="Tipo de Colegio"
+                placeholder="Seleccionar tipo"
+                options={tipoColegio.map((item) => ({
+                  value: item.id,
+                  label: item.descripcion,
+                }))}
+              />
+            </div>
+
+            <Button type="submit" className="w-full font-bold bg-customBlue">
+              Registrarse
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
 

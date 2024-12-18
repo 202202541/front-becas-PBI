@@ -1,5 +1,4 @@
 import UserLogin from "@/app/components/UserLogin"
-import React from "react"
 
 const Login = () => {
   return (
