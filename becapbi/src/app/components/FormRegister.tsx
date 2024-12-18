@@ -1,7 +1,7 @@
 "use client"
 
 import FormDatePicker from "@/app/components/FormDatePicker"
-import FormInput from "@/app/components/FormInput"
+import FormFieldInput from "@/app/components/FormFieldInput"
 import FormSelect from "@/app/components/FormSelect"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -93,14 +93,15 @@ const FormRegister = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="nombre1"
                 label="Primer Nombre"
                 placeholder="Ingrese primer nombre"
+                isRequired
               />
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="nombre2"
                 label="Segundo Nombre"
                 placeholder="Ingrese segundo nombre"
@@ -108,42 +109,45 @@ const FormRegister = () => {
             </div>
 
             <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="apellido1"
                 label="Primer Apellido"
                 placeholder="Ingrese primer apellido"
+                isRequired
               />
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="apellido2"
                 label="Segundo Apellido"
                 placeholder="Ingrese segundo apellido"
               />
             </div>
 
-            <FormInput
-              form={form}
+            <FormFieldInput
+              control={form.control}
               name="email"
               label="Correo Electrónico"
               placeholder="Ingrese su email"
-              type="email"
+              isRequired
             />
 
             <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="ci"
                 label="Carnet de Identidad"
                 placeholder="Ingrese su CI"
-                validation="numeric"
+                onlyNumber
+                isRequired
               />
-              <FormInput
-                form={form}
+              <FormFieldInput
+                control={form.control}
                 name="telefono_celular"
                 label="Teléfono Celular"
                 placeholder="Ingrese su número de teléfono"
-                validation="numeric"
+                onlyNumber
+                isRequired
               />
             </div>
 
@@ -158,6 +162,7 @@ const FormRegister = () => {
                   value: key,
                   label: value,
                 }))}
+                isRequired
               />
               <FormSelect
                 className="w-full"
@@ -169,6 +174,7 @@ const FormRegister = () => {
                   value: key,
                   label: value,
                 }))}
+                isRequired
               />
             </div>
 
@@ -183,19 +189,22 @@ const FormRegister = () => {
                   value: item.id,
                   label: item.descripcion,
                 }))}
+                isRequired
               />
               <FormDatePicker
                 form={form}
                 name="fecha_nacimiento"
                 label="Fecha de Nacimiento"
+                isRequired
               />
             </div>
 
-            <FormInput
-              form={form}
+            <FormFieldInput
+              control={form.control}
               name="nombre_colegio"
               label="Nombre del Colegio"
               placeholder="Ingrese nombre de su colegio"
+              isRequired
             />
 
             <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
@@ -208,8 +217,8 @@ const FormRegister = () => {
                 options={Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => ({
                   value: new Date().getFullYear() - i,
                   label: (new Date().getFullYear() - i).toString(),
-                }),
-                )}
+                }))}
+                isRequired
               />
               <FormSelect
                 className="w-full"
@@ -221,6 +230,7 @@ const FormRegister = () => {
                   value: item.id,
                   label: item.descripcion,
                 }))}
+                isRequired
               />
             </div>
 
