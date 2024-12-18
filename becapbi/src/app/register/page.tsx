@@ -85,7 +85,9 @@ const FormularioRegistro: React.FC = () => {
 			const respuesta = await AxiosServiceCreaCuenta(preparedData);
 
 			if(respuesta.data.statusCode === 200){
-				router.push('../inicio');
+				// router.push('../inicio');
+				console.log(respuesta)
+				
 			}
 			//console.log('codigo : ', respuesta.data.statusCode , "mensaje: ", respuesta.data.message);
 			setErrorM(respuesta.data.message);
