@@ -1,4 +1,4 @@
-export interface Postulante {
+export interface IPostulante {
   apellido1: string
   apellido2: string
   ci: string
@@ -15,4 +15,3 @@ export interface Postulante {
   telefono_celular: string
   tipo_colegio_id: number
 }
-

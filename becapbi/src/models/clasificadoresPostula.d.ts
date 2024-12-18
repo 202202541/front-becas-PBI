@@ -1,4 +1,4 @@
-export interface ClasificadoresResponse {
+export interface IClasificadoresResponse {
   status: string
   statusCode: number
   message: string
@@ -19,7 +19,7 @@ export interface ClasificadoresResponse {
   lista_oferta_postulacion: Oferta_Fac_Carr[]
 }
 
-export interface ClasificadoresDataP {
+export interface IClasificadoresDataP {
   lista_tipo_colegio: Datos[]
   lista_estado_civil: DatosPr
   lista_sexo: DatosPr
@@ -37,21 +37,21 @@ export interface ClasificadoresDataP {
   lista_oferta_postulacion: Oferta_Fac_Carr[]
 }
 
-export interface Datos {
+export interface IDatos {
   id: number
   descripcion: string
   sigla?: string
 }
 
-export interface Datos_departamento extends Datos {
+export interface IDatos_departamento extends Datos {
   departamento_id: number
 }
 
-export interface Datos_provincia extends Datos {
+export interface IDatos_provincia extends Datos {
   provincia_id: number
 }
 
-export interface Oferta_Fac_Carr {
+export interface IOferta_Fac_Carr {
   oferta_id: number
   plan_estudio_id: string
   plan_estudio: string
@@ -59,6 +59,6 @@ export interface Oferta_Fac_Carr {
   facultad: string
 }
 
-export interface DatosPr {
+export interface IDatosPr {
   [key: string]: string
 }

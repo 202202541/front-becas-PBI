@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { format } from "date-fns"
 import { useRouter } from 'next/navigation'
 import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/services/axios.service"
-import { ClasificadoresCrea, Datos, DatosP } from "@/models/Clasificadores"
+import { IClasificadoresCrea, IDatos, IDatosP } from "@/models/clasificadores"
 import FormInput from "@/app/components/FormInput"
 import FormSelect from "@/app/components/FormSelect"
 import FormDatePicker from "./FormDatePicker"
@@ -18,10 +18,10 @@ import FormDatePicker from "./FormDatePicker"
 const FormRegister: React.FC = () => {
   const router = useRouter()
 
-  const [descripcionPaises, setDescripcionPaises] = useState<Datos[]>([])
-  const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
-  const [estadoCivil, setEstadoCivil] = useState<DatosP>({})
-  const [sexos, setSexos] = useState<DatosP>({})
+  const [descripcionPaises, setDescripcionPaises] = useState<IDatos[]>([])
+  const [tipoColegio, setTipoColegio] = useState<IDatos[]>([])
+  const [estadoCivil, setEstadoCivil] = useState<IDatosP>({})
+  const [sexos, setSexos] = useState<IDatosP>({})
   const [errorM, setErrorM] = useState<string | null>(null)
   const [date, setDate] = useState<Date | undefined>(new Date())
 
@@ -67,7 +67,7 @@ const FormRegister: React.FC = () => {
     const fetchDatos = async () => {
       try {
         const respuesta = await AxiosServiceClasificadoresCrea()
-        const datos = respuesta.data as ClasificadoresCrea
+        const datos = respuesta.data as IClasificadoresCrea
         setDescripcionPaises(datos.lista_pais)
         setTipoColegio(datos.lista_tipo_colegio)
         setSexos(datos.lista_sexo)

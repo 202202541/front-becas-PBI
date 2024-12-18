@@ -1,16 +1,16 @@
-export interface ApiResponse<T> {
+export interface IApiResponse<T> {
   data: T
   message: string
   status: string
   statusCode: number
 }
 
-export interface ApiResponseStatus {
+export interface IApiResponseStatus {
   message: string
   status: string
   statusCode: number
 }
 
-export interface StatusService {
+export interface IStatusService {
   activo: boolean
 }

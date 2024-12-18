@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { useAuth } from "@/hooks/useAuth"
 import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/services/axios.service"
-import { Postulante } from "@/models/Postulante"
-import { ClasificadoresDataP, ClasificadoresResponse, Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/models/ClasificadoresPostula'
+import { IPostulante } from "@/models/postulante"
+import { IClasificadoresDataP, IClasificadoresResponse, IDatos, IDatosPr, IDatos_departamento, IDatos_provincia, IOferta_Fac_Carr} from '@/models/clasificadoresPostula'
 
 // Nuevo tipo Form según la respuesta de la API
 type Form = {
@@ -48,21 +48,21 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   const { token, uuid } = useAuth()
   const [form, setForm] = useState<Form>(defaultForm)
 
-  const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
-  const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
-  const [sexos, setSexos] = useState<DatosPr>({})
-  const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
-  const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
-  const [dedicacion, setDedicacion] = useState <DatosPr> ({})
-  const [tipoVivienda, setTipoVivienda] = useState<DatosPr>({})
-  const [personVivePostulante, setPersonaVivePostualnte] = useState <DatosPr> ({})
-  const [pais, setPais] = useState<Datos[]> ([])
-  const [departamento, setDepartamento] = useState<Datos[]>([])
-  const [provincia, setProvincia] = useState <Datos_departamento[]>([])
-  const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
-  const [parentesco, setParentesco] = useState <Datos[]>([])
-  const [organizacionSocial, setOrganizacionSocial] = useState <Datos[]>([])
-  const [ofertaPostulacion, setOfertaPostualcion] = useState <Oferta_Fac_Carr[]>([])
+  const [tipoColegio, setTipoColegio] = useState<IDatos[]>([])
+  const [estadoCivil, setEstadoCivil] = useState<IDatosPr>({})
+  const [sexos, setSexos] = useState<IDatosPr>({})
+  const [sectorTrabajo, setSectorTrabajo] = useState<IDatosPr>({})
+  const [categoriaOcupacional, setCategoriaOcupacional] = useState <IDatosPr>({})
+  const [dedicacion, setDedicacion] = useState <IDatosPr> ({})
+  const [tipoVivienda, setTipoVivienda] = useState<IDatosPr>({})
+  const [personVivePostulante, setPersonaVivePostualnte] = useState <IDatosPr> ({})
+  const [pais, setPais] = useState<IDatos[]> ([])
+  const [departamento, setDepartamento] = useState<IDatos[]>([])
+  const [provincia, setProvincia] = useState <IDatos_departamento[]>([])
+  const [municipio, setMunicipio] = useState <IDatos_provincia[]>([])
+  const [parentesco, setParentesco] = useState <IDatos[]>([])
+  const [organizacionSocial, setOrganizacionSocial] = useState <IDatos[]>([])
+  const [ofertaPostulacion, setOfertaPostualcion] = useState <IOferta_Fac_Carr[]>([])
 
   useEffect(() => {
     console.log('Token:', token)
