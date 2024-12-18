@@ -8,8 +8,8 @@ import { Form } from '@/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { format } from "date-fns"
 import { useRouter } from 'next/navigation'
-import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/Services/axios.service"
-import { ClasificadoresCrea, Datos, DatosP } from "@/Models/Clasificadores"
+import { AxiosServiceClasificadoresCrea, AxiosServiceCreaCuenta } from "@/lib/services/axios.service"
+import { ClasificadoresCrea, Datos, DatosP } from "@/models/Clasificadores"
 import FormInput from "@/app/components/FormInput"
 import FormSelect from "@/app/components/FormSelect"
 import FormDatePicker from "./FormDatePicker"

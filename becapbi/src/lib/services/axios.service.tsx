@@ -1,9 +1,9 @@
 import axios from "axios"
 import { FormData } from "@/app/register/page"
-import { ApiResponse, ApiResponseStatus, StatusService } from "@/Models/ApiResponse"
-import { Postulante } from "@/Models/Postulante"
-import { ClasificadoresResponse } from "@/Models/ClasificadoresPostula"
-import { LoginResponse } from "@/Models/Login"
+import { ApiResponse, ApiResponseStatus, StatusService } from "@/models/ApiResponse"
+import { Postulante } from "@/models/Postulante"
+import { ClasificadoresResponse } from "@/models/ClasificadoresPostula"
+import { LoginResponse } from "@/models/Login"
 
 
 const axiosPostulacionInstance = axios.create({

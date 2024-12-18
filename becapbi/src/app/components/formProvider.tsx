@@ -2,9 +2,9 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { useAuth } from "@/hooks/useAuth"
-import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/Services/axios.service"
-import { Postulante } from "@/Models/Postulante"
-import { ClasificadoresDataP, ClasificadoresResponse, Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
+import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/services/axios.service"
+import { Postulante } from "@/models/Postulante"
+import { ClasificadoresDataP, ClasificadoresResponse, Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/models/ClasificadoresPostula'
 
 // Nuevo tipo Form según la respuesta de la API
 type Form = {
