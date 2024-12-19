@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const axiosInstance = axios.create({
   baseURL: "http://sispos.dev.umss.net/api",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "multipart/form-data" },
   timeout: 5000,
 })
 

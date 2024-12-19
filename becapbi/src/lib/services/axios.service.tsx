@@ -36,7 +36,7 @@ export const axiosGetServiceDatosIniciales = async (uuid: string, token: string)
 }
 
 export const axiosGetServiceClasificadoresPostula = async (token: string): Promise<IClasificadoresResponse> => {
-  const response = await axiosPostulacionInstance.get<IClasificadoresResponse>('postulacion/clasificadores-postula', {
+  const response = await axiosInstance.get<IClasificadoresResponse>('postulacion/clasificadores-postula', {
     headers: {
       Authorization: `Bearer ${token}`
     }
