@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import FotoCargada from "@/app/components/FotoCargada"
 // import { Button } from "@/components/ui/button"
 // import { cn } from "@/lib/utils"
@@ -22,6 +22,11 @@ import { TypographyH1 } from "@/components/ui/TypographyH1"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "@/app/components/formProvider"
+import { useAuth } from "@/context/AuthContext"
+import { Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
+import { AxiosServiceClasificadoresPostula } from "@/lib/Services/axios.service"
+import { number } from "zod"
+import { id } from "date-fns/locale"
 
 
 function DatosPersonales() {
@@ -29,6 +34,83 @@ function DatosPersonales() {
 	//const [date, setDate] = React.useState<Date | undefined>(new Date())
 	const form = useForm();
 	console.log("Formulario en DatosPersonales:", form);
+
+	   const { token,  } = useAuth()
+	
+		const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
+		const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
+		const [sexos, setSexos] = useState<DatosPr>({})
+		const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
+		const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
+		const [dedicacion, setDedicacion] = useState <DatosPr> ({})
+		const [tipoVivienda, setTipoVivienda] = useState<DatosPr>({})
+		const [personVivePostulante, setPersonaVivePostualnte] = useState <DatosPr> ({})
+		const [pais, setPais] = useState<Datos[]> ([])
+		const [departamento, setDepartamento] = useState<Datos[]>([])
+		const [provincia, setProvincia] = useState <Datos_departamento[]>([])
+		const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
+		const [parentesco, setParentesco] = useState <Datos[]>([])
+		const [organizacionSocial, setOrganizacionSocial] = useState <Datos[]>([])
+		const [ofertaPostulacion, setOfertaPostualcion] = useState <Oferta_Fac_Carr[]>([])
+	  
+		const [selectedDepartamento, setSelectedDepartamento] = useState(null);
+		const [filteredProvincias, setFilteredProvincias] = useState([]);
+		const [selectedProvincia, setSelectedProvincia] = useState(null);
+		const [filteredMunicipios, setFilteredMunicipios] = useState([]);
+
+		useEffect(() => {
+		  const fetchInitialData = async () => {
+			try{
+			const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
+			  const clasificadores = responseClasificadores.data
+			  console.log(clasificadores)
+			  setTipoColegio(clasificadores.lista_tipo_colegio)
+			  setEstadoCivil(clasificadores.lista_estado_civil)
+			  setSexos(clasificadores.lista_sexo)
+			  setSectorTrabajo(clasificadores.lista_sector_trabajo)
+			  setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
+			  setDedicacion(clasificadores.lista_dedicacion)
+			  setTipoVivienda(clasificadores.lista_tipo_vivienda)
+			  setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
+			  setPais(clasificadores.lista_pais)
+			  setDepartamento(clasificadores.lista_departamento)
+			  setProvincia(clasificadores.lista_provincia)
+			  setMunicipio(clasificadores.lista_municipio)
+			  setParentesco(clasificadores.lista_parentesco)
+			  setOrganizacionSocial(clasificadores.lista_organizacion_social)
+			  setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
+			}catch(error){
+			  console.log(error)
+			}
+			}
+			fetchInitialData();
+		  
+		},[token]);
+		
+		const handleDepartamentoChange = (departamentoId: number) => {
+			setSelectedDepartamento(departamentoId);
+	
+			const provinciasFiltradas = provincia.filter(
+				(item) => item.departamento_id === departamentoId
+			);
+			setFilteredProvincias(provinciasFiltradas);
+	
+		
+		};
+		
+		const handleProvinciaChange = (provinciaId: number) => {
+			setSelectedProvincia(provinciaId);
+		
+			const municipiosFiltrados = municipio.filter(
+				(item) => item.provincia_id === provinciaId
+			);
+			setFilteredMunicipios(municipiosFiltrados);
+		};
+
+		const selectedTipoColegio = tipoColegio.find(
+			(item) => item.id === form.tipo_colegio_id
+		);
+		
 
 	return (
 		<div className="relative w-full min-h-screen p-2">
@@ -97,12 +179,17 @@ function DatosPersonales() {
 										readOnly
 									/>
 								</div>
+								{/* recuperar los datos necesarios para q esto funcione */}
 								<div className="grid gap-2">
 									<Label htmlFor="tipoColegio">Tipo de Colegio</Label>
 									<Input
 										id="tipoColegio"
 										type="text"
 										required
+										value={
+											tipoColegio.find((item) => item.id === form.tipo_colegio_id)?.descripcion || ""
+										}
+										readOnly
 									/>
 								</div>
 							</div>
@@ -167,29 +254,45 @@ function DatosPersonales() {
 											<SelectValue placeholder="Municipio" />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="Bolivia">Bolivia</SelectItem>
+											{filteredMunicipios.map((item) => (
+												<SelectItem value={item.id.toString()} key={item.id}>
+													{item.descripcion}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 								</div>
+
 								<div className="col-span-1">
 									<Label htmlFor="Provincia">Provincia</Label>
-									<Select>
-										<SelectTrigger >
+									<Select onValueChange={(value) => handleProvinciaChange(Number(value))}>
+										<SelectTrigger>
 											<SelectValue placeholder="Provincia" />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="soltero">Bolivia</SelectItem>
+											{filteredProvincias.map((item) => (
+												<SelectItem value={item.id.toString()} key={item.id}>
+													{item.descripcion}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 								</div>
+
+
+
 								<div className="col-span-1">
 									<Label htmlFor="Departamento">Departamento</Label>
-									<Select>
-										<SelectTrigger >
+									<Select onValueChange={(value) => handleDepartamentoChange(Number(value))}>
+										<SelectTrigger>
 											<SelectValue placeholder="Departamento" />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="soltero">Bolivia</SelectItem>
+											{departamento.map((item) => (
+												<SelectItem value={item.id.toString()} key={item.id}>
+													{item.descripcion}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 								</div>
@@ -232,12 +335,18 @@ function DatosPersonales() {
 							</div>
 							<div >
 								<Label htmlFor="organizacion">Organizacion social patrocinadora</Label>
-								<Input
-									id="organizacion"
-									type="text"
-									placeholder="organizacion social patrocinadora"
-									required
-								/>
+								<Select>
+									<SelectTrigger>
+										<SelectValue placeholder= "Organizacion"/>
+									</SelectTrigger>
+									<SelectContent>
+										{organizacionSocial.map((item) =>(
+											<SelectItem value={item.nombre} key={item.id}>
+												{item.nombre}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 							</div>
 							<div >
 								<Label htmlFor="organizacion">Otra Referencia</Label>

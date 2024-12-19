@@ -102,7 +102,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
           console.error("Error al obtener los datos iniciales: ", error)
         }
       }
-      fetchInitialData()
+      fetchInitialData();
     }
   }, [token, uuid])
 

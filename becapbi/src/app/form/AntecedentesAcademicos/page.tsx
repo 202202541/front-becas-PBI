@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   Card,
   CardContent,
@@ -18,9 +18,62 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import{useForm} from "@/app/components/formProvider"
+import { AxiosServiceClasificadoresPostula } from "@/lib/Services/axios.service"
+import { Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
+import { useAuth } from "@/context/AuthContext"
+
 
 function AntecedentesAcademicos() {
   const form = useForm();
+   const { token,  } = useAuth()
+
+    const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
+    const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
+    const [sexos, setSexos] = useState<DatosPr>({})
+    const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
+    const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
+    const [dedicacion, setDedicacion] = useState <DatosPr> ({})
+    const [tipoVivienda, setTipoVivienda] = useState<DatosPr>({})
+    const [personVivePostulante, setPersonaVivePostualnte] = useState <DatosPr> ({})
+    const [pais, setPais] = useState<Datos[]> ([])
+    const [departamento, setDepartamento] = useState<Datos[]>([])
+    const [provincia, setProvincia] = useState <Datos_departamento[]>([])
+    const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
+    const [parentesco, setParentesco] = useState <Datos[]>([])
+    const [organizacionSocial, setOrganizacionSocial] = useState <Datos[]>([])
+    const [ofertaPostulacion, setOfertaPostualcion] = useState <Oferta_Fac_Carr[]>([])
+  
+    useEffect(() => {
+      const fetchInitialData = async () => {
+        try{
+        const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
+          const clasificadores = responseClasificadores.data
+          console.log(clasificadores)
+          setTipoColegio(clasificadores.lista_tipo_colegio)
+          setEstadoCivil(clasificadores.lista_estado_civil)
+          setSexos(clasificadores.lista_sexo)
+          setSectorTrabajo(clasificadores.lista_sector_trabajo)
+          setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
+          setDedicacion(clasificadores.lista_dedicacion)
+          setTipoVivienda(clasificadores.lista_tipo_vivienda)
+          setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
+          setPais(clasificadores.lista_pais)
+          setDepartamento(clasificadores.lista_departamento)
+          setProvincia(clasificadores.lista_provincia)
+          setMunicipio(clasificadores.lista_municipio)
+          setParentesco(clasificadores.lista_parentesco)
+          setOrganizacionSocial(clasificadores.lista_organizacion_social)
+          setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
+        }catch(error){
+          console.log(error)
+        }
+        }
+        fetchInitialData();
+      
+    },[token]);
+
+    
+
   return (
     <div className="relative w-full min-h-screen">
       <div className=" flex min-h-screen w-full items-center justify-center p-2">
@@ -65,7 +118,7 @@ function AntecedentesAcademicos() {
                       <SelectValue placeholder="Municipio" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Bolivia">Bolivia</SelectItem>
+                    
                     </SelectContent>
                   </Select>
                 </div>
@@ -87,12 +140,17 @@ function AntecedentesAcademicos() {
                       <SelectValue placeholder="Departamento" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="soltero">Bolivia</SelectItem>
+                      {departamento.map((item) =>(
+                        <SelectItem value={item.descripcion} Key={item.id}>
+                          {item.descripcion}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="grid gap-2">
+                {/* seleccionar la de la Id */}
                 <Label htmlFor="tipoColegio">Tipo de Colegio</Label>
                 <Select>
                   <SelectTrigger >
