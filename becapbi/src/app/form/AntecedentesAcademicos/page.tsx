@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import{useForm} from "@/app/components/formProvider"
 import { AxiosServiceClasificadoresPostula } from "@/lib/Services/axios.service"
-import { Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
+import { Datos, Datos_departamento, Datos_provincia,} from '@/Models/ClasificadoresPostula'
 import { useAuth } from "@/context/AuthContext"
 
 
@@ -28,21 +28,16 @@ function AntecedentesAcademicos() {
    const { token,  } = useAuth()
 
     const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
-    const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
-    const [sexos, setSexos] = useState<DatosPr>({})
-    const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
-    const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
-    const [dedicacion, setDedicacion] = useState <DatosPr> ({})
-    const [tipoVivienda, setTipoVivienda] = useState<DatosPr>({})
-    const [personVivePostulante, setPersonaVivePostualnte] = useState <DatosPr> ({})
-    const [pais, setPais] = useState<Datos[]> ([])
     const [departamento, setDepartamento] = useState<Datos[]>([])
     const [provincia, setProvincia] = useState <Datos_departamento[]>([])
     const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
-    const [parentesco, setParentesco] = useState <Datos[]>([])
-    const [organizacionSocial, setOrganizacionSocial] = useState <Datos[]>([])
-    const [ofertaPostulacion, setOfertaPostualcion] = useState <Oferta_Fac_Carr[]>([])
-  
+    
+
+        const [selectedDepartamento, setSelectedDepartamento] = useState(null);
+        const [filteredProvincias, setFilteredProvincias] = useState([]);
+        const [selectedProvincia, setSelectedProvincia] = useState(null);
+        const [filteredMunicipios, setFilteredMunicipios] = useState([]);
+    
     useEffect(() => {
       const fetchInitialData = async () => {
         try{
@@ -50,20 +45,11 @@ function AntecedentesAcademicos() {
           const clasificadores = responseClasificadores.data
           console.log(clasificadores)
           setTipoColegio(clasificadores.lista_tipo_colegio)
-          setEstadoCivil(clasificadores.lista_estado_civil)
-          setSexos(clasificadores.lista_sexo)
-          setSectorTrabajo(clasificadores.lista_sector_trabajo)
-          setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
-          setDedicacion(clasificadores.lista_dedicacion)
-          setTipoVivienda(clasificadores.lista_tipo_vivienda)
-          setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
-          setPais(clasificadores.lista_pais)
+        
           setDepartamento(clasificadores.lista_departamento)
           setProvincia(clasificadores.lista_provincia)
           setMunicipio(clasificadores.lista_municipio)
-          setParentesco(clasificadores.lista_parentesco)
-          setOrganizacionSocial(clasificadores.lista_organizacion_social)
-          setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
+          
         }catch(error){
           console.log(error)
         }
@@ -72,7 +58,26 @@ function AntecedentesAcademicos() {
       
     },[token]);
 
-    
+
+    const handleDepartamentoChange = (departamentoId: number) => {
+      setSelectedDepartamento(departamentoId);
+
+      const provinciasFiltradas = provincia.filter(
+          (item) => item.departamento_id === departamentoId
+      );
+      setFilteredProvincias(provinciasFiltradas);
+
+  
+  };
+  
+  const handleProvinciaChange = (provinciaId: number) => {
+      setSelectedProvincia(provinciaId);
+  
+      const municipiosFiltrados = municipio.filter(
+          (item) => item.provincia_id === provinciaId
+      );
+      setFilteredMunicipios(municipiosFiltrados);
+  };
 
   return (
     <div className="relative w-full min-h-screen">
@@ -106,7 +111,7 @@ function AntecedentesAcademicos() {
                     type="text"
                     placeholder="año"
                     required
-                    defaultValue={2024} // controlar el año aun no se sabe   
+                    defaultValue={form.gestion_egreso_colegio} // controlar el año aun no se sabe   
                   />
                 </div>
               </div>
@@ -118,48 +123,57 @@ function AntecedentesAcademicos() {
                       <SelectValue placeholder="Municipio" />
                     </SelectTrigger>
                     <SelectContent>
-                    
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-1">
-                  <Label htmlFor="Provincia">Provincia</Label>
-                  <Select>
-                    <SelectTrigger >
-                      <SelectValue placeholder="Provincia" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="soltero">Bolivia</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-1">
-                  <Label htmlFor="Departamento">Departamento</Label>
-                  <Select>
-                    <SelectTrigger >
-                      <SelectValue placeholder="Departamento" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {departamento.map((item) =>(
-                        <SelectItem value={item.descripcion} Key={item.id}>
+                      {filteredMunicipios.map((item) => (
+                        <SelectItem value={item.id.toString()} key={item.id}>
                           {item.descripcion}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="col-span-1">
+                  <Label htmlFor="Provincia">Provincia</Label>
+                  <Select onValueChange={(value) => handleProvinciaChange(Number(value))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Provincia" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {filteredProvincias.map((item) => (
+                        <SelectItem value={item.id.toString()} key={item.id}>
+                          {item.descripcion}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-1">
+                <Label htmlFor="Departamento">Departamento</Label>
+                <Select onValueChange={(value) => handleDepartamentoChange(Number(value))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Departamento" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {departamento.map((item) => (
+                      <SelectItem value={item.id.toString()} key={item.id}>
+                        {item.descripcion}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               </div>
               <div className="grid gap-2">
                 {/* seleccionar la de la Id */}
                 <Label htmlFor="tipoColegio">Tipo de Colegio</Label>
-                <Select>
-                  <SelectTrigger >
-                    <SelectValue placeholder="urbano" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="urbano">urbano</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input
+                  id="tipoColegio"
+                  type="text"
+                  required 
+                  value={
+                    tipoColegio.find((item) =>item.id === form.tipo_colegio_id)?.descripcion||""
+                  }
+                  readOnly
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="promedioCuarto">Promedio de nota de cuarto, quinto y sexto curso</Label>

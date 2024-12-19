@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import NavBar from "@/app/components/Navbar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -28,12 +28,73 @@ import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
+import{useForm} from "@/app/components/formProvider"
+import { useAuth } from "@/context/AuthContext"
+import { AxiosServiceClasificadoresPostula } from "@/lib/Services/axios.service"
+import { Datos, DatosPr, Datos_departamento, Datos_provincia, Oferta_Fac_Carr} from '@/Models/ClasificadoresPostula'
+import { object } from "zod"
 
 
 function DatosSocioeconomicos() {
-
   const [date, setDate] = React.useState<Date | undefined>(new Date())
 
+  const form = useForm();
+     const { token,  } = useAuth()
+  
+      const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
+      const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
+      const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
+      const [dedicacion, setDedicacion] = useState <DatosPr> ({})
+      const [departamento, setDepartamento] = useState<Datos[]>([])
+      const [provincia, setProvincia] = useState <Datos_departamento[]>([])
+      const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
+      const [parentesco, setParentesco] = useState <Datos[]>([])
+      
+      const [selectedDepartamento, setSelectedDepartamento] = useState(null);
+      const [filteredProvincias, setFilteredProvincias] = useState([]);
+      const [selectedProvincia, setSelectedProvincia] = useState(null);
+      const [filteredMunicipios, setFilteredMunicipios] = useState([]);
+      
+      useEffect(() => {
+        const fetchInitialData = async () => {
+          try{
+          const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
+            const clasificadores = responseClasificadores.data
+            console.log(clasificadores)
+            setEstadoCivil(clasificadores.lista_estado_civil)
+            setSectorTrabajo(clasificadores.lista_sector_trabajo)
+            setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
+            setDedicacion(clasificadores.lista_dedicacion)
+            setDepartamento(clasificadores.lista_departamento)
+            setProvincia(clasificadores.lista_provincia)
+            setMunicipio(clasificadores.lista_municipio)
+            setParentesco(clasificadores.lista_parentesco)
+          }catch(error){
+            console.log(error)
+          }
+          }
+          fetchInitialData();
+        
+      },[token]);
+      const handleDepartamentoChange = (departamentoId: number) => {
+        setSelectedDepartamento(departamentoId);
+
+        const provinciasFiltradas = provincia.filter(
+            (item) => item.departamento_id === departamentoId
+        );
+        setFilteredProvincias(provinciasFiltradas);
+
+    
+    };
+    
+    const handleProvinciaChange = (provinciaId: number) => {
+        setSelectedProvincia(provinciaId);
+    
+        const municipiosFiltrados = municipio.filter(
+            (item) => item.provincia_id === provinciaId
+        );
+        setFilteredMunicipios(municipiosFiltrados);
+    };
 
   return (
     <div className="relative w-full min-h-screen">
@@ -95,12 +156,18 @@ function DatosSocioeconomicos() {
               </div>
               <div>
                 <Label htmlFor="parentesco">Parentesco</Label>
-                <Input
-                  id="parentesco"
-                  type="text"
-                  placeholder="parentesco"
-                  required
-                />
+                <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Parentesco" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {parentesco.map((item) =>(
+                        <SelectItem value={item.descripcion} key= {item.id}>
+                          {item.descripcion}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -110,11 +177,11 @@ function DatosSocioeconomicos() {
                       <SelectValue placeholder="Estado civil" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="soltero">Soltero(a)</SelectItem>
-                      <SelectItem value="casado">Casado(a)</SelectItem>
-                      <SelectItem value="divorciado">Divorciado(a)</SelectItem>
-                      <SelectItem value="viudo">Viudo(a)</SelectItem>
-                      <SelectItem value="unido">Unido(a) de hecho</SelectItem>
+                      {Object.entries(estadoCivil).map(([Key,value])=> (
+                        <SelectItem value ={Key} key={Key}>
+                          {value}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -152,12 +219,18 @@ function DatosSocioeconomicos() {
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="ocupacion">Ocupacion</Label>
-                  <Input
-                    id="ocupacion"
-                    type="text"
-                    placeholder="ocupacion"
-                    required
-                  />
+                  <Select>
+                    <SelectTrigger >
+                      <SelectValue placeholder="Ocupacion " />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(dedicacion).map(([Key,value])=> (
+                        <SelectItem value ={Key} key={Key}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <Label htmlFor="institucion">Institucion de trabajo</Label>
@@ -192,38 +265,50 @@ function DatosSocioeconomicos() {
               <Label className="text-lg" > Lugar de Trabajo:</Label>
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-1">
-                  <Label htmlFor="Municipio">Municipio</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Municipio" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Bolivia">Bolivia</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <Label htmlFor="Municipio">Municipio</Label>
+                    <Select>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Municipio" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {filteredMunicipios.map((item) => (
+                                <SelectItem value={item.id.toString()} key={item.id}>
+                                    {item.descripcion}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="col-span-1">
-                  <Label htmlFor="Provincia">Provincia</Label>
-                  <Select>
-                    <SelectTrigger >
-                      <SelectValue placeholder="Provincia" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="soltero">Bolivia</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <Label htmlFor="Provincia">Provincia</Label>
+                    <Select onValueChange={(value) => handleProvinciaChange(Number(value))}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Provincia" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {filteredProvincias.map((item) => (
+                                <SelectItem value={item.id.toString()} key={item.id}>
+                                    {item.descripcion}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="col-span-1">
                   <Label htmlFor="Departamento">Departamento</Label>
-                  <Select>
-                    <SelectTrigger >
-                      <SelectValue placeholder="Departamento" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="soltero">Bolivia</SelectItem>
-                    </SelectContent>
+                  <Select onValueChange={(value) => handleDepartamentoChange(Number(value))}>
+                      <SelectTrigger>
+                          <SelectValue placeholder="Departamento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          {departamento.map((item) => (
+                              <SelectItem value={item.id.toString()} key={item.id}>
+                                  {item.descripcion}
+                              </SelectItem>
+                          ))}
+                      </SelectContent>
                   </Select>
-                </div>
+              </div>
               </div>
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -242,7 +327,11 @@ function DatosSocioeconomicos() {
                       <SelectValue placeholder="seleccione el sector" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="obrero">Obrero</SelectItem>
+                      {Object.entries(sectorTrabajo).map(([key, value])=>(
+                        <SelectItem value={key} key = {key}>
+                          {value}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -254,7 +343,11 @@ function DatosSocioeconomicos() {
                     <SelectValue placeholder="seleccione la categoria" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="cuentaPropia">Trabajador por cuenta propia</SelectItem>
+                      {Object.entries(categoriaOcupacional).map(([key, value]) =>(
+                        <SelectItem value={key} key = {key}>
+                          {value}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>

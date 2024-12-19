@@ -38,20 +38,10 @@ function DatosPersonales() {
 	   const { token,  } = useAuth()
 	
 		const [tipoColegio, setTipoColegio] = useState<Datos[]>([])
-		const [estadoCivil, setEstadoCivil] = useState<DatosPr>({})
-		const [sexos, setSexos] = useState<DatosPr>({})
-		const [sectorTrabajo, setSectorTrabajo] = useState<DatosPr>({})
-		const [categoriaOcupacional, setCategoriaOcupacional] = useState <DatosPr>({})
-		const [dedicacion, setDedicacion] = useState <DatosPr> ({})
-		const [tipoVivienda, setTipoVivienda] = useState<DatosPr>({})
-		const [personVivePostulante, setPersonaVivePostualnte] = useState <DatosPr> ({})
-		const [pais, setPais] = useState<Datos[]> ([])
 		const [departamento, setDepartamento] = useState<Datos[]>([])
 		const [provincia, setProvincia] = useState <Datos_departamento[]>([])
 		const [municipio, setMunicipio] = useState <Datos_provincia[]>([])
-		const [parentesco, setParentesco] = useState <Datos[]>([])
 		const [organizacionSocial, setOrganizacionSocial] = useState <Datos[]>([])
-		const [ofertaPostulacion, setOfertaPostualcion] = useState <Oferta_Fac_Carr[]>([])
 	  
 		const [selectedDepartamento, setSelectedDepartamento] = useState(null);
 		const [filteredProvincias, setFilteredProvincias] = useState([]);
@@ -65,20 +55,10 @@ function DatosPersonales() {
 			  const clasificadores = responseClasificadores.data
 			  console.log(clasificadores)
 			  setTipoColegio(clasificadores.lista_tipo_colegio)
-			  setEstadoCivil(clasificadores.lista_estado_civil)
-			  setSexos(clasificadores.lista_sexo)
-			  setSectorTrabajo(clasificadores.lista_sector_trabajo)
-			  setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
-			  setDedicacion(clasificadores.lista_dedicacion)
-			  setTipoVivienda(clasificadores.lista_tipo_vivienda)
-			  setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
-			  setPais(clasificadores.lista_pais)
 			  setDepartamento(clasificadores.lista_departamento)
 			  setProvincia(clasificadores.lista_provincia)
 			  setMunicipio(clasificadores.lista_municipio)
-			  setParentesco(clasificadores.lista_parentesco)
 			  setOrganizacionSocial(clasificadores.lista_organizacion_social)
-			  setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
 			}catch(error){
 			  console.log(error)
 			}
@@ -106,11 +86,6 @@ function DatosPersonales() {
 			);
 			setFilteredMunicipios(municipiosFiltrados);
 		};
-
-		const selectedTipoColegio = tipoColegio.find(
-			(item) => item.id === form.tipo_colegio_id
-		);
-		
 
 	return (
 		<div className="relative w-full min-h-screen p-2">
