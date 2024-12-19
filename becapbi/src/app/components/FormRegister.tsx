@@ -9,12 +9,15 @@ import { Form } from "@/components/ui/form"
 import { useGetDataRegister, usePostRegister } from "@/hooks/useRegister"
 import { FormData } from "@/models/apiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const FormRegister = () => {
+  const router = useRouter()
   const { data } = useGetDataRegister()
-  const { mutate: register, data: responseRegister } = usePostRegister()
+  const { mutate: register, data: responseRegister, isSuccess, isPending } = usePostRegister()
 
   const lista_estado_civil = Object.entries(data?.lista_estado_civil || {})
   const lista_sexo = Object.entries(data?.lista_sexo || {})
@@ -29,10 +32,10 @@ const FormRegister = () => {
     fecha_nacimiento: z.string().refine(val => new Date(val).toString() !== "Invalid Date", { message: "Fecha inválida" }),
     sexo: z.string().min(1, { message: "Seleccione un sexo" }),
     estado_civil: z.string().min(1, { message: "Seleccione estado civil" }),
-    email: z.string().email({ message: "Email inválido" }),
-    telefono_celular: z.string().min(8, { message: "Teléfono inválido" }),
+    email: z.string().regex(/^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "El formato es incorrecto" }),
+    telefono_celular: z.string(),
     nombre_colegio: z.string().min(3, { message: "Nombre de colegio requerido" }),
-    gestion_egreso_colegio: z.string(),
+    gestion_egreso_colegio: z.number().min(4, { message: "El año no es valido" }),
     tipo_colegio_id: z.number().min(1, { message: "Seleccione tipo de colegio" }),
   })
 
@@ -61,8 +64,18 @@ const FormRegister = () => {
     register(data)
   }
 
+  useEffect(() => {
+    if (isSuccess) {
+      if (responseRegister.status === "error") {
+        console.error(responseRegister.message)
+      } else if (responseRegister.status === "success") {
+        router.push("/login")
+      }
+    }
+  }, [isSuccess, router])
+
   return (
-    <Card className="w-11/12 max-w-lg bg-[#F3F4F7]">
+    <Card className="w-11/12 max-w-xl bg-[#F3F4F7]">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Registro de Cuenta</CardTitle>
       </CardHeader>
@@ -125,7 +138,6 @@ const FormRegister = () => {
                 label="Teléfono Celular"
                 placeholder="Ingrese su número de teléfono"
                 onlyNumber
-                isRequired
               />
             </div>
 
@@ -198,6 +210,7 @@ const FormRegister = () => {
                   label: (new Date().getFullYear() - i).toString(),
                 }))}
                 isRequired
+                isValueNumber
               />
               <FormSelect
                 className="w-full"
@@ -214,8 +227,12 @@ const FormRegister = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full font-bold bg-customBlue">
-              Registrarse
+            <Button
+              type="submit"
+              className="w-full font-bold bg-customBlue"
+              disabled={isPending}
+            >
+              {isPending ? "Registrandose..." : "Registrarse"}
             </Button>
           </form>
         </Form>
