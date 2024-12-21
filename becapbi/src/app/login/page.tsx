@@ -1,4 +1,5 @@
-import UserLogin from "@/app/components/UserLogin"
+import FormLogin from "@/app/components/FormLogin"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const Login = () => {
   return (
@@ -9,7 +10,14 @@ const Login = () => {
         <span>Becas <span className="text-customBlue">PBI</span></span>
       </h2>
 
-      <UserLogin />
+      <Card className="w-11/12 max-w-md bg-[#F3F4F7]">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl">Inicio de Sesión</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FormLogin />
+        </CardContent>
+      </Card>
     </section>
   )
 }
