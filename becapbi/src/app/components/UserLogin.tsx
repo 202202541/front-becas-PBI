@@ -65,9 +65,9 @@ const UserLogin = () => {
             <FormFieldInput
               control={form.control}
               name="username"
-              label="Codigo SIS"
-              maxLength={9}
-              placeholder="ingrese su codigo SIS"
+              label="Nombre de Usuario"
+              maxLength={15}
+              placeholder="Ingrese su nombre de usuario"
               onlyNumber
               isRequired
             />

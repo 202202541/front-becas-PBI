@@ -14,7 +14,9 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       <AuthProvider>
         <html lang="es">
           <body>
-            {children}
+            <main className="w-full min-h-screen bg-[url('/PBI.svg')] bg-cover bg-fixed bg-center">
+              {children}
+            </main>
           </body>
         </html>
       </AuthProvider>
