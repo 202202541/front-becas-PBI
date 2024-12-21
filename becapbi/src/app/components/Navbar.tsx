@@ -1,69 +1,36 @@
-"use client";
+"use client"
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-function Navbar() {
-  const pathname = usePathname();
+const routes = [
+  { label: "Formulario", path: "form", destination: "/form" },
+  { label: "Contacto", path: "contact", destination: "/contact" },
+  { label: "Inicio", path: "inicio", destination: "/inicio" },
+]
+
+const Navbar = () => {
+  const pathname = usePathname().split("/")[1]
 
   return (
-    <nav className="bg-gradient-to-r from-blue-900 via-blue-900 to-red-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-white text-2xl">UMSS</h1>
-        <ul className="flex space-x-4">
-          <li>
-            {pathname === '/form' ? (
-              <div className="border border-orange-500 rounded p-1">
-                <Link className="text-orange-500" href="/form">
-                  Formulario
-                </Link>
-              </div>
-            ) : (
+    <header className="bg-customBlue text-white py-5 px-4">
+      <nav className="container mx-auto flex justify-between items-center">
+        <h1 className="text-2xl font-black">UMSS</h1>
+
+        <div className="flex gap-2 sm:gap-5 lg:gap-8">
+          {routes.map(({ label, path, destination }, idx) => {
+            return (
               <Link
-                className="text-white hover:text-gray-300"
-                href="/form"
-              >
-                Formulario
-              </Link>
-            )}
-          </li>
-          <li>
-            {pathname === '/contact' ? (
-              <div className="border border-orange-500 rounded p-1">
-                <Link className="text-orange-500" href="/contact">
-                  Contacto
-                </Link>
-              </div>
-            ) : (
-              <Link
-                className="text-white hover:text-gray-300"
-                href="/contact"
-              >
-                Contacto
-              </Link>
-            )}
-          </li>
-          <li>
-            {pathname === '/inicio' ? (
-              <div className="border border-orange-500 rounded p-1">
-                <Link className="text-orange-500" href="/inicio">
-                  Inicio
-                </Link>
-              </div>
-            ) : (
-              <Link
-                className="text-white hover:text-gray-300"
-                href="/inicio"
-              >
-                Inicio
-              </Link>
-            )}
-          </li>
-        </ul>
-      </div>
-    </nav>
-  );
+                key={idx}
+                href={destination}
+                className={`${path === pathname ? "border-b-white font-medium" : ""} mt-1 py-1 border-b border-b-transparent hover:border-b-white hover:opacity-70`}
+              >{label}</Link>
+            )
+          })}
+        </div>
+      </nav>
+    </header>
+  )
 }
 
-export default Navbar;
+export default Navbar
