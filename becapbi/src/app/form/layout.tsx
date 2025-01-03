@@ -1,23 +1,25 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { FormProvider } from '../components/formProvider';
-import PaginationComponent from '../components/PaginationComponent';
+"use client"
+import Navbar from "@/app/components/Navbar"
+import PaginationForm from "@/app/components/PaginationForm"
+import { FormProvider } from "../components/formProvider"
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const routesPagination = [
+  "/form2/datos-personales",
+  "/form2/datos-familiares",
+  "/form2/datos-socieconomicos",
+  "/form2/antecedentes-academicos",
+]
 
-const FormularioVentana: React.FC<LayoutProps> = ({ children }) => {
+const FormularioVentana = ({ children }: { children: Readonly<React.ReactNode> }) => {
   return (
-
-    <div className='bg-[#EFF1F3]'>
+    <div className="min-h-screen flex flex-col justify-between">
       <Navbar />
       <FormProvider>
         <main>{children}</main>
+        <PaginationForm routes={routesPagination} />
       </FormProvider>
-      <PaginationComponent />
     </div>
   )
 }
 
-export default FormularioVentana;
+export default FormularioVentana

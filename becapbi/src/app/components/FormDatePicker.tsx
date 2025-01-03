@@ -20,6 +20,8 @@ interface FormInputProps {
   label: string
   isRequired?: boolean
   className?: string
+  disabled?: boolean
+  placeholder?: string
 }
 
 const FormDatePicker: React.FC<FormInputProps> = ({
@@ -28,6 +30,8 @@ const FormDatePicker: React.FC<FormInputProps> = ({
   label,
   isRequired = false,
   className = "",
+  disabled = false,
+  placeholder = "",
 }) => {
   return (
     <FormField
@@ -49,13 +53,15 @@ const FormDatePicker: React.FC<FormInputProps> = ({
                     "w-full h-10 px-4 justify-start text-left font-normal rounded-md text-sm truncate",
                     !field.value && "text-muted-foreground"
                   )}
+                  disabled={disabled}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   {field.value ? (
                     format(new Date(field.value), "dd/MM/yyyy")
                   ) : (
-                    <span>Seleccionar fecha</span>
+                    <span>{placeholder}</span>
                   )}
+                  
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-full max-w-[300px] p-0">

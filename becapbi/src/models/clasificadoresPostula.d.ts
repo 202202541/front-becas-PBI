@@ -2,39 +2,21 @@ export interface IClasificadoresResponse {
   status: string
   statusCode: number
   message: string
-  lista_tipo_colegio: Datos[]
-  lista_estado_civil: DatosPr
-  lista_sexo: DatosPr
-  lista_sector_trabajo: DatosPr
-  lista_categoria_ocupacional: DatosPr
-  lista_dedicacion: DatosPr
-  lista_tipo_vivienda: DatosPr
-  lista_personas_vive_postulante: DatosPr
-  lista_pais: Datos[]
-  lista_departamento: Datos[]
-  lista_provincia: Datos_departamento[]
-  lista_municipio: Datos_provincia[]
-  lista_parentesco: Datos[]
-  lista_organizacion_social: Datos[]
-  lista_oferta_postulacion: Oferta_Fac_Carr[]
-}
-
-export interface IClasificadoresDataP {
-  lista_tipo_colegio: Datos[]
-  lista_estado_civil: DatosPr
-  lista_sexo: DatosPr
-  lista_sector_trabajo: DatosPr
-  lista_categoria_ocupacional: DatosPr
-  lista_dedicacion: DatosPr
-  lista_tipo_vivienda: DatosPr
-  lista_personas_vive_postulante: DatosPr
-  lista_pais: Datos[]
-  lista_departamento: Datos[]
-  lista_provincia: Datos_departamento[]
-  lista_municipio: Datos_provincia[]
-  lista_parentesco: Datos[]
-  lista_organizacion_social: Datos[]
-  lista_oferta_postulacion: Oferta_Fac_Carr[]
+  lista_tipo_colegio: IDatos[]
+  lista_estado_civil: IDatosPr
+  lista_sexo: IDatosPr
+  lista_sector_trabajo: IDatosPr[]
+  lista_categoria_ocupacional: IDatosPr[]
+  lista_dedicacion: IDatosPr[]
+  lista_tipo_vivienda: IDatosPr[]
+  lista_personas_vive_postulante: IDatosPr[]
+  lista_pais: IDatos[]
+  lista_departamento: IDatos[]
+  lista_provincia: IDatos_departamento[]
+  lista_municipio: IDatos_provincia[]
+  lista_parentesco: IDatos[]
+  lista_organizacion_social: IDatos[]
+  lista_oferta_postulacion: IOferta_Fac_Carr[]
 }
 
 export interface IDatos {
@@ -43,11 +25,11 @@ export interface IDatos {
   sigla?: string
 }
 
-export interface IDatos_departamento extends Datos {
+export interface IDatos_departamento extends IDatos {
   departamento_id: number
 }
 
-export interface IDatos_provincia extends Datos {
+export interface IDatos_provincia extends IDatos {
   provincia_id: number
 }
 
