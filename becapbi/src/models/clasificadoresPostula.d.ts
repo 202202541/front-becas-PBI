@@ -5,11 +5,11 @@ export interface IClasificadoresResponse {
   lista_tipo_colegio: IDatos[]
   lista_estado_civil: IDatosPr
   lista_sexo: IDatosPr
-  lista_sector_trabajo: IDatosPr[]
-  lista_categoria_ocupacional: IDatosPr[]
-  lista_dedicacion: IDatosPr[]
-  lista_tipo_vivienda: IDatosPr[]
-  lista_personas_vive_postulante: IDatosPr[]
+  lista_sector_trabajo: IDatosPr
+  lista_categoria_ocupacional: IDatosPr
+  lista_dedicacion: IDatosPr
+  lista_tipo_vivienda: IDatosPr
+  lista_personas_vive_postulante: IDatosPr
   lista_pais: IDatos[]
   lista_departamento: IDatos[]
   lista_provincia: IDatos_departamento[]
@@ -23,6 +23,9 @@ export interface IDatos {
   id: number
   descripcion: string
   sigla?: string
+  nombre?: string
+  // departamento_id?: number
+  // provincia_id?: number
 }
 
 export interface IDatos_departamento extends IDatos {

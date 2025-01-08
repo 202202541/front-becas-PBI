@@ -17,7 +17,7 @@ import DatosPadres from '@/app/components/DatosPadres'
 import DatosApoderado from '@/app/components/DatosApoderado'
 
 const FormDatoFamiliar = () => {
-
+  
   const formSchema = z.object({
     en_contacto_padres: z.boolean(),
     tiene_apoderado: z.boolean(),
@@ -53,19 +53,19 @@ const FormDatoFamiliar = () => {
     },
   })
 
-  useEffect(() => {
-    const subscription = form.watch((values) => {
-      // console.log("Valores datos familiares:", values)
-      console.log(form.getValues())
-    })
+  // useEffect(() => {
+  //   const subscription = form.watch((values) => {
+  //     // console.log("Valores datos familiares:", values)
+  //     console.log(form.getValues())
+  //   })
 
-    // return () => subscription.unsubscribe()
-    
-  }, [form.watch])
+  //   // return () => subscription.unsubscribe()
+
+  // }, [form.watch])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values)
-    
+
   }
 
   const [contactoPadres, setContactoPadres] = useState<boolean | null>(null)
@@ -86,8 +86,8 @@ const FormDatoFamiliar = () => {
                 name="en_contacto_padres"
                 label="¿Vive con sus padres?"
                 onValueChange={(value: string) => {
-                  value === "true" ? setContactoPadres(true) 
-                  : setContactoPadres(false)
+                  value === "true" ? setContactoPadres(true)
+                    : setContactoPadres(false)
                 }}
               >
                 <FormRadioValue
@@ -107,7 +107,7 @@ const FormDatoFamiliar = () => {
                 label="¿Tiene apoderado?"
                 onValueChange={(value) => {
                   value === "true" ? setApoderado(true)
-                  : setApoderado(false)
+                    : setApoderado(false)
                 }}>
                 <FormRadioValue
                   value={"true"}
@@ -120,17 +120,14 @@ const FormDatoFamiliar = () => {
                 ></FormRadioValue>
               </FormRadioGroup>
 
-              {contactoPadres !== null &&
-                (contactoPadres &&
-                  <DatosPadres
-                    form={form} />
-                )
+              {contactoPadres &&
+                <DatosPadres
+                  form={form} />
               }
-              {apoderado !== null &&
-                (apoderado &&
-                  <DatosApoderado
-                    form={form} />
-                )}
+              {apoderado &&
+                <DatosApoderado
+                  form={form} />
+              }
             </form>
           </Form>
         </CardContent>

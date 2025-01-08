@@ -4,6 +4,7 @@ import FormFieldInput from './FormFieldInput'
 import { Control, Path, FieldValues } from 'react-hook-form'
 import FormSelect from './FormSelect'
 import { Button } from '@/components/ui/button'
+import { useFormContext } from './formProvider'
 
 interface IntegranteFamiliarProps<T extends FieldValues> {
   name: string
@@ -14,14 +15,15 @@ interface IntegranteFamiliarProps<T extends FieldValues> {
   onRemove: (index: number) => void
 }
 
-const IntegranteFamiliar = <T extends FieldValues>({name, form, index, onRemove }: IntegranteFamiliarProps<T>) => {
+const IntegranteFamiliar = <T extends FieldValues>({ name, form, index, onRemove }: IntegranteFamiliarProps<T>) => {
   const accordionId = `integrante-${index}`
+  const { clasificadoresResponse, getSelectObjects, mapToSelectOptions } = useFormContext()
   return (
     <>
-    <Accordion type="single" collapsible defaultValue={accordionId}>
-      <AccordionItem value={accordionId}>
-        <AccordionTrigger>{name}</AccordionTrigger>
-        <AccordionContent>
+      <Accordion type="single" collapsible defaultValue={accordionId}>
+        <AccordionItem value={accordionId}>
+          <AccordionTrigger>{name}</AccordionTrigger>
+          <AccordionContent>
             <FormFieldInput
               control={form.control}
               name={`grupo_familiar.[${index}].nombres` as Path<T>}
@@ -44,27 +46,26 @@ const IntegranteFamiliar = <T extends FieldValues>({name, form, index, onRemove 
               isRequired
               onlyNumber={true}
             ></FormFieldInput>
-            <FormFieldInput
-              control={form.control}
+            <FormSelect
+              form={form}
               name={`grupo_familiar.[${index}].ocupacion` as Path<T>}
               label="Ocupación"
-              placeholder="Ingrese ocupación"
+              options={getSelectObjects(clasificadoresResponse?.lista_categoria_ocupacional || {})}
               isRequired
-            ></FormFieldInput>
+            />
             <FormSelect
               form={form}
               name={`grupo_familiar.[${index}].estado_civil` as Path<T>}
               label="Estado Civil"
-              options={[]}
+              options={getSelectObjects(clasificadoresResponse?.lista_estado_civil || {})}
               isRequired
-            ></FormSelect>
+            />
             <FormSelect
               form={form}
               name={`grupo_familiar.[${index}].parentesco_id` as Path<T>}
               label="Parentesco"
-              options={[]}
-              isRequired
-            ></FormSelect>
+              options={mapToSelectOptions(clasificadoresResponse?.lista_parentesco || {})}
+            />
             <Button
               onClick={() => onRemove(index)}
               className="bg-red-600 text-white"

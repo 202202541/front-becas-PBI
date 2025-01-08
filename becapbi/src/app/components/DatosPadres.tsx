@@ -2,15 +2,16 @@ import React from 'react'
 import { Control, FieldValues, Path } from 'react-hook-form'
 import FormFieldInput from './FormFieldInput'
 import FormSelect from './FormSelect'
-
+import { useFormContext } from "@/app/components/formProvider"
+import { IDatosPr } from "@/models/clasificadoresPostula"
 
 interface DatosPadresProps<T extends FieldValues> {
   form: {
     control: Control<T>
   }
 }
-
 const DatosPadres = <T extends FieldValues>({ form }: DatosPadresProps<T>) => {
+  const {clasificadoresResponse, getSelectObjects} = useFormContext()
   return (
     <>
       <FormFieldInput
@@ -49,14 +50,13 @@ const DatosPadres = <T extends FieldValues>({ form }: DatosPadresProps<T>) => {
         isRequired
         type="text"
       />
-      <FormFieldInput
-        control={form.control}
+      <FormSelect
+        form={form}
         name={"tipo_vivienda_pad" as Path<T>}
         label="tipo de vivienda de los padres"
-        maxLength={50}
-        placeholder="Ingrese el tipo de vivienda de sus padres"
+        placeholder='Seleccione el tipo de vivienda'
+        options={getSelectObjects(clasificadoresResponse?.lista_tipo_vivienda || {})}  // Usamos la función aquí
         isRequired
-        type="text"
       />
     </>
   )

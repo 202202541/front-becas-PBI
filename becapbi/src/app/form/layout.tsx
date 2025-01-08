@@ -4,10 +4,10 @@ import PaginationForm from "@/app/components/PaginationForm"
 import { FormProvider } from "../components/formProvider"
 
 const routesPagination = [
-  "/form2/datos-personales",
-  "/form2/datos-familiares",
-  "/form2/datos-socieconomicos",
-  "/form2/antecedentes-academicos",
+  "/form/datos-personales",
+  "/form/datos-familiares",
+  "/form/datos-integrantes",
+  "/form/datos-socieconomicos",
 ]
 
 const FormularioVentana = ({ children }: { children: Readonly<React.ReactNode> }) => {

@@ -1,17 +1,19 @@
 import React from 'react'
-import {Control, Field, FieldValues, Form, Path} from 'react-hook-form'
+import { Control, Field, FieldValues, Form, Path } from 'react-hook-form'
 import FormFieldInput from './FormFieldInput'
 import FormSelect from './FormSelect'
 import FormDatePicker from './FormDatePicker'
+import { useFormContext } from './formProvider'
 
 interface DatosIndependienteProps<T extends FieldValues> {
   form: {
     control: Control<T>
   }
-} 
+}
 
 const DatosIndependiente = <T extends FieldValues>
-({ form }: DatosIndependienteProps<T>) => {
+  ({ form }: DatosIndependienteProps<T>) => {
+  const { clasificadoresResponse, getSelectObjects, mapToSelectOptions } = useFormContext()
   return (
     <>
       <FormFieldInput
@@ -37,15 +39,15 @@ const DatosIndependiente = <T extends FieldValues>
       ></FormFieldInput>
       <FormSelect
         form={form}
-        options={[]}
         name={"dedicacion_trabajo" as Path<T>}
         label="Dedicación de trabajo"
-        placeholder=""
+        placeholder="Seleccione la dedicación"
+        options={getSelectObjects(clasificadoresResponse?.lista_dedicacion || [])}
         isRequired
-      ></FormSelect>
+      />
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_sector_trabajo || [])}
         name={"sector_trabajo" as Path<T>}
         label="Sector de trabajo"
         placeholder=""
@@ -53,7 +55,7 @@ const DatosIndependiente = <T extends FieldValues>
       ></FormSelect>
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_categoria_ocupacional || [])}
         name={"categoria_ocupacional" as Path<T>}
         label="Categoria ocupacional"
         placeholder=""
@@ -61,7 +63,7 @@ const DatosIndependiente = <T extends FieldValues>
       ></FormSelect>
       <FormSelect
         form={form}
-        options={[]}
+        options={mapToSelectOptions(clasificadoresResponse?.lista_parentesco || [])}
         name={"postulante_vive_con" as Path<T>}
         label="Postulante vive con"
         placeholder=""
@@ -69,7 +71,7 @@ const DatosIndependiente = <T extends FieldValues>
       ></FormSelect>
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_tipo_vivienda || [])}
         name={"tipo_vivienda_pos" as Path<T>}
         label="Tipo de vivienda"
         placeholder=""

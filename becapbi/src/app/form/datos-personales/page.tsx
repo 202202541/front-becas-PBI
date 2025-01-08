@@ -30,16 +30,14 @@ const formSchema = z.object({
 })
 
 const DatosPersonales = () => {
-  const { formData, setFormData } = useFormContext()
+  const { formData, setFormData, clasificadoresResponse, succesClasificadores } = useFormContext()
+  const dataClasificadores = clasificadoresResponse as IClasificadoresResponse
   const { uuid, token } = useAuth()
   const { data, isLoading, isSuccess } = useQuery<IApiResponse<IPostulante>>({
     queryKey: ["data-postulante"],
     queryFn: () => axiosGetServiceDatosIniciales(uuid, token)
   })
-  const { data: dataClasificadores, isSuccess: succesClasificadores } = useQuery<IClasificadoresResponse>({
-    queryKey: ["data-clasificadores-postula"],
-    queryFn: () => axiosGetServiceClasificadoresPostula(token)
-  })
+
   const form = useForm<IPostulante>({
     resolver: zodResolver(formSchema),
     defaultValues: formData.postulante
@@ -80,7 +78,7 @@ const DatosPersonales = () => {
     if (succesClasificadores && dataClasificadores?.status === "success") {
       console.log(dataClasificadores)
     }
-  }, [data, isSuccess, form.reset, dataClasificadores, succesClasificadores])
+  }, [data, isSuccess, dataClasificadores, succesClasificadores])
 
 
     useEffect(() => {

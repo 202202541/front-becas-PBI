@@ -4,6 +4,8 @@ import { Control, Path } from 'react-hook-form'
 import FormDatePicker from './FormDatePicker'
 import FormSelect from './FormSelect'
 import { FieldValues } from 'react-hook-form'
+import { useFormContext } from './formProvider'
+import { get } from 'axios'
 
 interface DatosDependienteProps<T extends FieldValues> {
   form: {
@@ -14,6 +16,7 @@ interface DatosDependienteProps<T extends FieldValues> {
 const DatosDependiente = <T extends FieldValues>({
   form
 }: DatosDependienteProps<T>) => {
+  const { clasificadoresResponse, getSelectObjects, mapToSelectOptions } = useFormContext()
   return (
     <>
       <FormFieldInput
@@ -39,7 +42,7 @@ const DatosDependiente = <T extends FieldValues>({
       </FormDatePicker>
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_sexo || {})}
         name={"estado_civil" as Path<T>}
         label="Estado Civil"
         placeholder=""
@@ -89,7 +92,7 @@ const DatosDependiente = <T extends FieldValues>({
       ></FormFieldInput>
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_dedicacion || {})}
         name={"sector_trabajo" as Path<T>}
         label="Sector de trabajo"
         placeholder=""
@@ -97,7 +100,7 @@ const DatosDependiente = <T extends FieldValues>({
       ></FormSelect>
       <FormSelect
         form={form}
-        options={[]}
+        options={getSelectObjects(clasificadoresResponse?.lista_sector_trabajo || {})}
         name={"categoria_ocupacional" as Path<T>}
         label="Categoria ocupacional"
         placeholder=""
