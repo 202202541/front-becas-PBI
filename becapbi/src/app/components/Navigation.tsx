@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
 interface NavigationProps {
-  previous: string
+  previous: () => void
   nextName?: string
   nextType?: "submit" | "button"
   nextDisabled?: boolean
@@ -15,8 +15,9 @@ const Navigation: React.FC<NavigationProps> = ({ previous, nextName = "Siguiente
   return (
     <div className="flex justify-between items-center gap-4 w-full max-w-md mx-auto">
       <Button
-        onClick={() => router.push(previous)}
+        onClick={previous}
         disabled={previousDisabled}
+        type='button'
         className="w-1/2"
       >
         Anterior

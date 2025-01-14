@@ -108,7 +108,7 @@ const DatosIntegrantesFamiliares = () => {
           </div>
         </div>
         <Navigation
-          previous="/form/datos-familiares"
+          previous={router.back}
 
         />
       </form>

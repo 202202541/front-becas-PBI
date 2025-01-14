@@ -8,9 +8,9 @@ import FormRadioValue from '@/app/components/FormRadioValue'
 import { useState } from 'react'
 import DatosDependiente from '@/app/components/DatosDependiente'
 import DatosIndependiente from '@/app/components/DatosIndependiente'
-import { Button } from '@/components/ui/button'
 import { useFormContext } from '@/app/components/formProvider'
 import Navigation from '@/app/components/Navigation'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   es_dependiente: z.string(),
@@ -32,6 +32,7 @@ const formSchema = z.object({
 })
 
 const DatosSocieconomicos = () => {
+  const router = useRouter()
   const { formData } = useFormContext()
   const [esDependiente, setEsDependiente] = useState<boolean>(formData.dato_socioeconomico?.es_dependiente === "true" ? true : false)
 
@@ -111,7 +112,7 @@ const DatosSocieconomicos = () => {
         
         <div className="flex justify-end">
           <Navigation 
-            previous="/form/datos-integrantes"
+            previous={router.back}
             nextName={form.formState.isSubmitting ? 'Enviando...' : 'Enviar Formulario'}
           />
         </div>

@@ -251,7 +251,7 @@ const DatosPersonales = () => {
           />
         </div>
           <Navigation
-            previous="/"
+            previous={router.back}
             previousDisabled={true}
           />
       </form>

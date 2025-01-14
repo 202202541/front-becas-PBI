@@ -131,7 +131,7 @@ const FormDatoFamiliar = () => {
               )}
 
               <Navigation 
-                previous="/form/datos-personales"	 
+                previous={router.back}	 
               />
             </form>
           </Form>
