@@ -16,15 +16,18 @@ import {
 } from "@/components/ui/select"
 import { IOption } from "@/models/clasificadores"
 
+
 interface FormSelectProps {
   form: any
   name: string
-  options: IOption[]
+  options?: IOption[]
   label: string
   placeholder?: string
   isRequired?: boolean
   className?: string
   isValueNumber?: boolean
+  defaultValue?: string
+  disabled?: boolean
 }
 
 const FormSelect: React.FC<FormSelectProps> = ({
@@ -36,7 +39,10 @@ const FormSelect: React.FC<FormSelectProps> = ({
   isRequired = false,
   className = "",
   isValueNumber = false,
+  disabled = false,
+  defaultValue = "",
 }) => {
+  
   return (
     <FormField
       control={form.control}
@@ -57,13 +63,14 @@ const FormSelect: React.FC<FormSelectProps> = ({
                   field.onChange(value.toString())
                 }
               }}
-              defaultValue={String(field.value || "")}
+              value={defaultValue?defaultValue:String(field.value || "")}
+              disabled={disabled}
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
-                {options.map((option) => (
+                {defaultValue? defaultValue: options?.map((option) => (
                   <SelectItem key={option.value} value={String(option.value)}>
                     {option.label}
                   </SelectItem>

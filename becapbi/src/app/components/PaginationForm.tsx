@@ -3,32 +3,39 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationItem,
-  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
 } from "@/components/ui/pagination"
 import { usePathname, useRouter } from "next/navigation"
+import { useFormContext } from "@/app/components/formProvider"
 
 const PaginationForm = ({ routes }: { routes: string[] }) => {
   const router = useRouter()
   const pathname = usePathname()
+  const formContext = useFormContext()
 
-  const handleOnclick = (id: number, destination: string) => {
-    router.push(destination)
+  if (!formContext) return null
+
+  const currentIndex = routes.indexOf(pathname)
+
+  const handleNavigation = (direction: "next" | "previous") => {
+    const nextIndex = currentIndex + (direction === "next" ? 1 : -1)
+    if (nextIndex >= 0 && nextIndex < routes.length) {
+      router.push(routes[nextIndex])
+    }
   }
 
   return (
     <Pagination className="py-2 bg-[#EFF1F3]">
       <PaginationContent>
-        {routes.map((route, idx) => {
-          return (
-            <PaginationItem key={idx} className="hover:cursor-pointer">
-              <PaginationLink
-                isActive={pathname === route}
-                onClick={() => handleOnclick(idx, route)}
-              >{idx + 1}</PaginationLink>
-            </PaginationItem>
-          )
-        })}
+        <PaginationPrevious
+          onClick={() => handleNavigation("previous")}
+          className={currentIndex <= 0 ? "pointer-events-none opacity-50" : ""}
+        />
+        <PaginationNext
+          onClick={() => handleNavigation("next")}
+          className={currentIndex >= routes.length - 1 ? "pointer-events-none opacity-50" : ""}
+        />
       </PaginationContent>
     </Pagination>
   )

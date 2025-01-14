@@ -1,118 +1,133 @@
-"use client"
-
-import { createContext, useContext, useState, useEffect, ReactNode } from "react"
+import React, { createContext, useContext, useState } from "react"
+import FormData from "@/models/formData"
+import { useQuery } from "@tanstack/react-query"
+import { IClasificadoresResponse } from "@/models/clasificadoresPostula"
+import { axiosGetServiceClasificadoresPostula } from "@/lib/services/axios.service"
 import { useAuth } from "@/hooks/useAuth"
-import { AxiosServiceClasificadoresPostula, AxiosServiceDatosIniciales } from "@/lib/services/axios.service"
-import { IPostulante } from "@/models/postulante"
-import { IClasificadoresDataP, IClasificadoresResponse, IDatos, IDatosPr, IDatos_departamento, IDatos_provincia, IOferta_Fac_Carr} from '@/models/clasificadoresPostula'
+import { IDatosPr, IDatos } from "@/models/clasificadoresPostula"
 
-// Nuevo tipo Form según la respuesta de la API
-type Form = {
-  apellido1: string
-  apellido2: string
-  nombre1: string
-  nombre2: string
-  ci: string
-  pais_nacionalidad_id: number
-  fecha_nacimiento: string
-  sexo: string
-  estado_civil: string
-  email: string
-  telefono_celular: string
-  nombre_colegio: string
-  gestion_egreso_colegio: number
-  tipo_colegio_id: number
+interface FormContextProps {
+  formData: FormData
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>
+  clasificadoresResponse: IClasificadoresResponse
+  succesClasificadores: boolean
+  getSelectObjects: (obj: IDatosPr) => { value: string | number; label: string }[]
+  mapToSelectOptions: (data: IDatos[]) => { value: string | number; label: string }[]
 }
 
-const defaultForm: Form = {
-  apellido1: '',
-  apellido2: '',
-  nombre1: '',
-  nombre2: '',
-  ci: '',
-  pais_nacionalidad_id: 0,
-  fecha_nacimiento: '',
-  sexo: '',
-  estado_civil: '',
-  email: '',
-  telefono_celular: '',
-  nombre_colegio: '',
-  gestion_egreso_colegio: 0,
-  tipo_colegio_id: 0,
+const initialForm: FormData = {
+  postulante: {
+    nombre2: "",
+    apellido2: "",
+    departamento_emision_ci_id: 0,
+    telefono_celular: "",
+    direccion_domicilio: "",
+    telefono_domicilio: "",
+    promedio1: "",
+    promedio2: "",
+    promedio3: "",
+  },
+  dato_familiar: {
+    en_contacto_padres: false,
+    tiene_apoderado: false,
+    direccion_padres: "",
+    telefono_padres: "",
+    celular_padres: "",
+    referencia_padres: "",
+    tipo_vivienda_pad: "",
+    
+    nombres_apellido_apoderado: "",
+    direccion_apoderado: "",
+    telefono_apoderado: "",
+    celular_apoderado: "",
+    referencia_apoderado: "",
+  },
+  grupo_familiar: [],
+  dato_socioeconomico: {
+    es_dependiente: "false",
+    nombres_apellidos_responsable: "",
+    parentesco: "",
+    fecha_nacimiento: new Date(),
+    estado_civil: "",
+    nro_integrantes_familia: "",
+    ocupacion: "",
+    institucion_trabajo: "",
+    telefono_trabajo: "",
+    salario_ingreso: "",
+    otro_ingreso: "",
+    sector_trabajo: "",
+    categoria_ocupacional: "",
+    dedicacion_trabajo: "",
+    postulante_vive_con: "",
+    tipo_vivienda_pos: "",
+    // municipio_trabajo_id: 0,
+  },
+  postulacion: {
+    uuid: "",
+    oferta_id: 1,
+  },
 }
 
-const FormContext = createContext<Form>(defaultForm)
+export const clasificadoresInitialState: IClasificadoresResponse = {
+  status: "",
+  statusCode: 0,
+  message: "",
+  lista_tipo_colegio: [],
+  lista_estado_civil: {},
+  lista_sexo: {},
+  lista_sector_trabajo: {},
+  lista_categoria_ocupacional: {},
+  lista_dedicacion: {},
+  lista_tipo_vivienda: {},
+  lista_personas_vive_postulante: {},
+  lista_pais: [],
+  lista_departamento: [],
+  lista_provincia: [],
+  lista_municipio: [],
+  lista_parentesco: [],
+  lista_organizacion_social: [],
+  lista_oferta_postulacion: []
+}
 
-export const FormProvider = ({ children }: { children: ReactNode }) => {
+export const FormContext = createContext<FormContextProps>({
+  formData: initialForm,
+  setFormData: () => { },
+  clasificadoresResponse: clasificadoresInitialState,
+  succesClasificadores: false,
+  getSelectObjects: () => [],
+  mapToSelectOptions: () => []
+})
 
-  const { token, uuid } = useAuth()
-  const [form, setForm] = useState<Form>(defaultForm)
-
-  const [tipoColegio, setTipoColegio] = useState<IDatos[]>([])
-  const [estadoCivil, setEstadoCivil] = useState<IDatosPr>({})
-  const [sexos, setSexos] = useState<IDatosPr>({})
-  const [sectorTrabajo, setSectorTrabajo] = useState<IDatosPr>({})
-  const [categoriaOcupacional, setCategoriaOcupacional] = useState <IDatosPr>({})
-  const [dedicacion, setDedicacion] = useState <IDatosPr> ({})
-  const [tipoVivienda, setTipoVivienda] = useState<IDatosPr>({})
-  const [personVivePostulante, setPersonaVivePostualnte] = useState <IDatosPr> ({})
-  const [pais, setPais] = useState<IDatos[]> ([])
-  const [departamento, setDepartamento] = useState<IDatos[]>([])
-  const [provincia, setProvincia] = useState <IDatos_departamento[]>([])
-  const [municipio, setMunicipio] = useState <IDatos_provincia[]>([])
-  const [parentesco, setParentesco] = useState <IDatos[]>([])
-  const [organizacionSocial, setOrganizacionSocial] = useState <IDatos[]>([])
-  const [ofertaPostulacion, setOfertaPostualcion] = useState <IOferta_Fac_Carr[]>([])
-
-  useEffect(() => {
-    console.log('Token:', token)
-    console.log('UUID:', uuid)
-
-    if (token && uuid) {
-      const fetchInitialData = async () => {
-        try {
-          const response = await AxiosServiceDatosIniciales(uuid, token) 
-          const postulante = response.data
-          setForm(postulante)
-          console.log(response)
-          if (response.status !== "success") {
-            console.error("Error en la solicitud:", response.status, response.data)
-          }
-          
-          const responseClasificadores = await AxiosServiceClasificadoresPostula(token)
-          const clasificadores = responseClasificadores.data
-          console.log(clasificadores)
-          setTipoColegio(clasificadores.lista_tipo_colegio)
-          setEstadoCivil(clasificadores.lista_estado_civil)
-          setSexos(clasificadores.lista_sexo)
-          setSectorTrabajo(clasificadores.lista_sector_trabajo)
-          setCategoriaOcupacional(clasificadores.lista_categoria_ocupacional)
-          setDedicacion(clasificadores.lista_dedicacion)
-          setTipoVivienda(clasificadores.lista_tipo_vivienda)
-          setPersonaVivePostualnte(clasificadores.lista_personas_vive_postulante)
-          setPais(clasificadores.lista_pais)
-          setDepartamento(clasificadores.lista_departamento)
-          setProvincia(clasificadores.lista_provincia)
-          setMunicipio(clasificadores.lista_municipio)
-          setParentesco(clasificadores.lista_parentesco)
-          setOrganizacionSocial(clasificadores.lista_organizacion_social)
-          setOfertaPostualcion(clasificadores.lista_oferta_postulacion)
-
-        } catch (error) {
-          console.error("Error al obtener los datos iniciales: ", error)
-        }
-      }
-      fetchInitialData();
-    }
-  }, [token, uuid])
-
-
-
+export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { token } = useAuth()
+  const [formData, setFormData] = useState<FormData>(initialForm)
+  const { data: dataClasificadores, isSuccess: succesClasificadores } = useQuery<IClasificadoresResponse>({
+    queryKey: ["data-clasificadores-postula"],
+    queryFn: () => axiosGetServiceClasificadoresPostula(token)
+  })
+  const mapObjectToOptions  = (obj: IDatosPr) => {
+    return Object.keys(obj).map((key) => ({
+      value: key,
+      label: obj[key],
+    }))
+  }
+  const mapToSelectOptions = (data: IDatos[]) => {
+    return data?.map((item) => ({
+      value: item.id,
+      label: item.descripcion,
+    }))
+  }
   return (
-    <FormContext.Provider value={form}>
+    <FormContext.Provider value={{
+      formData, setFormData,
+      clasificadoresResponse: dataClasificadores || clasificadoresInitialState,
+      succesClasificadores: succesClasificadores || false,
+      getSelectObjects: mapObjectToOptions,
+      mapToSelectOptions: mapToSelectOptions
+    }}>
       {children}
     </FormContext.Provider>
   )
 }
 
-export const useForm = () => useContext(FormContext)
+export const useFormContext = () => useContext(FormContext)

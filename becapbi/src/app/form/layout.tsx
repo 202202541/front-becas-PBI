@@ -1,23 +1,21 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import { FormProvider } from '../components/formProvider';
-import PaginationComponent from '../components/PaginationComponent';
+"use client"
+import Navbar from "@/app/components/Navbar"
+import PaginationForm from "@/app/components/PaginationForm"
+import { FormProvider } from "../components/formProvider"
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const FormularioVentana: React.FC<LayoutProps> = ({ children }) => {
+const FormularioVentana = ({ children }: { children: Readonly<React.ReactNode> }) => {
   return (
-
-    <div className='bg-[#EFF1F3]'>
+    <div className="min-h-screen flex flex-col justify-between">
       <Navbar />
       <FormProvider>
-        <main>{children}</main>
+        <div className="flex items-center justify-center py-4">
+          <main className="w-full max-w-4xl px-4">
+            {children}
+          </main>
+        </div>
       </FormProvider>
-      <PaginationComponent />
     </div>
   )
 }
 
-export default FormularioVentana;
+export default FormularioVentana

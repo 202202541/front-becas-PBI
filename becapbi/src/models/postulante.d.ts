@@ -11,6 +11,12 @@ export interface IPostulante {
   nombre2: string
   nombre_colegio: string
   pais_nacionalidad_id: number
+  telefono_domicilio: string
+  direccion_domicilio: string
+  departamento_emision_ci_id: number
+  promedio1: string
+  promedio2: string
+  promedio3: string
   sexo: string
   telefono_celular: string
   tipo_colegio_id: number

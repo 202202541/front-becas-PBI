@@ -19,6 +19,7 @@ type FormFieldInputProps<T extends FieldValues> = {
   placeholder: string
   isRequired?: boolean
   onlyNumber?: boolean
+  disabled?: boolean
 }
 
 function FormFieldInput<T extends FieldValues>({
@@ -30,6 +31,7 @@ function FormFieldInput<T extends FieldValues>({
   placeholder,
   isRequired = false,
   onlyNumber = false,
+  disabled = false,
 }: FormFieldInputProps<T>) {
   const InputComponent = typeInputs[type]
 
@@ -52,6 +54,7 @@ function FormFieldInput<T extends FieldValues>({
               field.onChange(value)
             }}
             required={isRequired}
+            disabled={disabled}
           />
         </FormControl>
 
