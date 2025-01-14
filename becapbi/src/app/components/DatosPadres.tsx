@@ -3,7 +3,6 @@ import { Control, FieldValues, Path } from 'react-hook-form'
 import FormFieldInput from './FormFieldInput'
 import FormSelect from './FormSelect'
 import { useFormContext } from "@/app/components/formProvider"
-import { IDatosPr } from "@/models/clasificadoresPostula"
 
 interface DatosPadresProps<T extends FieldValues> {
   form: {
@@ -30,7 +29,7 @@ const DatosPadres = <T extends FieldValues>({ form }: DatosPadresProps<T>) => {
         maxLength={50}
         placeholder="Ingrese el telefono de sus padres"
         isRequired
-        type="text"
+        onlyNumber={true}
       />
       <FormFieldInput
         control={form.control}
@@ -39,7 +38,7 @@ const DatosPadres = <T extends FieldValues>({ form }: DatosPadresProps<T>) => {
         maxLength={50}
         placeholder="Ingrese el celular de sus padres"
         isRequired
-        type="text"
+        onlyNumber={true}
       />
       <FormFieldInput
         control={form.control}

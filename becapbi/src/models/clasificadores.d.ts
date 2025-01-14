@@ -16,6 +16,6 @@ export interface IDatosP {
 }
 
 export interface IOption {
-	value: string
+	value: string | number
 	label: string
 }

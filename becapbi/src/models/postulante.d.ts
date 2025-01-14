@@ -12,14 +12,15 @@ export interface IPostulante {
   email: string
   telefono_celular: string
   nombre_colegio: string
-  gestion_egreso_colegio: number
+  gestion_egreso_colegio: string
   tipo_colegio_id: number
   direccion_domicilio: string
   telefono_domicilio: string
 
-  promedio1: number
-  promedio2: number
-  promedio3: number
+  promedio1: string
+  promedio2: string
+  promedio3: string
+
 
   // uuid: string
   estado: string

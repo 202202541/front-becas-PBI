@@ -19,11 +19,13 @@ const IntegranteFamiliar = <T extends FieldValues>({ name, form, index, onRemove
   const accordionId = `integrante-${index}`
   const { clasificadoresResponse, getSelectObjects, mapToSelectOptions } = useFormContext()
   return (
-    <>
+    <div
+    className='border border-gray-200 p-4 rounded-lg mb-4'>
       <Accordion type="single" collapsible defaultValue={accordionId}>
         <AccordionItem value={accordionId}>
           <AccordionTrigger>{name}</AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent
+            className="px-2 space-y-2">
             <FormFieldInput
               control={form.control}
               name={`grupo_familiar.[${index}].nombres` as Path<T>}
@@ -73,7 +75,7 @@ const IntegranteFamiliar = <T extends FieldValues>({ name, form, index, onRemove
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </>
+    </div>
   )
 }
 

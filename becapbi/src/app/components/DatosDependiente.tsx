@@ -5,7 +5,6 @@ import FormDatePicker from './FormDatePicker'
 import FormSelect from './FormSelect'
 import { FieldValues } from 'react-hook-form'
 import { useFormContext } from './formProvider'
-import { get } from 'axios'
 
 interface DatosDependienteProps<T extends FieldValues> {
   form: {
@@ -26,13 +25,14 @@ const DatosDependiente = <T extends FieldValues>({
         placeholder=""
         isRequired
       ></FormFieldInput>
-      <FormFieldInput
-        control={form.control}
+      <FormSelect
+        form={form}
+        options={mapToSelectOptions(clasificadoresResponse?.lista_parentesco || {})}
         name={"parentesco" as Path<T>}
-        label="Parentesco"
-        placeholder=""
+        label="Parentesco del Responsable"
+        placeholder="selccione el parentesco"
         isRequired
-      ></FormFieldInput>
+      ></FormSelect>
       <FormDatePicker
         form={form}
         name={"fecha_nacimiento" as Path<T>}
@@ -75,6 +75,7 @@ const DatosDependiente = <T extends FieldValues>({
         label="Telefono de trabajo"
         placeholder=""
         isRequired
+        onlyNumber
       ></FormFieldInput>
       <FormFieldInput
         control={form.control}
@@ -82,6 +83,7 @@ const DatosDependiente = <T extends FieldValues>({
         label="Salario de ingreso"
         placeholder=""
         isRequired
+        onlyNumber
         ></FormFieldInput>
       <FormFieldInput
         control={form.control}
@@ -89,13 +91,14 @@ const DatosDependiente = <T extends FieldValues>({
         label="Otro ingreso"
         placeholder=""
         isRequired
+        onlyNumber
       ></FormFieldInput>
       <FormSelect
         form={form}
         options={getSelectObjects(clasificadoresResponse?.lista_dedicacion || {})}
         name={"sector_trabajo" as Path<T>}
         label="Sector de trabajo"
-        placeholder=""
+        placeholder="seleccione el sector"
         isRequired
       ></FormSelect>
       <FormSelect
@@ -103,7 +106,7 @@ const DatosDependiente = <T extends FieldValues>({
         options={getSelectObjects(clasificadoresResponse?.lista_sector_trabajo || {})}
         name={"categoria_ocupacional" as Path<T>}
         label="Categoria ocupacional"
-        placeholder=""
+        placeholder="seleccione la categoria"
         isRequired
       ></FormSelect>
     </>

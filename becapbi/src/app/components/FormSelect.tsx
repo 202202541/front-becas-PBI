@@ -28,7 +28,6 @@ interface FormSelectProps {
   isValueNumber?: boolean
   defaultValue?: string
   disabled?: boolean
-  onSetValue?: (value: string) => void
 }
 
 const FormSelect: React.FC<FormSelectProps> = ({
@@ -42,7 +41,6 @@ const FormSelect: React.FC<FormSelectProps> = ({
   isValueNumber = false,
   disabled = false,
   defaultValue = "",
-  onSetValue,
 }) => {
   
   return (

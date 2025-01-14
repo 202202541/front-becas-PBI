@@ -1,75 +1,59 @@
 "use client"
-import FormFieldInput from "@/app/components/FormFieldInput"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form } from "@/components/ui/form"
-import { useAuth } from "@/hooks/useAuth"
-import { AxiosServiceLogin, axiosGetServiceCiclo } from "@/lib/services/axios.service"
-import { IStatusService } from "@/models/apiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import FormRadioGroup from '@/app/components/FormRadioGroup'
 import FormRadioValue from '@/app/components/FormRadioValue'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import DatosPadres from '@/app/components/DatosPadres'
 import DatosApoderado from '@/app/components/DatosApoderado'
+import { useRouter } from "next/navigation"
+import Navigation from "@/app/components/Navigation"
+import { useFormContext } from "@/app/components/formProvider"
+import FormValues from "@/models/dataFamiliar"
+import { is } from "date-fns/locale"
+
+const baseSchema = z.object({
+  en_contacto_padres: z.boolean(),
+  tiene_apoderado: z.boolean(),
+  direccion_padres: z.string().optional(),
+  telefono_padres: z.string().optional(),
+  celular_padres: z.string().optional(),
+  referencia_padres: z.string().optional(),
+  tipo_vivienda_pad: z.string().optional(),
+  nombres_apellido_apoderado: z.string().optional(),
+  direccion_apoderado: z.string().optional(),
+  telefono_apoderado: z.string().optional(),
+  celular_apoderado: z.string().optional(),
+  referencia_apoderado: z.string().optional(),
+  // municipio_dir_pad_id: z.number().optional(),
+  // municipio_dir_apo_id: z.number().optional(),
+})
+
 
 const FormDatoFamiliar = () => {
-  
-  const formSchema = z.object({
-    en_contacto_padres: z.boolean(),
-    tiene_apoderado: z.boolean(),
+  const router = useRouter()
+  const { formData, setFormData } = useFormContext()
+  const [contactoPadres, setContactoPadres] = useState<boolean>(formData.dato_familiar?.en_contacto_padres)
+  const [apoderado, setApoderado] = useState<boolean>(formData.dato_familiar?.tiene_apoderado)
 
-    direccion_padres: z.string(),
-    telefono_padres: z.string(),
-    celular_padres: z.string(),
-    referencia_padres: z.string(),
-    tipo_vivienda_pad: z.string(),
-
-    nombres_apellido_apoderado: z.string(),
-    direccion_apoderado: z.string(),
-    telefono_apoderado: z.string(),
-    celular_apoderado: z.string(),
-    referencia_apoderado: z.string(),
-  })
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormValues>({
+    resolver: zodResolver(baseSchema),
     defaultValues: {
-      en_contacto_padres: false,
-      tiene_apoderado: false,
-      direccion_padres: "",
-      telefono_padres: "",
-      celular_padres: "",
-      referencia_padres: "",
-      tipo_vivienda_pad: "",
-      nombres_apellido_apoderado: "",
-      direccion_apoderado: "",
-      telefono_apoderado: "",
-      celular_apoderado: "",
-      referencia_apoderado: "",
-    },
+      ...formData.dato_familiar,
+    }
   })
 
-  // useEffect(() => {
-  //   const subscription = form.watch((values) => {
-  //     // console.log("Valores datos familiares:", values)
-  //     console.log(form.getValues())
-  //   })
-
-  //   // return () => subscription.unsubscribe()
-
-  // }, [form.watch])
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-
+  const onSubmit = (values: FormValues) => {
+    const updateData = (prevData: any) => ({
+      ...prevData,
+      dato_familiar: values
+    })
+    setFormData(updateData)
+    router.push("/form/datos-integrantes")
   }
-
-  const [contactoPadres, setContactoPadres] = useState<boolean | null>(null)
-  const [apoderado, setApoderado] = useState<boolean | null>(null)
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -86,48 +70,67 @@ const FormDatoFamiliar = () => {
                 name="en_contacto_padres"
                 label="¿Vive con sus padres?"
                 onValueChange={(value: string) => {
-                  value === "true" ? setContactoPadres(true)
-                    : setContactoPadres(false)
+                  const isContactoPadres = value === "true"
+                  setContactoPadres( isContactoPadres )
+                  form.setValue("en_contacto_padres", isContactoPadres)
+
+                  if (!isContactoPadres) {
+                    form.setValue("direccion_padres", "")
+                    form.setValue("telefono_padres", "")
+                    form.setValue("celular_padres", "")
+                    form.setValue("referencia_padres", "")
+                    form.setValue("tipo_vivienda_pad", "")
+                  }
                 }}
               >
                 <FormRadioValue
-                  value={"true"}
+                  value="true"
                   label="Si, estoy en contacto con mis padres"
-                  disabled={apoderado === true}
-                ></FormRadioValue>
+                  disabled={apoderado}
+                />
                 <FormRadioValue
-                  value={"false"}
+                  value="false"
                   label="No, no estoy en contacto con mis padres"
-                ></FormRadioValue>
+                />
               </FormRadioGroup>
 
               <FormRadioGroup
                 form={form}
                 name="tiene_apoderado"
                 label="¿Tiene apoderado?"
-                onValueChange={(value) => {
-                  value === "true" ? setApoderado(true)
-                    : setApoderado(false)
-                }}>
+                onValueChange={(value: string) => {
+                  const isApoderado = value === "true"
+                  setApoderado(isApoderado)
+                  form.setValue("tiene_apoderado", isApoderado)
+
+                  if (!isApoderado) {
+                    form.setValue("nombres_apellido_apoderado", "")
+                    form.setValue("direccion_apoderado", "")
+                    form.setValue("telefono_apoderado", "")
+                    form.setValue("celular_apoderado", "")
+                    form.setValue("referencia_apoderado", "")
+                  }
+                }}
+              >
                 <FormRadioValue
-                  value={"true"}
+                  value="true"
                   label="Si, tengo apoderado"
-                  disabled={contactoPadres === true}
-                ></FormRadioValue>
+                  disabled={contactoPadres}
+                />
                 <FormRadioValue
-                  value={"false"}
+                  value="false"
                   label="No, no tengo apoderado"
-                ></FormRadioValue>
+                />
               </FormRadioGroup>
 
-              {contactoPadres &&
-                <DatosPadres
-                  form={form} />
-              }
-              {apoderado &&
-                <DatosApoderado
-                  form={form} />
-              }
+              {contactoPadres && (
+                <DatosPadres form={form} />
+              )}
+              {apoderado && (
+                <DatosApoderado form={form} />
+              )}
+
+              <Navigation previous="/form/datos-personales" />
             </form>
           </Form>
         </CardContent>

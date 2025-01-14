@@ -11,8 +11,8 @@ interface FormContextProps {
   setFormData: React.Dispatch<React.SetStateAction<FormData>>
   clasificadoresResponse: IClasificadoresResponse
   succesClasificadores: boolean
-  getSelectObjects: (obj: IDatosPr) => { value: string; label: string }[]
-  mapToSelectOptions: (data: IDatos[]) => { value: string; label: string }[]
+  getSelectObjects: (obj: IDatosPr) => { value: string | number; label: string }[]
+  mapToSelectOptions: (data: IDatos[]) => { value: string | number; label: string }[]
 }
 
 const initialForm: FormData = {
@@ -23,17 +23,44 @@ const initialForm: FormData = {
     telefono_celular: "",
     direccion_domicilio: "",
     telefono_domicilio: "",
-    promedio1: 0,
-    promedio2: 0,
-    promedio3: 0,
+    promedio1: "",
+    promedio2: "",
+    promedio3: "",
   },
   dato_familiar: {
     en_contacto_padres: false,
     tiene_apoderado: false,
+    direccion_padres: "",
+    telefono_padres: "",
+    celular_padres: "",
+    referencia_padres: "",
+    tipo_vivienda_pad: "",
+    
+    nombres_apellido_apoderado: "",
+    direccion_apoderado: "",
+    telefono_apoderado: "",
+    celular_apoderado: "",
+    referencia_apoderado: "",
   },
   grupo_familiar: [],
   dato_socioeconomico: {
-    es_dependiente: false,
+    es_dependiente: "false",
+    nombres_apellidos_responsable: "",
+    parentesco: "",
+    fecha_nacimiento: new Date(),
+    estado_civil: "",
+    nro_integrantes_familia: "",
+    ocupacion: "",
+    institucion_trabajo: "",
+    telefono_trabajo: "",
+    salario_ingreso: "",
+    otro_ingreso: "",
+    sector_trabajo: "",
+    categoria_ocupacional: "",
+    dedicacion_trabajo: "",
+    postulante_vive_con: "",
+    tipo_vivienda_pos: "",
+    // municipio_trabajo_id: 0,
   },
   postulacion: {
     uuid: "",
@@ -86,9 +113,9 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
   const mapToSelectOptions = (data: IDatos[]) => {
     return data?.map((item) => ({
-      value: String(item.id),
+      value: item.id,
       label: item.descripcion,
-    })) || [];
+    }))
   }
   return (
     <FormContext.Provider value={{
